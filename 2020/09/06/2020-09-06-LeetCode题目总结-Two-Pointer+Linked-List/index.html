@@ -1,14 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
 
-  
-  <title>LeetCode题目总结-Two Pointer+Linked List | Junyu</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="题目3:无重复字符的最长子串 描述： 给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。 示例 1: 输入: “abcabcbb”输出: 3解释: 因为无重复字符的最长子串是 “abc”，所以其长度为 3。">
-<meta property="og:type" content="article">
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Junyu">
+    <title>LeetCode题目总结-Two Pointer+Linked List - Junyu</title>
+    <meta name="author" content="Junyu Bian">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Junyu Bian","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"题目3:无重复字符的最长子串\n描述：\n给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。\n示例 1:\n输入: “abcabcbb”输出: 3解释: 因为无重复字符的最长子串是 “abc”，所以其长度为 3。\n\n\n示例 2:\n输入: “bbbbb”输出: 1解释: 因为无重复字符的最长子串是 “b”，所以其长度为 1。示例 3:\n输入: “pwwkew”输出: 3解释: 因为无重复字符的最长子串是 “wke”，所以其长度为 3。     请注意，你的答案必须是 子串 的长度，”pwke” 是一个子序列，不是子串。\n思路一：\n突破点：滑动窗口。\n步骤：\n\n设立指针a和指针b；\nb指针向右伸缩，对于每个A[b]判断是否之前出现过；\n若出现，则a指向出现过的未知的下一位置，更新右指针和最大长度。\n\n代码：\n1234567891011121314151617181920212223class Solution &#123;public:    int lengthOfLongestSubstring(string s) &#123;        //s[start,end) 前面包含 后面不包含        int start(0), end(0), length(0), result(0);        int stringSize = int(s.size());        while (end &lt; stringSize) &#123;            char tmpChar = s[end];            for (int index = start; index &lt; end; index++) &#123;                if (tmpChar == s[index]) &#123;                    start = index + 1;                    length = end - start;                    break;                &#125;            &#125;            end++;            length++;            result = max(result, length);        &#125;        return result;    &#125;&#125;;\n\n思路二：\n突破点：hashMap。\n步骤：\n\n与思路一类似；\n在判断是否出现过时，使用hashmap优化时间。\nb指针向右伸缩，对于每个A[b]判断是否之前出现过；\n若出现，则a指向出现过的未知的下一位置，更新右指针和最大长度。\n\n代码：\n12345678910111213141516171819202122232425class Solution &#123;public:    int lengthOfLongestSubstring(string s) &#123;        //s[start,end) 前面包含 后面不包含        int start(0), end(0), length(0), result(0);        int sSize = int(s.size());              unordered_map&lt;char, int&gt; hash;              while (end &lt; sSize) &#123;            char tmpChar = s[end];            //仅当s[start,end) 中存在s[end]时更新start            if (hash.find(tmpChar) != hash.end() &amp;&amp; hash[tmpChar] &gt;= start) &#123;                start = hash[tmpChar] + 1;                length = end - start;            &#125;            hash[tmpChar] = end;            end++;            length++;            result = max(result, length);        &#125;        return result;    &#125;&#125;;\n\n\n题目75:颜色分类\n描述：\n给定一个包含红色、白色和蓝色，一共 n 个元素的数组，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。\n此题中，我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。\n注意:不能使用代码库中的排序函数来解决这道题。\n示例:\n输入: [2,0,2,1,1,0]输出: [0,0,1,1,2,2]进阶：\n一个直观的解决方案是使用计数排序的两趟扫描算法。首先，迭代计算出0、1 和 2 元素的个数，然后按照0、1、2的排序，重写当前数组。你能想出一个仅使用常数空间的一趟扫描算法吗？\n思路：\n突破点：三指针。\n步骤：\n\n定义三个指针p0、p2、curr来追踪0、2的边界以及当前考虑的元素；\n初始化p0 = 0，p2 = n-1；\n当curr&lt;=p2时，如果nums[curr] = 0，则交换curr和p0所指元素，并将curr和p0右移；\n如果nums[curr] = 2，则交换curr和p2所指元素，并将p2左移，注意此时为了将判断移过来的元素类型而不右移curr；\n如果nums[curr] = 1，则curr右移。\n\n代码：\n1234567891011121314151617181920212223class Solution &#123;  public:  /*  荷兰三色旗问题解  */  void sortColors(vector&lt;int&gt;&amp; nums) &#123;    // 对于所有 idx &lt; p0 : nums[idx &lt; p0] = 0    // curr 是当前考虑元素的下标    int p0 = 0, curr = 0;    // 对于所有 idx &gt; p2 : nums[idx &gt; p2] = 2    int p2 = nums.size() - 1;    while (curr &lt;= p2) &#123;      if (nums[curr] == 0) &#123;        swap(nums[curr++], nums[p0++]);      &#125;      else if (nums[curr] == 2) &#123;        swap(nums[curr], nums[p2--]);      &#125;      else curr++;    &#125;  &#125;&#125;;\n\n\n题目88:合并两个有序数组\n描述：\n给你两个有序整数数组 nums1 和 nums2，请你将 nums2 合并到 nums1 中，使 nums1 成为一个有序数组。\n说明:\n初始化 nums1 和 nums2 的元素数量分别为 m 和 n 。你可以假设 nums1 有足够的空间（空间大小大于或等于 m + n）来保存 nums2 中的元素。\n示例:\n输入:nums1 = [1,2,3,0,0,0], m = 3nums2 = [2,5,6],       n = 3\n输出: [1,2,2,3,5,6]\n思路:\n突破点：归并排序思想。\n步骤：\n\n获取nums1数组的尾部指针；\n从两数组尾部开始，交换较大值和nums1尾部位置。\n\n代码：\n1234567891011void merge(vector&lt;int&gt;&amp; nums1, int m, vector&lt;int&gt;&amp; nums2, int n) &#123;    int i = nums1.size() - 1;    m--;    n--;    while (n &gt;= 0) &#123;        while (m &gt;= 0 &amp;&amp; nums1[m] &gt; nums2[n]) &#123;            swap(nums1[i--], nums1[m--]);        &#125;        swap(nums1[i--], nums2[n--]);    &#125;&#125;\n\n\n题目125:验证回文串\n描述：给定一个字符串，验证它是否是回文串，只考虑字母和数字字符，可以忽略字母的大小写。\n说明：本题中，我们将空字符串定义为有效的回文串。\n示例 1:\n12输入: &quot;A man, a plan, a canal: Panama&quot;输出: true\n\n示例 2:\n12输入: &quot;race a car&quot;输出: false\n\n思路：\n突破点：首尾指针比较。\n步骤：\n\n一个指针指向头部，一个指针指向尾部；\n分别从首尾开始比较，数字全部转化为小写比较；\n如果有不同，则返回false。\n\n代码：\n1234567891011class Solution &#123;public:    bool isPalindrome(string s) &#123;        for (int i = 0, j = s.length() - 1; i &lt; j; i ++, j --) &#123;            while(i &lt; j &amp;&amp; !isalnum(s[i])) i ++;            while(i &lt; j &amp;&amp; !isalnum(s[j])) j --;            if(tolower(s[i]) != tolower(s[j])) return false;        &#125;        return true;    &#125;&#125;;\n\n\n题目76:最小覆盖子串\n描述：\n给你一个字符串 S、一个字符串 T 。请你设计一种算法，可以在 O(n) 的时间复杂度内，从字符串 S 里面找出：包含 T 所有字符的最小子串。\n示例：\n输入：S = “ADOBECODEBANC”, T = “ABC”输出：”BANC”\n提示：\n如果 S 中不存这样的子串，则返回空字符串 “”。如果 S 中存在这样的子串，我们保证它是唯一的答案。\n思路：\n突破点：滑动窗口。\n步骤：\n\n声明两个指针left和right，right用于延伸窗口，left用于收缩窗口；\n首先移动right使得窗口内包含t所有字符；\n然后收缩left且保证收缩过程中t仍在窗口内；\n使用哈希表动态维护窗口中字符数以及t中字符数。\n\n代码：\n123456789101112131415161718192021222324252627282930313233343536373839404142434445class Solution &#123;public:    unordered_map &lt;char, int&gt; ori, cnt;  \t// 步骤4    bool check() &#123;        for (const auto &amp;p: ori) &#123;            if (cnt[p.first] &lt; p.second) &#123;                return false;            &#125;        &#125;        return true;    &#125;  \t// 滑窗    string minWindow(string s, string t) &#123;        for (const auto &amp;c: t) &#123;            ++ori[c];        &#125;      \t// 步骤1        int l = 0, r = -1;        int len = INT_MAX, ansL = -1, ansR = -1;      \t// 步骤2        while (r &lt; int(s.size())) &#123;            if (ori.find(s[++r]) != ori.end()) &#123;                ++cnt[s[r]];            &#125;          \t// 步骤3            while (check() &amp;&amp; l &lt;= r) &#123;                if (r - l + 1 &lt; len) &#123;                    len = r - l + 1;                    ansL = l;                &#125;                if (ori.find(s[l]) != ori.end()) &#123;                    --cnt[s[l]];                &#125;                ++l;            &#125;        &#125;        return ansL == -1 ? string() : s.substr(ansL, len);    &#125;&#125;;\n\n\n题目206:反转链表\n描述：\n反转一个单链表。\n示例:\n输入: 1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;NULL输出: 5-&gt;4-&gt;3-&gt;2-&gt;1-&gt;NULL进阶:你可以迭代或递归地反转链表。你能否用两种方法解决这道题？\n思路一：\n突破点：双指针。\n步骤：\n\n定义一前一后两个指针pre和cur；\n每次让pre的next指向cur，实现局部反转；\n局部反转后，两个指针同时前移一位，直到pre到达链表结尾。\n\n代码：\n12345678910111213class Solution &#123;public:    ListNode* reverseList(ListNode* head) &#123;        ListNode* cur = nullptr, *pre = head;        while (nullptr != pre) &#123;            ListNode* t = pre-&gt;next;            pre-&gt;next = cur;            cur = pre;            pre = t;        &#125;        return cur;    &#125;&#125;;\n\n思路二：\n突破点：递归。\n步骤：\n\n一直递归到链表最后一个节点；\n每次返回时，让当前节点的下一节点的next指针指向当前节点；\n让当前节点的next指针指向nullptr；\n递归函数全部出栈后，反转完成。\n\n代码：\n123456789101112class Solution &#123;public:    ListNode* reverseList(ListNode* head) &#123;        if (nullptr == head || nullptr == head-&gt;next) &#123;          return head;        &#125;      \tListNode* ret = reverseList(head-&gt;next);      \thead-&gt;next-&gt;next = head;     \t \thead-&gt;next = nullptr;      \treturn ret;    &#125;&#125;;\n\n\n题目21:合并两个有序链表\n描述：\n将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 \n示例：\n输入：1-&gt;2-&gt;4, 1-&gt;3-&gt;4输出：1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4\n思路：\n突破点：递归。\n步骤：\n\n递归时，首先比较两个输入头节点的大小；\n若list1小于list2的头节点，则尾部添加list1后继续递归；\n若list1大于list2的头节点，则尾部添加list2后继续递归。\n\n代码：\n12345678910111213141516class Solution &#123;public:    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) &#123;        if (nullptr == l1) &#123;            return l2;        &#125; else if (nullptr == l2) &#123;            return l1;        &#125; else if (l1-&gt;val &lt; l2-&gt;val) &#123;            l1-&gt;next = mergeTwoLists(l1-&gt;next, l2);            return l1;        &#125; else &#123;            l2-&gt;next = mergeTwoLists(l1, l2-&gt;next);            return l2;        &#125;    &#125;&#125;;\n\n\n题目23:合并K个升序链表\n描述：\n给你一个链表数组，每个链表都已经按升序排列。\n请你将所有链表合并到一个升序链表中，返回合并后的链表。\n示例 1：\n输入：lists = [[1,4,5],[1,3,4],[2,6]]输出：[1,1,2,3,4,4,5,6]解释：链表数组如下：[  1-&gt;4-&gt;5,  1-&gt;3-&gt;4,  2-&gt;6]将它们合并到一个有序链表中得到。1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6示例 2：\n输入：lists = []输出：[]示例 3：\n输入：lists = [[]]输出：[]\n提示：\nk == lists.length0 &lt;= k &lt;= 10^40 &lt;= lists[i].length &lt;= 500-10^4 &lt;= lists[i][j] &lt;= 10^4lists[i] 按 升序 排列lists[i].length 的总和不超过 10^4\n思路一：\n突破点：分治合并。\n步骤：\n\n将k个链表配对，并两两合并；\n重复1.中过程，直到得到最终链表。\n\n代码：\n123456789101112131415161718192021222324252627282930class Solution &#123;public:    ListNode* mergeTwoLists(ListNode *a, ListNode *b) &#123;        if ((!a) || (!b)) return a ? a : b;        ListNode head, *tail = &amp;head, *aPtr = a, *bPtr = b;        while (aPtr &amp;&amp; bPtr) &#123;            if (aPtr-&gt;val &lt; bPtr-&gt;val) &#123;                tail-&gt;next = aPtr;               \taPtr = aPtr-&gt;next;            &#125; else &#123;                tail-&gt;next = bPtr;               \tbPtr = bPtr-&gt;next;            &#125;            tail = tail-&gt;next;        &#125;        tail-&gt;next = (aPtr ? aPtr : bPtr);        return head.next;    &#125;    ListNode* merge(vector &lt;ListNode*&gt; &amp;lists, int l, int r) &#123;        if (l == r) return lists[l];        if (l &gt; r) return nullptr;        int mid = (l + r) &gt;&gt; 1;        return mergeTwoLists(merge(lists, l, mid), merge(lists, mid + 1, r));    &#125;    ListNode* mergeKLists(vector&lt;ListNode*&gt;&amp; lists) &#123;        return merge(lists, 0, lists.size() - 1);    &#125;&#125;;\n\n思路二：\n突破点：优先队列。\n步骤：\n\n维护当前每个链表没有别合并的元素最前面的一个；\n每次在1.中选取val值最小的元素合并到result中；\n使用优先队列进行优化。\n\n代码：\n1234567891011121314151617181920212223242526class Solution &#123;public:    struct Status &#123;        int val;        ListNode *ptr;        bool operator &lt; (const Status &amp;rhs) const &#123;            return val &gt; rhs.val;        &#125;    &#125;;    priority_queue &lt;Status&gt; q;    ListNode* mergeKLists(vector&lt;ListNode*&gt;&amp; lists) &#123;        for (auto node: lists) &#123;            if (node) q.push(&#123;node-&gt;val, node&#125;);        &#125;        ListNode head, *tail = &amp;head;        while (!q.empty()) &#123;            auto f = q.top(); q.pop();            tail-&gt;next = f.ptr;             tail = tail-&gt;next;            if (f.ptr-&gt;next) q.push(&#123;f.ptr-&gt;next-&gt;val, f.ptr-&gt;next&#125;);        &#125;        return head.next;    &#125;&#125;;\n\n","dateCreated":"2020-09-06T23:33:19+08:00","dateModified":"2020-09-07T18:49:05+08:00","datePublished":"2020-09-06T23:33:19+08:00","description":"题目3:无重复字符的最长子串\n描述：\n给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。\n示例 1:\n输入: “abcabcbb”输出: 3解释: 因为无重复字符的最长子串是 “abc”，所以其长度为 3。","headline":"LeetCode题目总结-Two Pointer+Linked List","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Two-Pointer+Linked-List/"},"publisher":{"@type":"Organization","name":"Junyu Bian","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Two-Pointer+Linked-List/","keywords":"C++, 算法"}</script>
+    <meta name="description" content="题目3:无重复字符的最长子串 描述： 给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。 示例 1: 输入: “abcabcbb”输出: 3解释: 因为无重复字符的最长子串是 “abc”，所以其长度为 3。">
+<meta property="og:type" content="blog">
 <meta property="og:title" content="LeetCode题目总结-Two Pointer+Linked List">
 <meta property="og:url" content="http://example.com/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Two-Pointer+Linked-List/index.html">
 <meta property="og:site_name" content="Junyu">
@@ -20,81 +25,327 @@
 <meta property="article:tag" content="C++">
 <meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Junyu" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-wxmdysl42bg8zzt2ryhfqsfzciwu3kx9uqdpszvt5k3t8nhbngsdtxq96fkn.min.css">
 
-<meta name="generator" content="Hexo 5.4.0"></head>
+    <!--STYLES END-->
+    
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Junyu</a>
-      </h1>
-      
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Junyu
+        </a>
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
+    
         
-          <a class="main-nav-link" href="/">Home</a>
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
         
-          <a class="main-nav-link" href="/archives">Archives</a>
         
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
-      </div>
-    </div>
-  </div>
+        </a>
+    
 </header>
-      <div class="outer">
-        <section id="main"><article id="post-2020-09-06-LeetCode题目总结-Two-Pointer+Linked-List" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Two-Pointer+Linked-List/" class="article-date">
-  <time datetime="2020-09-06T15:33:19.000Z" itemprop="datePublished">2020-09-06</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
-  </div>
 
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
         
-  
-    <h1 class="article-title" itemprop="name">
-      LeetCode题目总结-Two Pointer+Linked List
-    </h1>
-  
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link open-algolia-search"
+                            href="#search"
+                            
+                            rel="noopener"
+                            title="Search"
+                        >
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="http://stackoverflow.com/users"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Stack Overflow"
+                        >
+                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Stack Overflow</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://twitter.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Twitter"
+                        >
+                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Twitter</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://facebook.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Facebook"
+                        >
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://plus.google.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Google +"
+                        >
+                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Google +</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
 
-      </header>
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="题目3-无重复字符的最长子串"><a href="#题目3-无重复字符的最长子串" class="headerlink" title="题目3:无重复字符的最长子串"></a>题目3:<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/">无重复字符的最长子串</a></h3><hr>
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            LeetCode题目总结-Two Pointer+Linked List
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2020-09-06T23:33:19+08:00">
+	
+		    Sep 06, 2020
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/LeetCode/">LeetCode</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <h3 id="题目3-无重复字符的最长子串"><a href="#题目3-无重复字符的最长子串" class="headerlink" title="题目3:无重复字符的最长子串"></a>题目3:<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/">无重复字符的最长子串</a></h3><hr>
 <p>描述：</p>
 <p>给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。</p>
 <p>示例 1:</p>
@@ -288,153 +539,324 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Status</span> &#123;</span></span><br><span class="line">        <span class="keyword">int</span> val;</span><br><span class="line">        ListNode *ptr;</span><br><span class="line">        <span class="keyword">bool</span> <span class="keyword">operator</span> &lt; (<span class="keyword">const</span> Status &amp;rhs) <span class="keyword">const</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> val &gt; rhs.val;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    priority_queue &lt;Status&gt; q;</span><br><span class="line"></span><br><span class="line">    <span class="function">ListNode* <span class="title">mergeKLists</span><span class="params">(vector&lt;ListNode*&gt;&amp; lists)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> node: lists) &#123;</span><br><span class="line">            <span class="keyword">if</span> (node) q.<span class="built_in">push</span>(&#123;node-&gt;val, node&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        ListNode head, *tail = &amp;head;</span><br><span class="line">        <span class="keyword">while</span> (!q.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">            <span class="keyword">auto</span> f = q.<span class="built_in">top</span>(); q.<span class="built_in">pop</span>();</span><br><span class="line">            tail-&gt;next = f.ptr; </span><br><span class="line">            tail = tail-&gt;next;</span><br><span class="line">            <span class="keyword">if</span> (f.ptr-&gt;next) q.<span class="built_in">push</span>(&#123;f.ptr-&gt;next-&gt;val, f.ptr-&gt;next&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> head.next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 
-      
+            
+
+
+        </div>
     </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Two-Pointer+Linked-List/" data-id="ckwnih866001ak8t66kxk601j" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
+    <div id="post-footer" class="post-footer main-content-wrap">
         
-          LeetCode题目总结-Tree+BST
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Array/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">LeetCode题目总结-Array</div>
-    </a>
-  
-</nav>
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/C/" rel="tag">C++</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a>
 
-  
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/"
+                    data-tooltip="LeetCode题目总结-Tree+BST"
+                    aria-label="PREVIOUS: LeetCode题目总结-Tree+BST"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Array/"
+                    data-tooltip="LeetCode题目总结-Array"
+                    aria-label="NEXT: LeetCode题目总结-Array"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Two-Pointer+Linked-List/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Two-Pointer+Linked-List/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Two-Pointer+Linked-List/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
 </article>
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/LeetCode/">LeetCode</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Notes/">Notes</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%91%E8%AE%A1%E7%AE%97/">云计算</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a></li></ul>
-    </div>
-  </div>
 
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/" rel="tag">Algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cent-OS/" rel="tag">Cent OS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Command-Line/" rel="tag">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Database/" rel="tag">Database</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Django/" rel="tag">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FD-io/" rel="tag">FD.io</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/K8s/" rel="tag">K8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Notes/" rel="tag">Notes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VM/" rel="tag">VM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/" rel="tag">Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/Algorithm/" style="font-size: 16.67px;">Algorithm</a> <a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/Cent-OS/" style="font-size: 10px;">Cent OS</a> <a href="/tags/Command-Line/" style="font-size: 10px;">Command Line</a> <a href="/tags/Database/" style="font-size: 10px;">Database</a> <a href="/tags/Django/" style="font-size: 10px;">Django</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/FD-io/" style="font-size: 10px;">FD.io</a> <a href="/tags/K8s/" style="font-size: 10px;">K8s</a> <a href="/tags/Linux/" style="font-size: 11.67px;">Linux</a> <a href="/tags/Notes/" style="font-size: 11.67px;">Notes</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 11.67px;">操作系统</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.33px;">数据库</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 11.67px;">测试</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 18.33px;">算法</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2021/06/05/2021-06-05-K8s-and-docker-Related-Notes/">K8s and docker Related Notes</a>
-          </li>
-        
-          <li>
-            <a href="/2021/06/05/2021-06-05-VM-Related%20-Notes/">VM Related Notes</a>
-          </li>
-        
-          <li>
-            <a href="/2021/06/05/2021-06-05-Command-Line-Related-Notes/">Command Line Related Notes</a>
-          </li>
-        
-          <li>
-            <a href="/2021/04/26/2021-04-26-FDio%E7%AE%80%E4%BB%8B/">FD.io简介</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/08/2020-11-08-Diff-Array/">Diff Array</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2021 Junyu Bian<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2021 Junyu Bian. All Rights Reserved.
+    </span>
 </footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/"
+                    data-tooltip="LeetCode题目总结-Tree+BST"
+                    aria-label="PREVIOUS: LeetCode题目总结-Tree+BST"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Array/"
+                    data-tooltip="LeetCode题目总结-Array"
+                    aria-label="NEXT: LeetCode题目总结-Array"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Two-Pointer+Linked-List/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Two-Pointer+Linked-List/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Two-Pointer+Linked-List/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Two-Pointer+Linked-List/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Two-Pointer+Linked-List/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Two-Pointer+Linked-List/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
     </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">Junyu Bian</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-vnqkjqlintjjatuhqa130uwkuwsu27ios2j5z5qwaodowllkaooycjjcee9d.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
     
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
 
-
-<script src="/js/script.js"></script>
-
-
-
-
-  </div>
-</body>
+    </body>
 </html>

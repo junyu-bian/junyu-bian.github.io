@@ -1,14 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
 
-  
-  <title>Linux知识点总结 | Junyu</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1. find命令  查找指定文件名文件（不区分大小写）：  1find -iname &quot;ProgramToFind.java&quot;   对找到的文件执行某命令  1find -iname &quot;ProgramToOperate.java&quot; -exec md5sum &amp;#123;&amp;#125; \;   查找home目录下所有空文件  1find ~ -empty">
-<meta property="og:type" content="article">
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Junyu">
+    <title>Linux知识点总结 - Junyu</title>
+    <meta name="author" content="Junyu Bian">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Junyu Bian","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"1. find命令\n\n查找指定文件名文件（不区分大小写）：\n\n1find -iname &quot;ProgramToFind.java&quot;\n\n\n对找到的文件执行某命令\n\n1find -iname &quot;ProgramToOperate.java&quot; -exec md5sum &#123;&#125; \\;\n\n\n查找home目录下所有空文件\n\n1find ~ -empty\n\n\n\n\n在/home下找到大小超过3MB的文件\n\n1find /home -type f -size +3072k\n\n\n\n\n2. static和const关键字\nstatic：存储在静态存储区，未初始化时自动初始化为0：\n\n局部变量：\n变为静态局部变量；\n作用域仍为局部作用域；\n离开作用域仍驻留在内存中，但不可访问；\n\n\n全局变量：\n变为全局静态变量；\n在声明的文件之外不可见；\n\n\n成员变量：\n变为类的全局变量，被类的对象共享，包括派生类的对象；\n必须在类外进行初始化，如int base::var = 10;，但可以用const修饰static数据成员，从而在类内初始化；\n\n\n成员函数：\n使得成员函数为所有对象共享，不含this指针；\n可以独立访问，不需要创建实例，如base::func(3, 5);\n不可直接引用类的非静态成员，但是可以引用静态成员；\n不可同时用const和static修饰成员函数（const含this指针，static不含，冲突）；\n\n\n\nconst：\n\n表明变量不可修改；\n限定成员函数不可修改任何数据成员；\nconst与指针：\nconst char *p：指向的内容不能改变；\nchar * const p：将p声明为常指针，地址不能变，但是内容可变。\n\n\n\n\n3. C++的内存分区\n\n栈区（stack）：主要存放函数参数以及局部变量，由系统自动分配释放；\n堆区（heap）：用户通过malloc/new手动申请释放，分配类似链表；\n全局/静态区：存放全局变量、静态变量；\n字符串常量区：字符串常量；\n代码区：程序的二进制代码。\n\n\n4. STL容器\n底层数据结构：\n\nvector：数组；\nmap、multimap：红黑树；\nunordered_map、unordered_nultimap：哈希表。\n\n\n5. 内存泄漏\n\n一般为堆内存泄漏，即程序在运行中动态申请的内存空间不使用后，未及时释放；\n解决：\n良好编程习惯；\n重载new和delete，以链表形式自动管理分配的内存；\n使用智能指针。\n\n\n\n\n6. 32位、64位系统中，常用内置数据类型所占字节数\n\n32位：\nchar：1字节；\n指针变量：4字节；\nshort int：2字节；\nint：4字节；\nunsigned int：4字节；\nfloat：4字节；\ndouble：8字节；\nlong：4字节；\nunsigned long：4字节；\nlong long：8字节；\n\n\n64位：\nchar：1字节；\n指针变量：8字节；\nshort int：2字节；\nint：4字节；\nunsigned int：4字节；\nfloat：4字节；\ndouble：8字节；\nlong：8字节；\nunsigned long：8字节；\nlong long：8字节。\n\n\n\n\n7. inline、volatile关键字\n\ninline：解决频繁调用小函数大量消耗栈空间的问题；\nvolatile：表明类型变量可悲更改，不再优化，需要从如内存中重新读取。\n\n\n8. 深拷贝与浅拷贝\n拷贝函数使用场景：\n\n一个对象以值的方式传入函数体；\n一个对象以值的方式从函数返回；\n一个对象需通过另一个对象进行初始化；\n\n区别：\n\n浅拷贝：只是增加一个指针指向已存在的内存地址；\n深拷贝：增加一个指针，并且申请一个新的内存用于存放复制的对象。\n\n\n9. 派生类构造/析构函数调用顺序\n\n构造函数：先基后派；\n析构函数：先派后基。\n\n\n10. 数据成员初始化顺序\n顺序：\n\n基类的静态变量或全局变量；\n派生类的静态变量或全局变量；\n基类的成员变量；\n派生类的成员变量。\n\n\n11. static_cast, dynamic_cast, const_cast, reinpreter_cast区别\nstatic_cast与dynamic_cast：\n\n发生时间不同，一个是static编译时，一个是runtime运行时；\nstatic_cast为强制类型转换，不提供运行时的检查；\ndynamic_cast用于转换指针和引用，不可用于转换对象，主要用于类层次间的上行和下行转换：\n上行转换：B继承自A，由B转换为A；\n下行转换：B继承自A，A转换为B；\n\n\n上行转换时，static_cast和dynamic_cast效果相同，下行转换时，dynamic_cast具有类型检查，更安全。\n\n\n12. 定义一个空类 编译器会做什么\n\n当用到相关函数时，编译器会去自动生成：默认构造函数、默认拷贝构造函数、默认拷贝赋值操作符、默认析构函数；\n所有自动生成的函数都是inline和public的。\n\n\n13. 哪些函数不能成为虚函数\n\n构造函数：假如子类继承基类构造函数，则子类对象将使用基类构造函数构造，而积累的构造函数并不知道自类的成员，不符合语义，且，多态是通过基类指针指向子类对象实现多态的，在对象构造之前，并没有对象产生，因此无法使用多态特性，是矛盾的；\n内联成员函数：内联函数在编译时展开，而虚函数是在运行时绑定的，两者相违背；\n静态成员函数：在编译时确定，无法动态绑定，不支持多态。\n\n\n14. 内联函数与宏定义的区别\n\n宏定义在于处理时把所有宏名用宏体替换，内联函数在编译时进行代码插入、展开、省去调用的开销；\n宏定义没有类型检查，内联函数满足函数的性质，如有返回值、参数列表等。\n\n\n15. 左值引用和右值引用\n\n左值引用要求右边的值必须能够取地址，如果不能取地址，可以使用常引用；\n\n例：const int &amp;var = 10;等价于\n\n```c++const int temp = 10;const int &amp;var = temp;1234567891011121314151617181920212223   2. 但常引用修饰后，不可以通过引用进行修改，只能进行读取；2. 右值引用用来绑定到右值；   1. 左值：可以取地址的，有名字的，非临时的值；   2. 右值：不能取地址的，没有名字的，临时的值；   3. 定义格式`类型 &amp;&amp; 引用名 = 右值表达式;`   4. 例：`int &amp;&amp;var = 10;`---### 16. substr用法---1. 目的：构建一个string；2. 用法：s.substr(pos, n)：   1. ```c++      string s(&quot;testString&quot;);      string newStr = s.substr(0, 6);\n\n\n\n\n注意：返回一个从pos开始，包含pos的n个字符，pos默认值为0，n默认值为s.size()-pos。\n\n\n","dateCreated":"2020-09-28T22:43:19+08:00","dateModified":"2020-09-28T22:50:09+08:00","datePublished":"2020-09-28T22:43:19+08:00","description":"1. find命令\n\n查找指定文件名文件（不区分大小写）：\n\n1find -iname &quot;ProgramToFind.java&quot;\n\n\n对找到的文件执行某命令\n\n1find -iname &quot;ProgramToOperate.java&quot; -exec md5sum &#123;&#125; \\;\n\n\n查找home目录下所有空文件\n\n1find ~ -empty","headline":"Linux知识点总结","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2020/09/28/2020-09-28-Linux%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"},"publisher":{"@type":"Organization","name":"Junyu Bian","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"http://example.com/2020/09/28/2020-09-28-Linux%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/","keywords":"Linux"}</script>
+    <meta name="description" content="1. find命令  查找指定文件名文件（不区分大小写）：  1find -iname &quot;ProgramToFind.java&quot;   对找到的文件执行某命令  1find -iname &quot;ProgramToOperate.java&quot; -exec md5sum &amp;#123;&amp;#125; \;   查找home目录下所有空文件  1find ~ -empty">
+<meta property="og:type" content="blog">
 <meta property="og:title" content="Linux知识点总结">
 <meta property="og:url" content="http://example.com/2020/09/28/2020-09-28-Linux%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="Junyu">
@@ -19,81 +24,327 @@
 <meta property="article:author" content="Junyu Bian">
 <meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Junyu" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-wxmdysl42bg8zzt2ryhfqsfzciwu3kx9uqdpszvt5k3t8nhbngsdtxq96fkn.min.css">
 
-<meta name="generator" content="Hexo 5.4.0"></head>
+    <!--STYLES END-->
+    
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Junyu</a>
-      </h1>
-      
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Junyu
+        </a>
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
+    
         
-          <a class="main-nav-link" href="/">Home</a>
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
         
-          <a class="main-nav-link" href="/archives">Archives</a>
         
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
-      </div>
-    </div>
-  </div>
+        </a>
+    
 </header>
-      <div class="outer">
-        <section id="main"><article id="post-2020-09-28-Linux知识点总结" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/09/28/2020-09-28-Linux%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/" class="article-date">
-  <time datetime="2020-09-28T14:43:19.000Z" itemprop="datePublished">2020-09-28</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a>
-  </div>
 
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
         
-  
-    <h1 class="article-title" itemprop="name">
-      Linux知识点总结
-    </h1>
-  
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link open-algolia-search"
+                            href="#search"
+                            
+                            rel="noopener"
+                            title="Search"
+                        >
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="http://stackoverflow.com/users"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Stack Overflow"
+                        >
+                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Stack Overflow</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://twitter.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Twitter"
+                        >
+                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Twitter</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://facebook.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Facebook"
+                        >
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://plus.google.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Google +"
+                        >
+                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Google +</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
 
-      </header>
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-find命令"><a href="#1-find命令" class="headerlink" title="1. find命令"></a>1. find命令</h3><hr>
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            Linux知识点总结
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2020-09-28T22:43:19+08:00">
+	
+		    Sep 28, 2020
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <h3 id="1-find命令"><a href="#1-find命令" class="headerlink" title="1. find命令"></a>1. find命令</h3><hr>
 <ol>
 <li>查找指定文件名文件（不区分大小写）：</li>
 </ol>
@@ -296,153 +547,324 @@
 </li>
 </ol>
 
-      
+            
+
+
+        </div>
     </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2020/09/28/2020-09-28-Linux%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/" data-id="ckwnih86a001mk8t6ghw78evx" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
-
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2020/11/08/2020-11-08-Diff-Array/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
+    <div id="post-footer" class="post-footer main-content-wrap">
         
-          Diff Array
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2020/09/15/2020-09-15-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Recursion+Backtrack/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">LeetCode题目总结-Recursion+Backtrack</div>
-    </a>
-  
-</nav>
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/Linux/" rel="tag">Linux</a>
 
-  
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/11/08/2020-11-08-Diff-Array/"
+                    data-tooltip="Diff Array"
+                    aria-label="PREVIOUS: Diff Array"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/09/15/2020-09-15-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Recursion+Backtrack/"
+                    data-tooltip="LeetCode题目总结-Recursion+Backtrack"
+                    aria-label="NEXT: LeetCode题目总结-Recursion+Backtrack"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2020/09/28/2020-09-28-Linux%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2020/09/28/2020-09-28-Linux%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2020/09/28/2020-09-28-Linux%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
 </article>
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/LeetCode/">LeetCode</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Notes/">Notes</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%91%E8%AE%A1%E7%AE%97/">云计算</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a></li></ul>
-    </div>
-  </div>
 
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/" rel="tag">Algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cent-OS/" rel="tag">Cent OS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Command-Line/" rel="tag">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Database/" rel="tag">Database</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Django/" rel="tag">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FD-io/" rel="tag">FD.io</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/K8s/" rel="tag">K8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Notes/" rel="tag">Notes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VM/" rel="tag">VM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/" rel="tag">Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/Algorithm/" style="font-size: 16.67px;">Algorithm</a> <a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/Cent-OS/" style="font-size: 10px;">Cent OS</a> <a href="/tags/Command-Line/" style="font-size: 10px;">Command Line</a> <a href="/tags/Database/" style="font-size: 10px;">Database</a> <a href="/tags/Django/" style="font-size: 10px;">Django</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/FD-io/" style="font-size: 10px;">FD.io</a> <a href="/tags/K8s/" style="font-size: 10px;">K8s</a> <a href="/tags/Linux/" style="font-size: 11.67px;">Linux</a> <a href="/tags/Notes/" style="font-size: 11.67px;">Notes</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 11.67px;">操作系统</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.33px;">数据库</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 11.67px;">测试</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 18.33px;">算法</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2021/06/05/2021-06-05-K8s-and-docker-Related-Notes/">K8s and docker Related Notes</a>
-          </li>
-        
-          <li>
-            <a href="/2021/06/05/2021-06-05-VM-Related%20-Notes/">VM Related Notes</a>
-          </li>
-        
-          <li>
-            <a href="/2021/06/05/2021-06-05-Command-Line-Related-Notes/">Command Line Related Notes</a>
-          </li>
-        
-          <li>
-            <a href="/2021/04/26/2021-04-26-FDio%E7%AE%80%E4%BB%8B/">FD.io简介</a>
-          </li>
-        
-          <li>
-            <a href="/2020/11/08/2020-11-08-Diff-Array/">Diff Array</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2021 Junyu Bian<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2021 Junyu Bian. All Rights Reserved.
+    </span>
 </footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/11/08/2020-11-08-Diff-Array/"
+                    data-tooltip="Diff Array"
+                    aria-label="PREVIOUS: Diff Array"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/09/15/2020-09-15-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Recursion+Backtrack/"
+                    data-tooltip="LeetCode题目总结-Recursion+Backtrack"
+                    aria-label="NEXT: LeetCode题目总结-Recursion+Backtrack"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2020/09/28/2020-09-28-Linux%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=http://example.com/2020/09/28/2020-09-28-Linux%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=http://example.com/2020/09/28/2020-09-28-Linux%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=http://example.com/2020/09/28/2020-09-28-Linux%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=http://example.com/2020/09/28/2020-09-28-Linux%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=http://example.com/2020/09/28/2020-09-28-Linux%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
     </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
+
+
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">Junyu Bian</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-vnqkjqlintjjatuhqa130uwkuwsu27ios2j5z5qwaodowllkaooycjjcee9d.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
     
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
 
-
-<script src="/js/script.js"></script>
-
-
-
-
-  </div>
-</body>
+    </body>
 </html>
