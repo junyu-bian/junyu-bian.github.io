@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>LeetCode题目总结-DFS+BFS | Junyu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="题目116:填充每个节点的下一个右侧节点指针 描述： 给定一个完美二叉树，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下： struct Node {  int val;  Node *left;  Node *right;  Node *next;}">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode题目总结-DFS+BFS">
+<meta property="og:url" content="http://example.com/2020/09/08/2020-09-08-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-DFS+BFS/index.html">
+<meta property="og:site_name" content="Junyu">
+<meta property="og:description" content="题目116:填充每个节点的下一个右侧节点指针 描述： 给定一个完美二叉树，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下： struct Node {  int val;  Node *left;  Node *right;  Node *next;}">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-09-08T06:03:19.000Z">
+<meta property="article:modified_time" content="2020-09-09T04:31:18.424Z">
+<meta property="article:author" content="Junyu Bian">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Junyu" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Junyu</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2020-09-08-LeetCode题目总结-DFS+BFS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/08/2020-09-08-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-DFS+BFS/" class="article-date">
+  <time datetime="2020-09-08T06:03:19.000Z" itemprop="datePublished">2020-09-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      LeetCode题目总结-DFS+BFS
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="题目116-填充每个节点的下一个右侧节点指针"><a href="#题目116-填充每个节点的下一个右侧节点指针" class="headerlink" title="题目116:填充每个节点的下一个右侧节点指针"></a>题目116:<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node/">填充每个节点的下一个右侧节点指针</a></h3><hr>
+<p>描述：</p>
+<p>给定一个完美二叉树，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：</p>
+<p>struct Node {<br>  int val;<br>  Node *left;<br>  Node *right;<br>  Node *next;<br>}</p>
+<span id="more"></span>
+
+<p>填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。</p>
+<p>初始状态下，所有 next 指针都被设置为 NULL。</p>
+<p>示例：</p>
+<p>输入：{“$id”:”1”,”left”:{“$id”:”2”,”left”:{“$id”:”3”,”left”:null,”next”:null,”right”:null,”val”:4},”next”:null,”right”:{“$id”:”4”,”left”:null,”next”:null,”right”:null,”val”:5},”val”:2},”next”:null,”right”:{“$id”:”5”,”left”:{“$id”:”6”,”left”:null,”next”:null,”right”:null,”val”:6},”next”:null,”right”:{“$id”:”7”,”left”:null,”next”:null,”right”:null,”val”:7},”val”:3},”val”:1}</p>
+<p>输出：{“$id”:”1”,”left”:{“$id”:”2”,”left”:{“$id”:”3”,”left”:null,”next”:{“$id”:”4”,”left”:null,”next”:{“$id”:”5”,”left”:null,”next”:{“$id”:”6”,”left”:null,”next”:null,”right”:null,”val”:7},”right”:null,”val”:6},”right”:null,”val”:5},”right”:null,”val”:4},”next”:{“$id”:”7”,”left”:{“$ref”:”5”},”next”:null,”right”:{“$ref”:”6”},”val”:3},”right”:{“$ref”:”4”},”val”:2},”next”:null,”right”:{“$ref”:”7”},”val”:1}</p>
+<p>提示：</p>
+<p>你只能使用常量级额外空间。<br>使用递归解题也符合要求，本题中递归程序占用的栈空间不算做额外的空间复杂度。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node/solution/dui-lie-mo-ni-yan-du-bian-li-shi-jian-97kong-jian-/">思路</a>：</p>
+<p>突破点：<code>广度优先搜索。</code></p>
+<p>步骤：</p>
+<ol>
+<li>使用队列进行广度优先遍历；</li>
+<li>在接点出队列后，next指向队列首个元素，广度遍历完直接return。</li>
+</ol>
+<p>代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">Node* <span class="title">connect</span><span class="params">(Node* root)</span> </span>&#123;</span><br><span class="line">    	<span class="keyword">if</span>(!root) <span class="keyword">return</span> root;</span><br><span class="line">    	queue&lt;Node*&gt; work;</span><br><span class="line">      work.<span class="built_in">push</span>(root);</span><br><span class="line">    	work.<span class="built_in">push</span>(<span class="literal">nullptr</span>);</span><br><span class="line">    	Node* cur = <span class="literal">nullptr</span>;</span><br><span class="line">    	<span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// 如果队列首部是结点</span></span><br><span class="line">        <span class="keyword">if</span>(work.<span class="built_in">front</span>()) &#123;</span><br><span class="line">        	cur = work.<span class="built_in">front</span>();</span><br><span class="line">    			work.<span class="built_in">pop</span>();</span><br><span class="line">          <span class="comment">// 如果是非叶子结点</span></span><br><span class="line">          <span class="keyword">if</span>(cur-&gt;left) &#123;</span><br><span class="line">          	work.<span class="built_in">push</span>(cur-&gt;left);</span><br><span class="line">    				work.<span class="built_in">push</span>(cur-&gt;right);</span><br><span class="line">          &#125;</span><br><span class="line">    			cur-&gt;next = work.<span class="built_in">front</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 如果只剩下一个nullptr结点</span></span><br><span class="line">    		<span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">1</span> == work.<span class="built_in">size</span>()) &#123;</span><br><span class="line">          <span class="keyword">return</span> root;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 如果遇到nullptr结点，这是一层的分割点</span></span><br><span class="line">    		<span class="keyword">else</span> &#123;</span><br><span class="line">    			work.<span class="built_in">pop</span>();</span><br><span class="line">    			work.<span class="built_in">push</span>(<span class="literal">nullptr</span>);</span><br><span class="line">    		&#125;</span><br><span class="line">    	&#125;</span><br><span class="line">      <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="题目117-填充每个节点的下一个右侧节点指针-II"><a href="#题目117-填充每个节点的下一个右侧节点指针-II" class="headerlink" title="题目117:填充每个节点的下一个右侧节点指针 II"></a>题目117:<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node-ii/">填充每个节点的下一个右侧节点指针 II</a></h3><hr>
+<p>描述：</p>
+<p>给定一个二叉树</p>
+<p>struct Node {<br>  int val;<br>  Node *left;<br>  Node *right;<br>  Node *next;<br>}<br>填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。</p>
+<p>初始状态下，所有 next 指针都被设置为 NULL。 </p>
+<p>进阶：</p>
+<p>你只能使用常量级额外空间。<br>使用递归解题也符合要求，本题中递归程序占用的栈空间不算做额外的空间复杂度。</p>
+<p>示例：</p>
+<p>输入：root = [1,2,3,4,5,null,7]<br>输出：[1,#,2,3,#,4,5,7,#]</p>
+<p>提示：</p>
+<p>树中的节点数小于 6000<br>-100 &lt;= node.val &lt;= 100</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node-ii/solution/cceng-ci-bian-li-by-mrnice/">思路</a>：</p>
+<p>突破点：<code>层次遍历。</code></p>
+<p>步骤：</p>
+<ol>
+<li>使用队列层次遍历；</li>
+<li>每循环一层将这一层清空，录入孩子节点。</li>
+</ol>
+<p>代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">Node* <span class="title">connect</span><span class="params">(Node* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!root) &#123;</span><br><span class="line">          <span class="keyword">return</span> root;</span><br><span class="line">        &#125;</span><br><span class="line">        queue&lt;Node*&gt; q&#123;&#123;root&#125;&#125;;</span><br><span class="line">        <span class="keyword">while</span>(!q.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">            <span class="keyword">int</span> n = q.<span class="built_in">size</span>();</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)&#123;</span><br><span class="line">                Node* t = q.<span class="built_in">front</span>();</span><br><span class="line">                q.<span class="built_in">pop</span>();</span><br><span class="line">                <span class="keyword">if</span>(n<span class="number">-1</span> != i)&#123;</span><br><span class="line">                    Node* tNext = q.<span class="built_in">front</span>();</span><br><span class="line">                    t-&gt;next = tNext;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(t-&gt;left) &#123;</span><br><span class="line">                  q.<span class="built_in">push</span>(t-&gt;left);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(t-&gt;right) &#123;</span><br><span class="line">                  q.<span class="built_in">push</span>(t-&gt;right);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="题目200-岛屿数量"><a href="#题目200-岛屿数量" class="headerlink" title="题目200:岛屿数量"></a>题目200:<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/number-of-islands/">岛屿数量</a></h3><hr>
+<p>描述：</p>
+<p>给你一个由 ‘1’（陆地）和 ‘0’（水）组成的的二维网格，请你计算网格中岛屿的数量。</p>
+<p>岛屿总是被水包围，并且每座岛屿只能由水平方向或竖直方向上相邻的陆地连接形成。</p>
+<p>此外，你可以假设该网格的四条边均被水包围。</p>
+<p>示例 1:</p>
+<p>输入:<br>[<br>[‘1’,’1’,’1’,’1’,’0’],<br>[‘1’,’1’,’0’,’1’,’0’],<br>[‘1’,’1’,’0’,’0’,’0’],<br>[‘0’,’0’,’0’,’0’,’0’]<br>]<br>输出: 1<br>示例 2:</p>
+<p>输入:<br>[<br>[‘1’,’1’,’0’,’0’,’0’],<br>[‘1’,’1’,’0’,’0’,’0’],<br>[‘0’,’0’,’1’,’0’,’0’],<br>[‘0’,’0’,’0’,’1’,’1’]<br>]<br>输出: 3<br>解释: 每座岛屿只能由水平和/或竖直方向上相邻的陆地连接而成。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/number-of-islands/solution/dao-yu-shu-liang-by-leetcode/">思路一</a>：</p>
+<p>突破点：<code>深度优先搜索。</code></p>
+<p>步骤：</p>
+<ol>
+<li>将二维网格视为无向图，相邻1之间有边相连；</li>
+<li>搜索到1，则标记为0；</li>
+<li>最终深度优先搜索次数即为岛屿数量。</li>
+</ol>
+<p>代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(vector&lt;vector&lt;<span class="keyword">char</span>&gt; &gt;&amp; grid, <span class="keyword">int</span> r, <span class="keyword">int</span> c)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> nr = grid.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> nc = grid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">        grid[r][c] = <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">&#x27;1&#x27;</span> == r - <span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; grid[r<span class="number">-1</span>][c]) <span class="built_in">dfs</span>(grid, r - <span class="number">1</span>, c);</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">&#x27;1&#x27;</span> == r + <span class="number">1</span> &lt; nr &amp;&amp; grid[r+<span class="number">1</span>][c]) <span class="built_in">dfs</span>(grid, r + <span class="number">1</span>, c);</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">&#x27;1&#x27;</span> == c - <span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; grid[r][c<span class="number">-1</span>]) <span class="built_in">dfs</span>(grid, r, c - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">&#x27;1&#x27;</span> == c + <span class="number">1</span> &lt; nc &amp;&amp; grid[r][c+<span class="number">1</span>]) <span class="built_in">dfs</span>(grid, r, c + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numIslands</span><span class="params">(vector&lt;vector&lt;<span class="keyword">char</span>&gt; &gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> nr = grid.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (!nr) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> nc = grid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> num_islands = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> r = <span class="number">0</span>; r &lt; nr; ++r) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> c = <span class="number">0</span>; c &lt; nc; ++c) &#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="string">&#x27;1&#x27;</span> == grid[r][c]) &#123;</span><br><span class="line">                    ++num_islands;</span><br><span class="line">                    <span class="built_in">dfs</span>(grid, r, c);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> num_islands;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/number-of-islands/solution/dao-yu-shu-liang-by-leetcode/">思路二</a>：</p>
+<p>突破点：<code>广度优先搜索。</code></p>
+<p>步骤：</p>
+<ol>
+<li>将二维网格视为无向图，相邻1之间有边相连；</li>
+<li>搜索到1，则加入队列，并修改标记为0；</li>
+<li>最终广度优先搜索次数即为岛屿数量。</li>
+</ol>
+<p>代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numIslands</span><span class="params">(vector&lt;vector&lt;<span class="keyword">char</span>&gt; &gt;&amp; grid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> nr = grid.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (!nr) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> nc = grid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> num_islands = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> r = <span class="number">0</span>; r &lt; nr; ++r) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> c = <span class="number">0</span>; c &lt; nc; ++c) &#123;</span><br><span class="line">                <span class="keyword">if</span> (grid[r][c] == <span class="string">&#x27;1&#x27;</span>) &#123;</span><br><span class="line">                  ++num_islands;</span><br><span class="line">                  grid[r][c] = <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">                  queue&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; &gt; neighbors;</span><br><span class="line">                  neighbors.<span class="built_in">push</span>(&#123;r, c&#125;);</span><br><span class="line">                  <span class="keyword">while</span> (!neighbors.<span class="built_in">front</span>()) &#123;</span><br><span class="line">                    <span class="keyword">auto</span> rc = neighbors.<span class="built_in">front</span>();</span><br><span class="line">                    neighbors.<span class="built_in">pop</span>();</span><br><span class="line">                    <span class="keyword">int</span> row = rc.first, col = rc.second;</span><br><span class="line">                    <span class="keyword">if</span> (<span class="number">0</span> &lt;= row - <span class="number">1</span> &amp;&amp; <span class="string">&#x27;1&#x27;</span> == grid[row<span class="number">-1</span>][col]) &#123;</span><br><span class="line">                      neighbors.<span class="built_in">push</span>(&#123;row<span class="number">-1</span>, col&#125;);</span><br><span class="line">                      grid[row<span class="number">-1</span>][col] = <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (row + <span class="number">1</span> &lt; nr &amp;&amp; grid[row+<span class="number">1</span>][col] == <span class="string">&#x27;1&#x27;</span>) &#123;</span><br><span class="line">                      neighbors.<span class="built_in">push</span>(&#123;row+<span class="number">1</span>, col&#125;);</span><br><span class="line">                      grid[row+<span class="number">1</span>][col] = <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (col - <span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; grid[row][col<span class="number">-1</span>] == <span class="string">&#x27;1&#x27;</span>) &#123;</span><br><span class="line">                      neighbors.<span class="built_in">push</span>(&#123;row, col<span class="number">-1</span>&#125;);</span><br><span class="line">                      grid[row][col<span class="number">-1</span>] = <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (col + <span class="number">1</span> &lt; nc &amp;&amp; grid[row][col+<span class="number">1</span>] == <span class="string">&#x27;1&#x27;</span>) &#123;</span><br><span class="line">                      neighbors.<span class="built_in">push</span>(&#123;row, col+<span class="number">1</span>&#125;);</span><br><span class="line">                      grid[row][col+<span class="number">1</span>] = <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                  &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> num_islands;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="题目207-课程表"><a href="#题目207-课程表" class="headerlink" title="题目207:课程表"></a>题目207:<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/course-schedule/">课程表</a></h3><hr>
+<p>描述：</p>
+<p>你这个学期必须选修 numCourse 门课程，记为 0 到 numCourse-1 。</p>
+<p>在选修某些课程之前需要一些先修课程。 例如，想要学习课程 0 ，你需要先完成课程 1 ，我们用一个匹配来表示他们：[0,1]</p>
+<p>给定课程总量以及它们的先决条件，请你判断是否可能完成所有课程的学习？</p>
+<p>示例 1:</p>
+<p>输入: 2, [[1,0]]<br>输出: true<br>解释: 总共有 2 门课程。学习课程 1 之前，你需要完成课程 0。所以这是可能的。<br>示例 2:</p>
+<p>输入: 2, [[1,0],[0,1]]<br>输出: false<br>解释: 总共有 2 门课程。学习课程 1 之前，你需要先完成课程 0；并且学习课程 0 之前，你还应先完成课程 1。这是不可能的。</p>
+<p>提示：</p>
+<p>输入的先决条件是由 边缘列表 表示的图形，而不是 邻接矩阵 。详情请参见图的表示法。<br>你可以假定输入的先决条件中没有重复的边。<br>1 &lt;= numCourses &lt;= 10^5</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/course-schedule/solution/ke-cheng-biao-by-leetcode-solution/">思路一</a>：</p>
+<p>突破点：<code>深度优先搜索。</code></p>
+<p>步骤：</p>
+<ol>
+<li>题目即寻找有向图中是否成环；</li>
+<li>通过深度优先搜索，寻找拓扑排序；</li>
+<li>如果存在，说明无环，如果不存在，说明有环。</li>
+</ol>
+<p>代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    vector&lt;vector&lt;<span class="keyword">int</span>&gt; &gt; edges;</span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; visited;</span><br><span class="line">    <span class="keyword">bool</span> valid = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> u)</span> </span>&#123;</span><br><span class="line">        visited[u] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> v: edges[u]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">0</span> == visited[v]) &#123;</span><br><span class="line">                <span class="built_in">dfs</span>(v);</span><br><span class="line">                <span class="keyword">if</span> (!valid) &#123;</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">1</span> == visited[v]) &#123;</span><br><span class="line">                valid = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        visited[u] = <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">canFinish</span><span class="params">(<span class="keyword">int</span> numCourses, vector&lt;vector&lt;<span class="keyword">int</span>&gt; &gt;&amp; prerequisites)</span> </span>&#123;</span><br><span class="line">        edges.<span class="built_in">resize</span>(numCourses);</span><br><span class="line">        visited.<span class="built_in">resize</span>(numCourses);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; info: prerequisites) &#123;</span><br><span class="line">            edges[info[<span class="number">1</span>]].<span class="built_in">push_back</span>(info[<span class="number">0</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numCourses &amp;&amp; valid; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!visited[i]) &#123;</span><br><span class="line">                <span class="built_in">dfs</span>(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> valid;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/course-schedule/solution/ke-cheng-biao-by-leetcode-solution/">思路二</a>：</p>
+<p>突破点：<code>广度优先搜索。</code></p>
+<p>步骤：</p>
+<ol>
+<li>题目即寻找有向图中是否成环；</li>
+<li>通过广度优先搜索，寻找拓扑排序；</li>
+<li>寻找所有入度为0的点放入队列；</li>
+<li>每一步广度优先搜索时，取出队首节点，加入答案中；</li>
+<li>移除该点的所有出边；</li>
+<li>如果有某个相邻节点入度变为0，则将该节点加入答案；</li>
+<li>结束后，如果答案包含n各节点，则找到一种拓扑排序；</li>
+<li>否则，说明存在环。</li>
+</ol>
+<p>代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    vector&lt;vector&lt;<span class="keyword">int</span>&gt; &gt; edges;</span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; indeg;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">canFinish</span><span class="params">(<span class="keyword">int</span> numCourses, vector&lt;vector&lt;<span class="keyword">int</span>&gt; &gt;&amp; prerequisites)</span> </span>&#123;</span><br><span class="line">        edges.<span class="built_in">resize</span>(numCourses);</span><br><span class="line">        indeg.<span class="built_in">resize</span>(numCourses);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; info: prerequisites) &#123;</span><br><span class="line">            edges[info[<span class="number">1</span>]].<span class="built_in">push_back</span>(info[<span class="number">0</span>]);</span><br><span class="line">            ++indeg[info[<span class="number">0</span>]];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        queue&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numCourses; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">0</span> == indeg[i]) &#123;</span><br><span class="line">                q.<span class="built_in">push</span>(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> visited = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (!q.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">            ++visited;</span><br><span class="line">            <span class="keyword">int</span> u = q.<span class="built_in">front</span>();</span><br><span class="line">            q.<span class="built_in">pop</span>();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> v: edges[u]) &#123;</span><br><span class="line">                --indeg[v];</span><br><span class="line">                <span class="keyword">if</span> (<span class="number">0</span> == indeg[v]) &#123;</span><br><span class="line">                    q.<span class="built_in">push</span>(v);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> visited == numCourses;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="题目210-课程表-II"><a href="#题目210-课程表-II" class="headerlink" title="题目210:课程表 II"></a>题目210:<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/course-schedule-ii/">课程表 II</a></h3><hr>
+<p>描述：</p>
+<p>现在你总共有 n 门课需要选，记为 0 到 n-1。</p>
+<p>在选修某些课程之前需要一些先修课程。 例如，想要学习课程 0 ，你需要先完成课程 1 ，我们用一个匹配来表示他们: [0,1]</p>
+<p>给定课程总量以及它们的先决条件，返回你为了学完所有课程所安排的学习顺序。</p>
+<p>可能会有多个正确的顺序，你只要返回一种就可以了。如果不可能完成所有课程，返回一个空数组。</p>
+<p>示例 1:</p>
+<p>输入: 2, [[1,0]]<br>输出: [0,1]<br>解释: 总共有 2 门课程。要学习课程 1，你需要先完成课程 0。因此，正确的课程顺序为 [0,1] 。<br>示例 2:</p>
+<p>输入: 4, [[1,0],[2,0],[3,1],[3,2]]<br>输出: [0,1,2,3] or [0,2,1,3]<br>解释: 总共有 4 门课程。要学习课程 3，你应该先完成课程 1 和课程 2。并且课程 1 和课程 2 都应该排在课程 0 之后。<br>因此，一个正确的课程顺序是 [0,1,2,3] 。另一个正确的排序是 [0,2,1,3] 。<br>说明:</p>
+<p>输入的先决条件是由边缘列表表示的图形，而不是邻接矩阵。详情请参见图的表示法。<br>你可以假定输入的先决条件中没有重复的边。<br>提示:</p>
+<p>这个问题相当于查找一个循环是否存在于有向图中。如果存在循环，则不存在拓扑排序，因此不可能选取所有课程进行学习。<br>通过 DFS 进行拓扑排序 - 一个关于Coursera的精彩视频教程（21分钟），介绍拓扑排序的基本概念。<br>拓扑排序也可以通过 BFS 完成。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/course-schedule-ii/solution/ke-cheng-biao-ii-by-leetcode-solution/">思路</a>：</p>
+<p>突破点：<code>深度优先搜索。</code></p>
+<p>步骤：</p>
+<ol>
+<li>思考过程与题目207类似；</li>
+<li>当我们标记当前节点u为”搜索中“后，遍历每个相邻节点v；</li>
+<li>如果为未搜索，则开始搜索v，搜索完成后回溯到u；</li>
+<li>如果为搜索中，则找到一个环，返回false；</li>
+<li>如果为已完成，说明v已经在栈中，不进行操作；</li>
+<li>u所有相邻节点都为”已完成“后，将u入栈，并标记为已完成。</li>
+</ol>
+<p>代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="comment">// 存储有向图</span></span><br><span class="line">    vector&lt;vector&lt;<span class="keyword">int</span>&gt; &gt; edges;</span><br><span class="line">    <span class="comment">// 标记每个节点的状态：0=未搜索，1=搜索中，2=已完成</span></span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; visited;</span><br><span class="line">    <span class="comment">// 用数组来模拟栈，下标 0 为栈底，n-1 为栈顶</span></span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; result;</span><br><span class="line">    <span class="comment">// 判断有向图中是否有环</span></span><br><span class="line">    <span class="keyword">bool</span> valid = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> u)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 将节点标记为「搜索中」</span></span><br><span class="line">        visited[u] = <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 搜索其相邻节点</span></span><br><span class="line">        <span class="comment">// 只要发现有环，立刻停止搜索</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> v: edges[u]) &#123;</span><br><span class="line">            <span class="comment">// 如果「未搜索」那么搜索相邻节点</span></span><br><span class="line">            <span class="keyword">if</span> (visited[v] == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="built_in">dfs</span>(v);</span><br><span class="line">                <span class="keyword">if</span> (!valid) &#123;</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 如果「搜索中」说明找到了环</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (visited[v] == <span class="number">1</span>) &#123;</span><br><span class="line">                valid = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 将节点标记为「已完成」</span></span><br><span class="line">        visited[u] = <span class="number">2</span>;</span><br><span class="line">        <span class="comment">// 将节点入栈</span></span><br><span class="line">        result.<span class="built_in">push_back</span>(u);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">findOrder</span><span class="params">(<span class="keyword">int</span> numCourses, vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; prerequisites)</span> </span>&#123;</span><br><span class="line">        edges.<span class="built_in">resize</span>(numCourses);</span><br><span class="line">        visited.<span class="built_in">resize</span>(numCourses);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; info: prerequisites) &#123;</span><br><span class="line">            edges[info[<span class="number">1</span>]].<span class="built_in">push_back</span>(info[<span class="number">0</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 每次挑选一个「未搜索」的节点，开始进行深度优先搜索</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numCourses &amp;&amp; valid; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!visited[i]) &#123;</span><br><span class="line">                <span class="built_in">dfs</span>(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!valid) &#123;</span><br><span class="line">            <span class="keyword">return</span> &#123;&#125;;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 如果没有环，那么就有拓扑排序</span></span><br><span class="line">        <span class="comment">// 注意下标 0 为栈底，因此需要将数组反序输出</span></span><br><span class="line">        <span class="built_in">reverse</span>(result.<span class="built_in">begin</span>(), result.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="题目279-完全平方数"><a href="#题目279-完全平方数" class="headerlink" title="题目279:完全平方数"></a>题目279:<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/perfect-squares/">完全平方数</a></h3><hr>
+<p>描述：</p>
+<p>给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, …）使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。</p>
+<p>示例 1:</p>
+<p>输入: n = 12<br>输出: 3<br>解释: 12 = 4 + 4 + 4.<br>示例 2:</p>
+<p>输入: n = 13<br>输出: 2<br>解释: 13 = 4 + 9.</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/perfect-squares/solution/dong-tai-gui-hua-bfsliang-chong-fang-fa-by-yu-mu-2/">思路一</a>：</p>
+<p>突破点：<code>广度优先搜索。</code></p>
+<p>步骤：</p>
+<ol>
+<li>将题目抽象为从n走到0，每次跨越平方距离，求最少跨越次数；</li>
+<li>使用BFS解决。</li>
+</ol>
+<p>代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">/*返回小于n的平方序列: 1, 4, 9...*/</span></span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">getSquares</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i*i &lt;= n; ++i) &#123;</span><br><span class="line">            res.<span class="built_in">push_back</span>(i*i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numSquares</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; squares = <span class="built_in">getSquares</span>(n);</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">bool</span>&gt; <span class="title">visited</span><span class="params">(n+<span class="number">1</span>)</span></span>;    <span class="comment">//记录已访问过的节点</span></span><br><span class="line">        queue&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line"></span><br><span class="line">        q.<span class="built_in">push</span>(n);</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        visited[n] = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">while</span>(!q.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">            <span class="keyword">int</span> size = q.<span class="built_in">size</span>();</span><br><span class="line">            res++;</span><br><span class="line">          </span><br><span class="line">            <span class="keyword">while</span>(size--) &#123;</span><br><span class="line">                <span class="keyword">int</span> curr = q.<span class="built_in">front</span>();</span><br><span class="line">                q.<span class="built_in">pop</span>();</span><br><span class="line">                <span class="comment">/*每次跨越的间隔为平方数*/</span></span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> num: squares) &#123;</span><br><span class="line">                    <span class="keyword">int</span> next = curr - num;</span><br><span class="line">                    <span class="keyword">if</span>(<span class="number">0</span> &gt; next) &#123;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span>(<span class="number">0</span> == next) &#123;</span><br><span class="line">                        <span class="keyword">return</span> res;</span><br><span class="line">                    &#125;</span><br><span class="line">                    visited[next] = <span class="literal">true</span>;</span><br><span class="line">                    q.<span class="built_in">push</span>(next);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> n;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/perfect-squares/solution/yi-ge-wan-quan-bei-bao-wen-ti-by-wtffqbpl/">思路二</a>：</p>
+<p>突破点：<code>动态规划。</code></p>
+<p>步骤：</p>
+<ol>
+<li>将题目理解为背包问题；</li>
+<li>背包容量v[i]表示每个完全平方数字的大小；</li>
+<li>背包价值w[i]为1；</li>
+<li>求解组成数组所需要的完全平方数数量最少即为背包的价值最低。</li>
+</ol>
+<p>代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numSquares</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; choices;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 构造物品，即所有小于给定数字的完全平方数</span></span><br><span class="line">        <span class="keyword">while</span> (n / res &gt;= res) &#123;</span><br><span class="line">            choices.<span class="built_in">push_back</span>(res * res);</span><br><span class="line">            res++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">int</span> size = choices.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(n + <span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// init</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= n; ++i) &#123;</span><br><span class="line">            dp[i] = i;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 完全背包模板</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; size; ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = choices[i]; j &lt;= n; ++j) &#123;</span><br><span class="line">                dp[j] = <span class="built_in">min</span>(dp[j], dp[j - choices[i]] + <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> dp[n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="题目301-删除无效的括号"><a href="#题目301-删除无效的括号" class="headerlink" title="题目301:删除无效的括号"></a>题目301:<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/remove-invalid-parentheses/">删除无效的括号</a></h3><hr>
+<p>描述：</p>
+<p>删除最小数量的无效括号，使得输入的字符串有效，返回所有可能的结果。</p>
+<p>说明: 输入可能包含了除 ( 和 ) 以外的字符。</p>
+<p>示例 1:</p>
+<p>输入: “()())()”<br>输出: [“()()()”, “(())()”]<br>示例 2:</p>
+<p>输入: “(a)())()”<br>输出: [“(a)()()”, “(a())()”]<br>示例 3:</p>
+<p>输入: “)(“<br>输出: [“”]</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/remove-invalid-parentheses/solution/dfsjie-ti-by-hw_wt/">思路</a>：</p>
+<p>突破点：<code>深度优先遍历。</code></p>
+<p>步骤：</p>
+<ol>
+<li>首先遍历输入字符串，获取需要删除的左右括号个数；</li>
+<li>递归循环进行左右删除；</li>
+<li>当1.中计数都为0时，检查输入字符串是否有效。</li>
+</ol>
+<p>代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isvalid</span><span class="params">(string s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> cnt = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> c : s) &#123;</span><br><span class="line">            <span class="keyword">if</span> (c == <span class="string">&#x27;(&#x27;</span>) &#123;</span><br><span class="line">                cnt++;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (c == <span class="string">&#x27;)&#x27;</span>) &#123;</span><br><span class="line">                cnt--;</span><br><span class="line">                <span class="keyword">if</span> (cnt &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> cnt == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(string s, <span class="keyword">int</span> st, <span class="keyword">int</span> l, <span class="keyword">int</span> r, vector&lt;string&gt;&amp; ans)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (l == <span class="number">0</span> &amp;&amp; r == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">isvalid</span>(s)) &#123;</span><br><span class="line">                ans.<span class="built_in">push_back</span>(s);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = st; i &lt; s.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i != st &amp;&amp; s[i] == s[i<span class="number">-1</span>]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">if</span> (s[i] == <span class="string">&#x27;(&#x27;</span> &amp;&amp; l &gt; <span class="number">0</span>) &#123;</span><br><span class="line">              	<span class="comment">// 删除操作，substr(a, b):从a开始个字符组成的字符串</span></span><br><span class="line">                <span class="built_in">dfs</span>(s.<span class="built_in">substr</span>(<span class="number">0</span>, i) + s.<span class="built_in">substr</span>(i+<span class="number">1</span>, s.<span class="built_in">size</span>()<span class="number">-1</span>-i), i, l - <span class="number">1</span>, r, ans);</span><br><span class="line">            &#125; </span><br><span class="line">            <span class="keyword">if</span> (s[i] == <span class="string">&#x27;)&#x27;</span> &amp;&amp; r &gt; <span class="number">0</span>) &#123;</span><br><span class="line">              	<span class="comment">// 删除操作，substr(a, b):从a开始个字符组成的字符串</span></span><br><span class="line">                <span class="built_in">dfs</span>(s.<span class="built_in">substr</span>(<span class="number">0</span>, i) + s.<span class="built_in">substr</span>(i+<span class="number">1</span>, s.<span class="built_in">size</span>()<span class="number">-1</span>-i), i, l, r - <span class="number">1</span>, ans);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">vector&lt;string&gt; <span class="title">removeInvalidParentheses</span><span class="params">(string s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> right = <span class="number">0</span>;</span><br><span class="line">        vector&lt;string&gt; ans;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> c : s) &#123;</span><br><span class="line">            <span class="keyword">if</span> (c == <span class="string">&#x27;(&#x27;</span>) &#123;</span><br><span class="line">                left++;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (c == <span class="string">&#x27;)&#x27;</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (left &gt; <span class="number">0</span>) &#123; </span><br><span class="line">                    left--;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    right++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// left和right表示左右括号要删除的个数</span></span><br><span class="line">        <span class="built_in">dfs</span>(s, <span class="number">0</span>, left, right, ans);</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/09/08/2020-09-08-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-DFS+BFS/" data-id="ckwnih876004ok8t670g082se" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/09/09/2020-09-09-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Heap+Stack/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          LeetCode题目总结-Heap+Stack
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">LeetCode题目总结-Tree+BST</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/LeetCode/">LeetCode</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Notes/">Notes</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%91%E8%AE%A1%E7%AE%97/">云计算</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/" rel="tag">Algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cent-OS/" rel="tag">Cent OS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Command-Line/" rel="tag">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Database/" rel="tag">Database</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Django/" rel="tag">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FD-io/" rel="tag">FD.io</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/K8s/" rel="tag">K8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Notes/" rel="tag">Notes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VM/" rel="tag">VM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/" rel="tag">Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Algorithm/" style="font-size: 16.67px;">Algorithm</a> <a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/Cent-OS/" style="font-size: 10px;">Cent OS</a> <a href="/tags/Command-Line/" style="font-size: 10px;">Command Line</a> <a href="/tags/Database/" style="font-size: 10px;">Database</a> <a href="/tags/Django/" style="font-size: 10px;">Django</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/FD-io/" style="font-size: 10px;">FD.io</a> <a href="/tags/K8s/" style="font-size: 10px;">K8s</a> <a href="/tags/Linux/" style="font-size: 11.67px;">Linux</a> <a href="/tags/Notes/" style="font-size: 11.67px;">Notes</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 11.67px;">操作系统</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.33px;">数据库</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 11.67px;">测试</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 18.33px;">算法</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/06/05/2021-06-05-K8s-and-docker-Related-Notes/">K8s and docker Related Notes</a>
+          </li>
+        
+          <li>
+            <a href="/2021/06/05/2021-06-05-VM-Related%20-Notes/">VM Related Notes</a>
+          </li>
+        
+          <li>
+            <a href="/2021/06/05/2021-06-05-Command-Line-Related-Notes/">Command Line Related Notes</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/26/2021-04-26-FDio%E7%AE%80%E4%BB%8B/">FD.io简介</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/08/2020-11-08-Diff-Array/">Diff Array</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Junyu Bian<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

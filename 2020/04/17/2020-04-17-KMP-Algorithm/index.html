@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>KMP Algorithm | Junyu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Background…Once upon a time, Tom asked his father to find abab inside abcaabababaa. Tom’s dad did this in a traditional way (brute force). He compared each character of the first string with each char">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KMP Algorithm">
+<meta property="og:url" content="http://example.com/2020/04/17/2020-04-17-KMP-Algorithm/index.html">
+<meta property="og:site_name" content="Junyu">
+<meta property="og:description" content="Background…Once upon a time, Tom asked his father to find abab inside abcaabababaa. Tom’s dad did this in a traditional way (brute force). He compared each character of the first string with each char">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-04-16T16:31:29.000Z">
+<meta property="article:modified_time" content="2020-09-07T04:45:40.718Z">
+<meta property="article:author" content="Junyu Bian">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Junyu" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Junyu</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2020-04-17-KMP-Algorithm" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/04/17/2020-04-17-KMP-Algorithm/" class="article-date">
+  <time datetime="2020-04-16T16:31:29.000Z" itemprop="datePublished">2020-04-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      KMP Algorithm
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Background…"><a href="#Background…" class="headerlink" title="Background…"></a>Background…</h1><p>Once upon a time, Tom asked his father to find <code>abab</code> inside <code>abcaabababaa</code>.</p>
+<p>Tom’s dad did this in a traditional way (brute force). He compared each character of the first string with each character of the second string. When he find one character not matching, for example, the third character in the second string in this case, he start again from the second character of the second string. It went on and on and on…</p>
+<span id="more"></span>
+
+<h1 id="Moving-on…"><a href="#Moving-on…" class="headerlink" title="Moving on…"></a>Moving on…</h1><p>Unfortunately, Tom had a bad temper about waiting. He wanted to make some change. Tom noticed that, if the n-th character in the first string happened to be not match, even if he start again, he will make a compare with that character again in the future. Therefore, Tom decided not to start from the begining each time a not match is found.</p>
+<p>He talked to his dad, “when we have a not match for the n-th character, if we consider the characters before, we do have a big match, and if so, we actually can use the head of <code>abab</code> to try to match the tail of <code>abab</code>, the longest mathing substring will be the place for us to start again.” </p>
+<p>For example, for <code>abab</code>, there will be 3 possible heads: <code>a</code>, <code>ab</code>, <code>aba</code>. And there will be 3 possible tails: <code>b</code>, <code>ab</code>, <code>bab</code>. The <strong>longest matching</strong> is <code>ab</code>, so each time there’s a not mathing, we don’t need to start from begin, instead we can start from the 3-rd character to make a comparison.</p>
+<h1 id="Coding-work…"><a href="#Coding-work…" class="headerlink" title="Coding work…"></a>Coding work…</h1><p>Taking the above thought into real code, c++, for example:</p>
+<p>We first need a function to generate all the <strong>longest matching</strong> for each substring of the string we are trying to search.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> * <span class="title">FindLongestMatching</span><span class="params">(string first)</span></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> * tableOfFirst = <span class="keyword">new</span> <span class="keyword">int</span>[first.<span class="built_in">length</span>()];</span><br><span class="line">  tableOfFirst[<span class="number">0</span>] = <span class="number">-1</span>;</span><br><span class="line">  <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">int</span> j = <span class="number">-1</span>;</span><br><span class="line">  <span class="keyword">while</span> (i &lt; p.<span class="built_in">length</span>() - <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (j == <span class="number">-1</span> || first[i] == first[j]) &#123;</span><br><span class="line">      i++；</span><br><span class="line">      j++；</span><br><span class="line">      tableOfFirst[i] = j;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">      j = tableOfFirst[j];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> tableOfFirst;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>With this function, we can make a linear time matching:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">KMP</span> <span class="params">(string first, string second)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">int</span> * tableOfFirst = <span class="built_in">FindLongestMatching</span>(first);</span><br><span class="line">  <span class="keyword">while</span> (i &lt; second.<span class="built_in">length</span>() &amp;&amp; j &lt; first.<span class="built_in">length</span>()) &#123;</span><br><span class="line">    <span class="keyword">if</span> (j == <span class="number">-1</span> || second[i] == first[j]) &#123;</span><br><span class="line">      i++;</span><br><span class="line">      j++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">      j = tableOfFirst[j];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (j == first.<span class="built_in">length</span>())&#123;</span><br><span class="line">    <span class="keyword">return</span> i-j;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Tom is happy now.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/04/17/2020-04-17-KMP-Algorithm/" data-id="ckwnih85i0004k8t63yr30m7p" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Algorithm/" rel="tag">Algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          知识点整理-3
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/04/16/2020-04-16-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">知识点整理-2</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/LeetCode/">LeetCode</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Notes/">Notes</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%91%E8%AE%A1%E7%AE%97/">云计算</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/" rel="tag">Algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cent-OS/" rel="tag">Cent OS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Command-Line/" rel="tag">Command Line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Database/" rel="tag">Database</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Django/" rel="tag">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FD-io/" rel="tag">FD.io</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/K8s/" rel="tag">K8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Notes/" rel="tag">Notes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VM/" rel="tag">VM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/" rel="tag">Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Algorithm/" style="font-size: 16.67px;">Algorithm</a> <a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/Cent-OS/" style="font-size: 10px;">Cent OS</a> <a href="/tags/Command-Line/" style="font-size: 10px;">Command Line</a> <a href="/tags/Database/" style="font-size: 10px;">Database</a> <a href="/tags/Django/" style="font-size: 10px;">Django</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/FD-io/" style="font-size: 10px;">FD.io</a> <a href="/tags/K8s/" style="font-size: 10px;">K8s</a> <a href="/tags/Linux/" style="font-size: 11.67px;">Linux</a> <a href="/tags/Notes/" style="font-size: 11.67px;">Notes</a> <a href="/tags/VM/" style="font-size: 10px;">VM</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 11.67px;">操作系统</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.33px;">数据库</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 11.67px;">测试</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 18.33px;">算法</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/06/05/2021-06-05-K8s-and-docker-Related-Notes/">K8s and docker Related Notes</a>
+          </li>
+        
+          <li>
+            <a href="/2021/06/05/2021-06-05-VM-Related%20-Notes/">VM Related Notes</a>
+          </li>
+        
+          <li>
+            <a href="/2021/06/05/2021-06-05-Command-Line-Related-Notes/">Command Line Related Notes</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/26/2021-04-26-FDio%E7%AE%80%E4%BB%8B/">FD.io简介</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/08/2020-11-08-Diff-Array/">Diff Array</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Junyu Bian<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
