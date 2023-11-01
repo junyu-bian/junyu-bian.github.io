@@ -1,403 +1,243 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>Blogs of Junyu</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/normalize.css/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Blogs of Junyu</h1><a id="logo" href="/.">Blogs of Junyu</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/about/"><i class="fa fa-user"> About</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title"><a href="/2020/08/31/2020-08-31-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/">计算机网络知识点总结</a></h1><div class="post-meta">2020-08-31</div><a class="disqus-comment-count" data-disqus-identifier="2020/08/31/2020-08-31-计算机网络知识点总结/" href="/2020/08/31/2020-08-31-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/#disqus_thread"></a><div class="post-content"><h3 id="1-Https加密过程"><a href="#1-Https加密过程" class="headerlink" title="1. Https加密过程"></a>1. Https加密过程</h3><hr>
+<ol>
+<li>客户端发起握手请求；</li>
+<li>服务端返回已有的<code>证书公钥</code>（服务端通过CA认证后，拥有<code>证书公钥</code>和<code>证书私钥</code>）；</li>
+<li>客户端验证证书是否有效；</li>
+<li>若证书有效，则生成一个<code>随机数</code>；</li>
+<li>用<code>证书公钥</code>加密生成的随机数；</li>
+<li>将加密后的<code>密钥</code>发送给服务端；</li>
+<li>服务端用<code>证书私钥</code>解密密钥；</li>
+<li>服务端使用解密出的密钥加密要发送的内容并发送给客户端；</li>
+<li>客户端使用秘钥解密信息。</li>
+</ol></div><p class="readmore"><a href="/2020/08/31/2020-08-31-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/">Read More</a></p></div><div class="post"><h1 class="post-title"><a href="/2020/07/23/2020-07-23-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-6/">知识点整理-6</a></h1><div class="post-meta">2020-07-23</div><a class="disqus-comment-count" data-disqus-identifier="2020/07/23/2020-07-23-知识点整理-6/" href="/2020/07/23/2020-07-23-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-6/#disqus_thread"></a><div class="post-content"><h3 id="1-Linux和端口号、进程、文件相关的命令"><a href="#1-Linux和端口号、进程、文件相关的命令" class="headerlink" title="1. Linux和端口号、进程、文件相关的命令"></a>1. Linux和端口号、进程、文件相关的命令</h3><hr>
+<p><strong>静态进程查看</strong>: ps</p>
+<p>例：通过进程名查看进程号</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps ax | fgrep [进程名]</span><br></pre></td></tr></table></figure>
 
- <!DOCTYPE HTML>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  
-    <title>Blogs of Junyu</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
-    
-    <meta name="author" content="Junyu Bian">
-    
-    
-    
-    
-    <link rel="alternate" href="/atom.xml" title="Blogs of Junyu" type="application/atom+xml">
-    
-    
-    <link rel="icon" href="/img/favicon.ico">
-    
-    
-    <link rel="apple-touch-icon" href="/img/pacman.jpg">
-    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<p><strong>网络查看</strong>: netstat</p></div><p class="readmore"><a href="/2020/07/23/2020-07-23-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-6/">Read More</a></p></div><div class="post"><h1 class="post-title"><a href="/2020/05/17/2020-05-17-SWAP-Function/">SWAP Function</a></h1><div class="post-meta">2020-05-17</div><a class="disqus-comment-count" data-disqus-identifier="2020/05/17/2020-05-17-SWAP-Function/" href="/2020/05/17/2020-05-17-SWAP-Function/#disqus_thread"></a><div class="post-content"><p>In this blog, we will look into several ways of implementing swap in different ways.</p>
+<h1 id="Intermedia-Variable"><a href="#Intermedia-Variable" class="headerlink" title="Intermedia Variable"></a>Intermedia Variable</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> b = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">int</span> tem = a;</span><br><span class="line">a = b;</span><br><span class="line">b = temp;</span><br></pre></td></tr></table></figure></div><p class="readmore"><a href="/2020/05/17/2020-05-17-SWAP-Function/">Read More</a></p></div><div class="post"><h1 class="post-title"><a href="/2020/05/16/2020-05-16-emplace_back-in-C++/">EMPLACE_BACK in C++</a></h1><div class="post-meta">2020-05-16</div><a class="disqus-comment-count" data-disqus-identifier="2020/05/16/2020-05-16-emplace_back-in-C++/" href="/2020/05/16/2020-05-16-emplace_back-in-C++/#disqus_thread"></a><div class="post-content"><p>There are different type of containers in C++ STL. To add a new element into the back of a container, we normally use <code>push_back()</code>. In this blog, we will look into a new way of performing push back - <code>emplace_back()</code>.</p>
+<h1 id="Background-Knowledge"><a href="#Background-Knowledge" class="headerlink" title="Background Knowledge"></a>Background Knowledge</h1><p>Rvalue References: with aim of increasing the efficiency of C++, rvalues are included. It doesn’t  need to copy the value, the rvalue reference is bound to the value itself.</p></div><p class="readmore"><a href="/2020/05/16/2020-05-16-emplace_back-in-C++/">Read More</a></p></div><div class="post"><h1 class="post-title"><a href="/2020/04/28/2020-04-28-Insurance-Management-System---Overview/">Insurance Management System - Overview</a></h1><div class="post-meta">2020-04-28</div><a class="disqus-comment-count" data-disqus-identifier="2020/04/28/2020-04-28-Insurance-Management-System---Overview/" href="/2020/04/28/2020-04-28-Insurance-Management-System---Overview/#disqus_thread"></a><div class="post-content"><p>In this series of blogs, we will talk about how to build a Insurance Management web application together with database system.</p>
+<h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><p>Tom’s dad works in an insurance company. His work is to drop down who bought what kind of insurance, on which day does the customer receives an invoice, and on which day does the customer makes a payment. </p></div><p class="readmore"><a href="/2020/04/28/2020-04-28-Insurance-Management-System---Overview/">Read More</a></p></div><div class="post"><h1 class="post-title"><a href="/2020/04/23/2020-04-23-Sorting-Algorithms---Quick-Sort/">Sorting Algorithms - Quick Sort</a></h1><div class="post-meta">2020-04-23</div><a class="disqus-comment-count" data-disqus-identifier="2020/04/23/2020-04-23-Sorting-Algorithms---Quick-Sort/" href="/2020/04/23/2020-04-23-Sorting-Algorithms---Quick-Sort/#disqus_thread"></a><div class="post-content"><p>In this series of blogs, we will talk about different sorting algorithms. </p>
+<p>All the algorithms in the table below will be covered.</p>
+<table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Time Complexity (Average Case)</th>
+<th>Time Complexity (Worst Case)</th>
+<th>Time Complexity (Best Case)</th>
+<th>Merg</th>
+<th>Stability</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Bubble Sort</td>
+<td>O(N^2)</td>
+<td>O(N^2)</td>
+<td>O(N^2)</td>
+<td>O(1)</td>
+<td>Stable</td>
+</tr>
+<tr>
+<td>Quick Sort</td>
+<td>O(NlogN)</td>
+<td>O(N^2)</td>
+<td>O(NlogN)</td>
+<td>O(logN)</td>
+<td>Not Stable</td>
+</tr>
+<tr>
+<td>Quick Sort (with Random Selection)</td>
+<td>O(NlogN)</td>
+<td>O(NlogN)</td>
+<td>O(NlogN)</td>
+<td>O(logN)</td>
+<td>Not Stable</td>
+</tr>
+<tr>
+<td>Insertion Sort</td>
+<td>O(N^2)</td>
+<td>O(N^2)</td>
+<td>O(N)</td>
+<td>O(1)</td>
+<td>Stable</td>
+</tr>
+<tr>
+<td>Selection Sort</td>
+<td>O(N^2)</td>
+<td>O(N^2)</td>
+<td>O(N^2)</td>
+<td>O(1)</td>
+<td>Not Stable</td>
+</tr>
+<tr>
+<td>Heap Sort</td>
+<td>O(NlogN)</td>
+<td>O(NlogN)</td>
+<td>O(NlogN)</td>
+<td>O(1)</td>
+<td>Not Stable</td>
+</tr>
+<tr>
+<td>Merge Sort (with double divides)</td>
+<td>O(NlogN)</td>
+<td>O(NlogN)</td>
+<td>O(NlogN)</td>
+<td>O(N)</td>
+<td>Stable</td>
+</tr>
+<tr>
+<td>Merge Sort (with multi divides)</td>
+<td>O(NlogN)</td>
+<td>O(NlogN)</td>
+<td>O(NlogN)</td>
+<td>O(N)</td>
+<td>Stable</td>
+</tr>
+<tr>
+<td>Counting Sort</td>
+<td>O(N+M)</td>
+<td>O(N+M)</td>
+<td>O(N+M)</td>
+<td>O(N+M)</td>
+<td>Stable</td>
+</tr>
+<tr>
+<td>Bucket Sort</td>
+<td>O(N+M)</td>
+<td>O(N^2)</td>
+<td>O(N+M)</td>
+<td>O(N+M)</td>
+<td>Stable</td>
+</tr>
+<tr>
+<td>Radix Sort</td>
+<td>O(N*M)</td>
+<td>O(N*M)</td>
+<td>O(N*M)</td>
+<td>O(N+M)</td>
+<td>Stable</td>
+</tr>
+</tbody></table>
+<h1 id="Quick-Sort"><a href="#Quick-Sort" class="headerlink" title="Quick Sort"></a>Quick Sort</h1><h2 id="How-to-do-it…"><a href="#How-to-do-it…" class="headerlink" title="How to do it…"></a>How to do it…</h2><p>Divide and conquer.</p>
+<p>In each division, seperate the data into two parts. </p>
+<p>All elements in the first part should be all less than the elements in the second part.</p>
+<p>Loop until the array is sorted.</p></div><p class="readmore"><a href="/2020/04/23/2020-04-23-Sorting-Algorithms---Quick-Sort/">Read More</a></p></div><div class="post"><h1 class="post-title"><a href="/2020/04/22/2020-04-22-Sorting-Algorithms---Bubble-Sort/">Sorting Algorithms - Bubble Sort</a></h1><div class="post-meta">2020-04-22</div><a class="disqus-comment-count" data-disqus-identifier="2020/04/22/2020-04-22-Sorting-Algorithms---Bubble-Sort/" href="/2020/04/22/2020-04-22-Sorting-Algorithms---Bubble-Sort/#disqus_thread"></a><div class="post-content"><p>In this series of blogs, we will talk about different sorting algorithms. </p>
+<p>All the algorithms in the table below will be covered.</p>
+<table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Time Complexity (Average Case)</th>
+<th>Time Complexity (Worst Case)</th>
+<th>Time Complexity (Best Case)</th>
+<th>Merg</th>
+<th>Stability</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Bubble Sort</td>
+<td>O(N^2)</td>
+<td>O(N^2)</td>
+<td>O(N^2)</td>
+<td>O(1)</td>
+<td>Stable</td>
+</tr>
+<tr>
+<td>Quick Sort</td>
+<td>O(NlogN)</td>
+<td>O(N^2)</td>
+<td>O(NlogN)</td>
+<td>O(logN)</td>
+<td>Not Stable</td>
+</tr>
+<tr>
+<td>Quick Sort (with Random Selection)</td>
+<td>O(NlogN)</td>
+<td>O(NlogN)</td>
+<td>O(NlogN)</td>
+<td>O(logN)</td>
+<td>Not Stable</td>
+</tr>
+<tr>
+<td>Insertion Sort</td>
+<td>O(N^2)</td>
+<td>O(N^2)</td>
+<td>O(N)</td>
+<td>O(1)</td>
+<td>Stable</td>
+</tr>
+<tr>
+<td>Selection Sort</td>
+<td>O(N^2)</td>
+<td>O(N^2)</td>
+<td>O(N^2)</td>
+<td>O(1)</td>
+<td>Not Stable</td>
+</tr>
+<tr>
+<td>Heap Sort</td>
+<td>O(NlogN)</td>
+<td>O(NlogN)</td>
+<td>O(NlogN)</td>
+<td>O(1)</td>
+<td>Not Stable</td>
+</tr>
+<tr>
+<td>Merge Sort (with double divides)</td>
+<td>O(NlogN)</td>
+<td>O(NlogN)</td>
+<td>O(NlogN)</td>
+<td>O(N)</td>
+<td>Stable</td>
+</tr>
+<tr>
+<td>Merge Sort (with multi divides)</td>
+<td>O(NlogN)</td>
+<td>O(NlogN)</td>
+<td>O(NlogN)</td>
+<td>O(N)</td>
+<td>Stable</td>
+</tr>
+<tr>
+<td>Counting Sort</td>
+<td>O(N+M)</td>
+<td>O(N+M)</td>
+<td>O(N+M)</td>
+<td>O(N+M)</td>
+<td>Stable</td>
+</tr>
+<tr>
+<td>Bucket Sort</td>
+<td>O(N+M)</td>
+<td>O(N^2)</td>
+<td>O(N+M)</td>
+<td>O(N+M)</td>
+<td>Stable</td>
+</tr>
+<tr>
+<td>Radix Sort</td>
+<td>O(N*M)</td>
+<td>O(N*M)</td>
+<td>O(N*M)</td>
+<td>O(N+M)</td>
+<td>Stable</td>
+</tr>
+</tbody></table>
+<h1 id="Bubble-Sort"><a href="#Bubble-Sort" class="headerlink" title="Bubble Sort"></a>Bubble Sort</h1><h2 id="How-to-do-it…"><a href="#How-to-do-it…" class="headerlink" title="How to do it…"></a>How to do it…</h2><p>Compare the adjacent elements.</p>
+<p>If the first element is greater than the second element, swap them.</p>
+<p>Loop until reaching the last pair of elements.</p>
+<p>Repeat until all the array is sorted.</p></div><p class="readmore"><a href="/2020/04/22/2020-04-22-Sorting-Algorithms---Bubble-Sort/">Read More</a></p></div><div class="post"><h1 class="post-title"><a href="/2020/04/21/2020-04-21-Sorting-Algorithms---Summary/">Sorting Algorithms - Summary</a></h1><div class="post-meta">2020-04-21</div><a class="disqus-comment-count" data-disqus-identifier="2020/04/21/2020-04-21-Sorting-Algorithms---Summary/" href="/2020/04/21/2020-04-21-Sorting-Algorithms---Summary/#disqus_thread"></a><div class="post-content"><p>In this series of blogs, we will talk about different sorting algorithms. </p>
+<p>All the algorithms in the table below will be covered.</p></div><p class="readmore"><a href="/2020/04/21/2020-04-21-Sorting-Algorithms---Summary/">Read More</a></p></div><div class="post"><h1 class="post-title"><a href="/2020/04/20/2020-04-19-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-5/">知识点整理-5</a></h1><div class="post-meta">2020-04-20</div><a class="disqus-comment-count" data-disqus-identifier="2020/04/20/2020-04-19-知识点整理-5/" href="/2020/04/20/2020-04-19-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-5/#disqus_thread"></a><div class="post-content"><h3 id="1-MySQL查询10-20条的数据"><a href="#1-MySQL查询10-20条的数据" class="headerlink" title="1. MySQL查询10-20条的数据"></a>1. MySQL查询10-20条的数据</h3><hr>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from table limit 10, 20</span><br></pre></td></tr></table></figure>
 
-<meta name="generator" content="Hexo 5.4.0"></head>
-
-  <body>
-    <header>
-      <div>
-		
-			<div id="imglogo">
-				<a href="/"><img src="/img/logo.svg" alt="Blogs of Junyu" title="Blogs of Junyu"/></a>
-			</div>
-			
-			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="Blogs of Junyu">Blogs of Junyu</a></h1>
-				<h2 class="blog-motto"></h2>
-			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
-			</a></div>
-			<nav class="animated">
-				<ul>
-					
-						<li><a href="/">Home</a></li>
-					
-						<li><a href="/archives">Archives</a></li>
-					
-					<li>
-					
-					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
-						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
-						<input type="hidden" name="q" value="site:junyu-bian.github.io">
-					</form>
-					
-					</li>
-				</ul>
-			</nav>			
-</div>
-
-    </header>
-    <div id="container">
-      <div id="main">
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2020/08/31/2020-08-31-计算机网络知识点总结/" title="计算机网络知识点总结" itemprop="url">
-  
-    <h1 itemprop="name">计算机网络知识点总结</h1>
-    
-     
-       <p itemprop="description" >1. Https加密过程
-
-客户端发起握手请求；
-服务端返回已有的证书公钥（服务端通过CA认证后，拥有证书公钥和证书私钥）；
-客户端验证证书是否有效；
-若证书有效，则生成一个随机数；
-用证书公钥加密生成的随机数；
-将加密后的密钥发送给服务端；
-服务端用证书私钥解密密钥；
-服务端使</p>
-      
-    
-    <time datetime="2020-08-31T08:40:10.000Z" itemprop="datePublished">2020-08-31</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2020/07/23/2020-07-23-知识点整理-6/" title="知识点整理-6" itemprop="url">
-  
-    <h1 itemprop="name">知识点整理-6</h1>
-    
-     
-       <p itemprop="description" >1. Linux和端口号、进程、文件相关的命令
-静态进程查看: ps
-例：通过进程名查看进程号
-1ps ax | fgrep [进程名]
-
-网络查看: netstat</p>
-      
-    
-    <time datetime="2020-07-23T14:54:16.000Z" itemprop="datePublished">2020-07-23</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2020/05/17/2020-05-17-SWAP-Function/" title="SWAP Function" itemprop="url">
-  
-    <h1 itemprop="name">SWAP Function</h1>
-    
-     
-       <p itemprop="description" >In this blog, we will look into several ways of implementing swap in different ways.
-Intermedia Variable12345int a = 1;int b = 2;int tem = a</p>
-      
-    
-    <time datetime="2020-05-17T11:28:00.000Z" itemprop="datePublished">2020-05-17</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2020/05/16/2020-05-16-emplace_back-in-C++/" title="EMPLACE_BACK in C++" itemprop="url">
-  
-    <h1 itemprop="name">EMPLACE_BACK in C++</h1>
-    
-     
-       <p itemprop="description" >There are different type of containers in C++ STL. To add a new element into the back of a container, we normally use push_back(). In this b</p>
-      
-    
-    <time datetime="2020-05-16T01:39:00.000Z" itemprop="datePublished">2020-05-16</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2020/04/28/2020-04-28-Insurance-Management-System---Overview/" title="Insurance Management System - Overview" itemprop="url">
-  
-    <h1 itemprop="name">Insurance Management System - Overview</h1>
-    
-     
-       <p itemprop="description" >In this series of blogs, we will talk about how to build a Insurance Management web application together with database system.
-BackgroundTom</p>
-      
-    
-    <time datetime="2020-04-28T14:59:02.000Z" itemprop="datePublished">2020-04-28</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2020/04/23/2020-04-23-Sorting-Algorithms---Quick-Sort/" title="Sorting Algorithms - Quick Sort" itemprop="url">
-  
-    <h1 itemprop="name">Sorting Algorithms - Quick Sort</h1>
-    
-     
-       <p itemprop="description" >In this series of blogs, we will talk about different sorting algorithms. 
-All the algorithms in the table below will be covered.
-
-
-
-Algorit</p>
-      
-    
-    <time datetime="2020-04-23T05:42:56.000Z" itemprop="datePublished">2020-04-23</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2020/04/22/2020-04-22-Sorting-Algorithms---Bubble-Sort/" title="Sorting Algorithms - Bubble Sort" itemprop="url">
-  
-    <h1 itemprop="name">Sorting Algorithms - Bubble Sort</h1>
-    
-     
-       <p itemprop="description" >In this series of blogs, we will talk about different sorting algorithms. 
-All the algorithms in the table below will be covered.
-
-
-
-Algorit</p>
-      
-    
-    <time datetime="2020-04-22T01:23:36.000Z" itemprop="datePublished">2020-04-22</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2020/04/21/2020-04-21-Sorting-Algorithms---Summary/" title="Sorting Algorithms - Summary" itemprop="url">
-  
-    <h1 itemprop="name">Sorting Algorithms - Summary</h1>
-    
-     
-       <p itemprop="description" >In this series of blogs, we will talk about different sorting algorithms. 
-All the algorithms in the table below will be covered.</p>
-      
-    
-    <time datetime="2020-04-21T14:18:10.000Z" itemprop="datePublished">2020-04-21</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2020/04/20/2020-04-19-知识点整理-5/" title="知识点整理-5" itemprop="url">
-  
-    <h1 itemprop="name">知识点整理-5</h1>
-    
-     
-       <p itemprop="description" >1. MySQL查询10-20条的数据
-1select * from table limit 10, 20</p>
-      
-    
-    <time datetime="2020-04-19T16:51:32.000Z" itemprop="datePublished">2020-04-20</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2020/04/19/2020-04-19-知识点整理-4/" title="知识点整理-4" itemprop="url">
-  
-    <h1 itemprop="name">知识点整理-4</h1>
-    
-     
-       <p itemprop="description" >1. 黑盒测试和白盒测试
-
-黑盒测试：即功能性测试
-
-等价类划分：有效等价类即对于程序的规格来说是合理的、有意义的；无效等价类即对程序的规格来说是不合理的、每有意义的。
-边界值分析：对各种边界情况设计测试用例。
-因果图法：根据输入的各种组合来设计测试用例，用于检查程序输入条件的各</p>
-      
-    
-    <time datetime="2020-04-19T13:07:23.000Z" itemprop="datePublished">2020-04-19</time>
-  </a>
-</section>
-
-
-  <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/2/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next &amp;raquo;</a>
-  </nav>
-
-</div>
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
-
-<div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
-<aside class="clearfix">
-
-  
-<div class="categorieslist">
-	<p class="asidetitle">Categories</p>
-		<ul>
-		
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
-		
-			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>9</sup></a></li>
-		
-			<li><a href="/categories/Notes/" title="Notes">Notes<sup>5</sup></a></li>
-		
-			<li><a href="/categories/Web/" title="Web">Web<sup>1</sup></a></li>
-		
-			<li><a href="/categories/云计算/" title="云计算">云计算<sup>1</sup></a></li>
-		
-			<li><a href="/categories/知识点/" title="知识点">知识点<sup>11</sup></a></li>
-		
-		</ul>
-</div>
-
-
-  
-<div class="tagslist">
-	<p class="asidetitle">Tags</p>
-		<ul class="clearfix">
-		
-			<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
-		
-			<li><a href="/tags/Bash/" title="Bash">Bash<sup>2</sup></a></li>
-		
-			<li><a href="/tags/C/" title="C++">C++<sup>23</sup></a></li>
-		
-			<li><a href="/tags/Cent-OS/" title="Cent OS">Cent OS<sup>1</sup></a></li>
-		
-			<li><a href="/tags/Command-Line/" title="Command Line">Command Line<sup>1</sup></a></li>
-		
-			<li><a href="/tags/Database/" title="Database">Database<sup>1</sup></a></li>
-		
-			<li><a href="/tags/Django/" title="Django">Django<sup>1</sup></a></li>
-		
-			<li><a href="/tags/Docker/" title="Docker">Docker<sup>1</sup></a></li>
-		
-			<li><a href="/tags/FD-io/" title="FD.io">FD.io<sup>1</sup></a></li>
-		
-			<li><a href="/tags/K8s/" title="K8s">K8s<sup>1</sup></a></li>
-		
-			<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
-		
-			<li><a href="/tags/Notes/" title="Notes">Notes<sup>5</sup></a></li>
-		
-			<li><a href="/tags/VM/" title="VM">VM<sup>1</sup></a></li>
-		
-			<li><a href="/tags/Web/" title="Web">Web<sup>1</sup></a></li>
-		
-			<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>3</sup></a></li>
-		
-			<li><a href="/tags/数据库/" title="数据库">数据库<sup>4</sup></a></li>
-		
-			<li><a href="/tags/测试/" title="测试">测试<sup>3</sup></a></li>
-		
-			<li><a href="/tags/算法/" title="算法">算法<sup>14</sup></a></li>
-		
-			<li><a href="/tags/计算机网络/" title="计算机网络">计算机网络<sup>6</sup></a></li>
-		
-		</ul>
-</div>
-
-
-  <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
-</div>
-
-</aside>
-</div>
-    </div>
-    <footer><div id="footer" >
-	
-	<div class="line">
-		<span></span>
-		<div class="author"></div>
-	</div>
-	
-	
-	<div class="social-font clearfix">
-		
-		
-		
-		
-		
-	</div>
-		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2023 
-		
-		<a href="https://junyu-bian.github.io" target="_blank" title="Junyu Bian">Junyu Bian</a>
-		
-		</p>
-</div>
-</footer>
-    <script src="/js/jquery-2.1.0.min.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.navbar').click(function(){
-    $('header nav').toggleClass('shownav');
+<hr></div><p class="readmore"><a href="/2020/04/20/2020-04-19-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-5/">Read More</a></p></div><div class="post"><h1 class="post-title"><a href="/2020/04/19/2020-04-19-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-4/">知识点整理-4</a></h1><div class="post-meta">2020-04-19</div><a class="disqus-comment-count" data-disqus-identifier="2020/04/19/2020-04-19-知识点整理-4/" href="/2020/04/19/2020-04-19-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-4/#disqus_thread"></a><div class="post-content"><h3 id="1-黑盒测试和白盒测试"><a href="#1-黑盒测试和白盒测试" class="headerlink" title="1. 黑盒测试和白盒测试"></a>1. 黑盒测试和白盒测试</h3><hr>
+<blockquote>
+<p>黑盒测试：即功能性测试</p>
+</blockquote>
+<p><strong>等价类划分</strong>：有效等价类即对于程序的规格来说是合理的、有意义的；无效等价类即对程序的规格来说是不合理的、每有意义的。</p>
+<p><strong>边界值分析</strong>：对各种边界情况设计测试用例。</p>
+<p><strong>因果图法</strong>：根据输入的各种组合来设计测试用例，用于检查程序输入条件的各种组合情况。</p></div><p class="readmore"><a href="/2020/04/19/2020-04-19-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-4/">Read More</a></p></div><nav class="page-navigator"><a class="extend prev" rel="prev" href="/page/2/">Previous</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next</a></nav><script id="dsq-count-scr" src="//null.disqus.com/count.js" async></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
   });
-  var myWidth = 0;
-  function getSize(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-  };
-  var m = $('#main'),
-      a = $('#asidepart'),
-      c = $('.closeaside'),
-      o = $('.openaside');
-  $(window).resize(function(){
-    getSize(); 
-    if (myWidth >= 1024) {
-      $('header nav').removeClass('shownav');
-    }else
-    {
-      m.removeClass('moveMain');
-      a.css('display', 'block').removeClass('fadeOut');
-      o.css('display', 'none');
-        
-    }
-  });
-  c.click(function(){
-    a.addClass('fadeOut').css('display', 'none');
-    o.css('display', 'block').addClass('fadeIn');
-    m.addClass('moveMain');
-  });
-  o.click(function(){
-    o.css('display', 'none').removeClass('beforeFadeIn');
-    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
-    m.removeClass('moveMain');
-  });
-  $(window).scroll(function(){
-    o.css("top",Math.max(80,260-$(this).scrollTop()));
-  });
-});
-</script>
-
-
-
-
-
-
-
-  </body>
- </html>
+</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="https://junyu-bian.github.io"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/LeetCode/">LeetCode</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Notes/">Notes</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%91%E8%AE%A1%E7%AE%97/">云计算</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/C/" style="font-size: 15px;">C++</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 15px;">操作系统</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/tags/Algorithm/" style="font-size: 15px;">Algorithm</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 15px;">算法</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 15px;">数据库</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 15px;">测试</a> <a href="/tags/Web/" style="font-size: 15px;">Web</a> <a href="/tags/Django/" style="font-size: 15px;">Django</a> <a href="/tags/Database/" style="font-size: 15px;">Database</a> <a href="/tags/FD-io/" style="font-size: 15px;">FD.io</a> <a href="/tags/Notes/" style="font-size: 15px;">Notes</a> <a href="/tags/Cent-OS/" style="font-size: 15px;">Cent OS</a> <a href="/tags/Command-Line/" style="font-size: 15px;">Command Line</a> <a href="/tags/VM/" style="font-size: 15px;">VM</a> <a href="/tags/Bash/" style="font-size: 15px;">Bash</a> <a href="/tags/K8s/" style="font-size: 15px;">K8s</a> <a href="/tags/Docker/" style="font-size: 15px;">Docker</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2022/10/21/2022-10-21-dev%20null%20and%202&%3E1/">/dev/null and 2&>1</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/10/21/2022-10-21-getopts%20in%20Bash/">getopts in Bash</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/06/05/2021-06-05-K8s-and-docker-Related-Notes/">K8s and docker Related Notes</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/06/05/2021-06-05-VM-Related%20-Notes/">VM Related Notes</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/06/05/2021-06-05-Command-Line-Related-Notes/">Command Line Related Notes</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/26/2021-04-26-FDio%E7%AE%80%E4%BB%8B/">FD.io简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/11/08/2020-11-08-Diff-Array/">Diff Array</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/09/28/2020-09-28-Linux%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/">Linux知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/09/15/2020-09-15-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Recursion+Backtrack/">LeetCode题目总结-Recursion+Backtrack</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/09/12/2020-09-12-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Graph/">LeetCode题目总结-Graph</a></li></ul></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2023 <a href="/." rel="nofollow">Blogs of Junyu.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.css"><script type="text/javascript" src="/js/love.js"></script><script type="text/javascript" src="/js/copycode.js" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>
