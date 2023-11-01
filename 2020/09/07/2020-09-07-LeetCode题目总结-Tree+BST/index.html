@@ -1,25 +1,19 @@
+
 <!DOCTYPE html>
-<html lang=en>
+<html lang="en">
+    
 <head>
-  <meta charset="utf-8">
-  
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="Cache-Control" content="no-transform" />
-  <meta http-equiv="Cache-Control" content="no-siteapp" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="format-detection" content="telephone=no,email=no,adress=no">
-  <!-- Color theme for statusbar -->
-  <meta name="theme-color" content="#000000" />
-  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
-  <meta http-equiv="window-target" content="_top" />
-  
-  
-  <title>LeetCode题目总结-Tree+BST | Hexo</title>
-  <meta name="description" content="题目94:二叉树的中序遍历 描述： 给定一个二叉树，返回它的中序 遍历。 示例: 输入: [1,null,2,3]   1         2    &#x2F;   3 输出: [1,3,2]进阶: 递归算法很简单，你可以通过迭代算法完成吗？">
-<meta property="og:type" content="article">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Blogs of Junyu">
+    <title>LeetCode题目总结-Tree+BST - Blogs of Junyu</title>
+    <meta name="author" content="Junyu Bian">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Junyu Bian","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"题目94:二叉树的中序遍历\n描述：\n给定一个二叉树，返回它的中序 遍历。\n示例:\n输入: [1,null,2,3]   1         2    /   3\n输出: [1,3,2]进阶: 递归算法很简单，你可以通过迭代算法完成吗？\n\n\n思路一：\n突破点：递归。\n代码：\n123456void traversal(TreeNode* cur, vector&lt;int&gt;&amp; vec) &#123;    if (nullptr == cur) return;    traversal(cur-&gt;left, vec);  // 左    vec.push_back(cur-&gt;val);    // 中    traversal(cur-&gt;right, vec); // 右&#125;\n\n思路二：\n突破点：迭代。\n代码：\n1234567891011121314151617181920212223242526272829303132class Solution &#123;public:    vector&lt;int&gt; inorderTraversal(TreeNode* root) &#123;        vector&lt;int&gt; result;        stack&lt;TreeNode*&gt; tempStack;        if (nullptr != root) tempStack.push(root);        while (!tempStack.empty()) &#123;            TreeNode* node = tempStack.top();            if (nullptr != node) &#123;              \t// 将该节点弹出，避免重复操作，下面再将右中左节点添加到栈中                tempStack.pop();               \t// 添加右节点                if (node-&gt;right) tempStack.push(node-&gt;right);               \t// 添加中节点                tempStack.push(node);              \t// 中节点访问过，但是还没有处理，需要做一下标记。                tempStack.push(nullptr); \t\t\t\t\t\t\t\t// 添加左节点                if (node-&gt;left) tempStack.push(node-&gt;left);             &#125; else &#123;              \t// 将空节点弹出                tempStack.pop();               \t// 重新取出栈中元素                node = tempStack.top();                 tempStack.pop();              \t// 加入到数组中                result.push_back(node-&gt;val);             &#125;        &#125;        return result;    &#125;&#125;;\n\n\n题目144:二叉树的前序遍历\n描述：\n给定一个二叉树，返回它的 前序 遍历。\n示例:\n输入: [1,null,2,3]   1         2    /   3 \n输出: [1,2,3]进阶: 递归算法很简单，你可以通过迭代算法完成吗？\n思路一：\n突破点：递归。\n代码：\n1234567891011121314class Solution &#123;public:    void traversal(TreeNode* cur, vector&lt;int&gt;&amp; vec) &#123;        if (nullptr == cur) return;        vec.push_back(cur-&gt;val);    // 中        traversal(cur-&gt;left, vec);  // 左        traversal(cur-&gt;right, vec); // 右    &#125;    vector&lt;int&gt; preorderTraversal(TreeNode* root) &#123;        vector&lt;int&gt; result;        traversal(root, result);        return result;    &#125;&#125;;\n\n思路二：\n突破点：迭代。\n代码：\n123456789101112131415161718192021222324class Solution &#123;public:    vector&lt;int&gt; preorderTraversal(TreeNode* root) &#123;        vector&lt;int&gt; result;        stack&lt;TreeNode*&gt; tempStack;        if (nullptr != root) tempStack.push(root);        while (!tempStack.empty()) &#123;            TreeNode* node = tempStack.top();            if (nullptr != node) &#123;                tempStack.pop();                if (node-&gt;right) tempStack.push(node-&gt;right);  // 右                if (node-&gt;left) tempStack.push(node-&gt;left);    // 左                tempStack.push(node);                          // 中                tempStack.push(NULL);            &#125; else &#123;                tempStack.pop();                node = tempStack.top();                tempStack.pop();                result.push_back(node-&gt;val);            &#125;        &#125;        return result;    &#125;&#125;;\n\n\n题目145:二叉树的后序遍历\n描述：\n给定一个二叉树，返回它的 后序 遍历。\n示例:\n输入: [1,null,2,3]   1         2    /   3 \n输出: [3,2,1]进阶: 递归算法很简单，你可以通过迭代算法完成吗？\n思路一：\n突破点：递归。\n代码：\n1234567891011121314class Solution &#123;public:    void traversal(TreeNode* cur, vector&lt;int&gt;&amp; vec) &#123;        if (nullptr == cur) return;        traversal(cur-&gt;left, vec);  // 左        traversal(cur-&gt;right, vec); // 右        vec.push_back(cur-&gt;val);    // 中    &#125;    vector&lt;int&gt; postorderTraversal(TreeNode* root) &#123;        vector&lt;int&gt; result;        traversal(root, result);        return result;    &#125;&#125;;\n\n思路二：\n突破点：迭代。\n代码：\n12345678910111213141516171819202122232425class Solution &#123;public:    vector&lt;int&gt; postorderTraversal(TreeNode* root) &#123;        vector&lt;int&gt; result;        stack&lt;TreeNode*&gt; tempStack;        if (nullptr != root) tempStack.push(root);        while (!tempStack.empty()) &#123;            TreeNode* node = tempStack.top();            if (nullptr != node) &#123;                tempStack.pop();                tempStack.push(node);                          // 中                tempStack.push(NULL);                if (node-&gt;right) tempStack.push(node-&gt;right);  // 右                if (node-&gt;left) tempStack.push(node-&gt;left);    // 左            &#125; else &#123;                tempStack.pop();                node = tempStack.top();                tempStack.pop();                result.push_back(node-&gt;val);            &#125;        &#125;        return result;    &#125;&#125;;\n\n\n题目112:路径总和\n描述：给定一个二叉树和一个目标和，判断该树中是否存在根节点到叶子节点的路径，这条路径上所有节点值相加等于目标和。\n说明: 叶子节点是指没有子节点的节点。\n示例:给定如下二叉树，以及目标和 sum = 22，\n1234567      5     / \\    4   8   /   / \\  11  13  4 /  \\      \\7    2      1\n\n返回 true, 因为存在目标和为 22 的根节点到叶子节点的路径 5-&gt;4-&gt;11-&gt;2。\n思路一：\n突破点：广度优先搜索。\n步骤：\n\n使用广度优先搜索，计算从根节点到当前节点的路径和；\n使用两个队列，分别存储要遍历的节点和根节点到这些节点的路径和。\n\n代码：\n12345678910111213141516171819202122232425262728293031class Solution &#123;public:    bool hasPathSum(TreeNode *root, int sum) &#123;        if (nullptr == root) &#123;            return false;        &#125;        queue&lt;TreeNode *&gt; queNode;        queue&lt;int&gt; queVal;        queNode.push(root);        queVal.push(root-&gt;val);        while (!queNode.empty()) &#123;            TreeNode *now = queNode.front();            int temp = queVal.front();            queNode.pop();            queVal.pop();            if (nullptr ==now-&gt;left &amp;&amp; nullptr == now-&gt;right) &#123;                if (temp == sum) return true;                continue;            &#125;            if (nullptr != now-&gt;left) &#123;                queNode.push(now-&gt;left);                queVal.push(now-&gt;left-&gt;val + temp);            &#125;            if (now-&gt;right != nullptr) &#123;                queNode.push(now-&gt;right);                queVal.push(now-&gt;right-&gt;val + temp);            &#125;        &#125;        return false;    &#125;&#125;;\n\n思路二：\n突破点：递归。\n步骤：\n\n问题细化，即为求是否存在从当前节点的子节点到叶子节点的路径，使得路径和为sum-val；\n若当前节点为叶子节点，则直接判断sum是否与val相等；\n若非叶子节点，需递归进行查询。\n\n代码：\n12345678910111213class Solution &#123;public:    bool hasPathSum(TreeNode *root, int sum) &#123;        if (nullptr == root) &#123;            return false;        &#125;        if (nullptr == root-&gt;left &amp;&amp; nullptr == root-&gt;right) &#123;            return sum == root-&gt;val;        &#125;        return hasPathSum(root-&gt;left, sum - root-&gt;val) ||               hasPathSum(root-&gt;right, sum - root-&gt;val);    &#125;&#125;;\n\n\n题目113:路径总和 II\n描述：给定一个二叉树和一个目标和，找到所有从根节点到叶子节点路径总和等于给定目标和的路径。\n说明: 叶子节点是指没有子节点的节点。\n示例:给定如下二叉树，以及目标和 sum = 22，\n1234567      5     / \\    4   8   /   / \\  11  13  4 /  \\    / \\7    2  5   1\n\n返回:\n1234[   [5,4,11,2],   [5,8,4,5]]\n\n思路：\n突破点：DFS。\n步骤：\n\n递归记录当前路径上所有节点的值；\n当递归至叶子节点，计算路径总和并比较。\n\n代码：\n123456789101112131415161718192021222324252627282930/** * Definition for a binary tree node. * struct TreeNode &#123; *     int val; *     TreeNode *left; *     TreeNode *right; *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125; * &#125;; */class Solution &#123;public:    vector&lt;vector&lt;int&gt; &gt; ans;    void dfs(TreeNode* root, int sum, vector&lt;int&gt; valVec)&#123;        valVec.push_back(root-&gt;val);        if(nullptr == root-&gt;left &amp;&amp; nullptr == root-&gt;right)&#123;            int s = 0;            for(auto n: valVec) s += n;            if(s == sum) ans.push_back(valVec);        &#125;        if(root-&gt;left) dfs(root-&gt;left, sum, valVec);        if(root-&gt;right) dfs(root-&gt;right, sum, valVec);    &#125;    vector&lt;vector&lt;int&gt; &gt; pathSum(TreeNode* root, int sum) &#123;        if(root == NULL) return ans;        dfs(root, sum, &#123;&#125;);        return ans;     &#125;&#125;;\n\n\n题目235:二叉搜索树的最近公共祖先\n描述：\n给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。\n百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”\n示例 1:\n输入: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8输出: 6解释: 节点 2 和节点 8 的最近公共祖先是 6。示例 2:\n输入: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4输出: 2解释: 节点 2 和节点 4 的最近公共祖先是 2, 因为根据定义最近公共祖先节点可以为节点本身。\n说明:\n所有节点的值都是唯一的。p、q 为不同节点且均存在于给定的二叉搜索树中。\n思路：\n突破点：递归。\n步骤：\n\n分左右两边进行递归；\n如果左边没有找到，说明公共祖先在右边；\n如果右边没有找到，说明公共祖先在左边；\n如果左右均不为空，则说明找到了。\n\n代码：\n12345678910111213TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) &#123;\t\t\t\t//递归边界返回空或者返回存在的那个结点        if(nullptr == root || root == p || root == q) return root;\t\t\t\t//左边找一找        TreeNode* leftNode = lowestCommonAncestor(root-&gt;left,p,q);\t\t\t\t//右边找一找        TreeNode* rightNode = lowestCommonAncestor(root-&gt;right,p,q);\t\t\t\t//返回NULL或者有的那一侧        if(nullptr == leftNode)return rightNode;        if(nullptr == rightNode)return leftNode;\t\t\t\t//当前祖先左边有p，右边有q        return root;  &#125;\n\n\n题目1382:将二叉搜索树变平衡\n描述：\n给你一棵二叉搜索树，请你返回一棵 平衡后 的二叉搜索树，新生成的树应该与原来的树有着相同的节点值。\n如果一棵二叉搜索树中，每个节点的两棵子树高度差不超过 1 ，我们就称这棵二叉搜索树是 平衡的 。\n如果有多种构造方法，请你返回任意一种。\n示例：\n输入：root = [1,null,2,null,3,null,4,null,null]输出：[2,1,3,null,null,null,4]解释：这不是唯一的正确答案，[3,1,4,null,2,null,null] 也是一个可行的构造方案。\n提示：\n树节点的数目在 1 到 10^4 之间。树节点的值互不相同，且在 1 到 10^5 之间。\n思路：\n突破点：DFS。\n步骤：\n\n使用升序数组构造平衡二叉搜索树；\n设长度为n，则n/2处元素为根节点；\n递归进行构造。\n\n代码：\n12345678910111213141516171819202122232425262728293031323334353637383940/** * Definition for a binary tree node. * struct TreeNode &#123; *     int val; *     TreeNode *left; *     TreeNode *right; *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125; * &#125;; */class Solution &#123;    void dfs(TreeNode *root, vector&lt;int&gt; &amp;vec) &#123;        if(nullptr == root) &#123;           return;         &#125;        dfs(root-&gt;left, vec);        vec.push_back(root-&gt;val);        dfs(root-&gt;right, vec);    &#125;      TreeNode* construct(const vector&lt;int&gt; &amp;vec, int leftVal, int rightVal) &#123;        if(leftVal &gt; rightVal) &#123;            return nullptr;        &#125;        int mid = (leftVal+rightVal)&gt;&gt;1;        auto ptr = new TreeNode(vec[mid]);        ptr-&gt;right = construct(vec, mid+1, rightVal);        ptr-&gt;left = construct(vec, leftVal, mid-1);        return ptr;    &#125;  public:    TreeNode* balanceBST(TreeNode* root) &#123;        if(nullptr == root) &#123;            return nullptr;        &#125;        vector&lt;int&gt; data;        dfs(root, data);        return construct(data, 0, data.size()-1);    &#125;&#125;;\n\n","dateCreated":"2020-09-07T21:13:19+08:00","dateModified":"2020-09-07T22:47:45+08:00","datePublished":"2020-09-07T21:13:19+08:00","description":"题目94:二叉树的中序遍历\n描述：\n给定一个二叉树，返回它的中序 遍历。\n示例:\n输入: [1,null,2,3]   1         2    /   3\n输出: [1,3,2]进阶: 递归算法很简单，你可以通过迭代算法完成吗？","headline":"LeetCode题目总结-Tree+BST","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://junyu-bian.github.io/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/"},"publisher":{"@type":"Organization","name":"Junyu Bian","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"https://junyu-bian.github.io/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/","keywords":"C++, 算法"}</script>
+    <meta name="description" content="题目94:二叉树的中序遍历 描述： 给定一个二叉树，返回它的中序 遍历。 示例: 输入: [1,null,2,3]   1         2    &#x2F;   3 输出: [1,3,2]进阶: 递归算法很简单，你可以通过迭代算法完成吗？">
+<meta property="og:type" content="blog">
 <meta property="og:title" content="LeetCode题目总结-Tree+BST">
 <meta property="og:url" content="https://junyu-bian.github.io/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/index.html">
 <meta property="og:site_name" content="Blogs of Junyu">
@@ -31,365 +25,327 @@
 <meta property="article:tag" content="C++">
 <meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary">
-  <!-- Canonical links -->
-  <link rel="canonical" href="https://junyu-bian.github.io/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/index.html">
-  
-    <link rel="alternate" href="/atom.xml" title="Blogs of Junyu" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png" type="image/x-icon">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-wxmdysl42bg8zzt2ryhfqsfzciwu3kx9uqdpszvt5k3t8nhbngsdtxq96fkn.min.css">
 
-  
-  
-  
-  
-<meta name="generator" content="Hexo 5.4.0"></head>
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
 
 
-<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
-  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-  <div class="slimContent">
-    <div class="navbar-header">
-      
-      
-      <div class="profile-block text-center">
-        <a id="avatar" href="https://github.com/cofess" target="_blank">
-          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Blogs of Junyu
         </a>
-        <h2 id="name" class="hidden-xs hidden-sm">昵称</h2>
-        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Designer</h3>
-        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shenzhen, China</small>
-      </div>
-      
-      <div class="search" id="search-form-wrap">
-
-    <form class="search-form sidebar-form">
-        <div class="input-group">
-            <input type="text" class="search-form-input form-control" placeholder="Search" />
-            <span class="input-group-btn">
-                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
-            </span>
-        </div>
-    </form>
-    <div class="ins-search">
-  <div class="ins-search-mask"></div>
-  <div class="ins-search-container">
-    <div class="ins-input-wrapper">
-      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
-      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
     </div>
-    <div class="ins-section-wrapper">
-      <div class="ins-section-container"></div>
-    </div>
-  </div>
-</div>
-
-
-</div>
-      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
-    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
-      <ul class="nav navbar-nav main-nav ">
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
         
         
-        <li class="menu-item menu-item-home">
-          <a href="/.">
-            
-            <i class="icon icon-home-fill"></i>
-            
-            <span class="menu-title">Home</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives">
-            
-            <i class="icon icon-archives-fill"></i>
-            
-            <span class="menu-title">Archives</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories">
-            
-            <i class="icon icon-folder"></i>
-            
-            <span class="menu-title">Categories</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags">
-            
-            <i class="icon icon-tags"></i>
-            
-            <span class="menu-title">Tags</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-repository">
-          <a href="/repository">
-            
-            <i class="icon icon-project"></i>
-            
-            <span class="menu-title">Repository</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-books">
-          <a href="/books">
-            
-            <i class="icon icon-book-fill"></i>
-            
-            <span class="menu-title">Books</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-links">
-          <a href="/links">
-            
-            <i class="icon icon-friendship"></i>
-            
-            <span class="menu-title">Links</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about">
-            
-            <i class="icon icon-cup-fill"></i>
-            
-            <span class="menu-title">About</span>
-          </a>
-        </li>
-        
-      </ul>
-      
-	
-    <ul class="social-links">
-    	
-        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
-        
-        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
-        
-        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
-        
-        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
-        
-        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
-        
-    </ul>
-
-    </nav>
-  </div>
+        </a>
+    
 </header>
 
-  
-    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
-  <div class="slimContent">
-    
-      <div class="widget">
-    <h3 class="widget-title">Board</h3>
-    <div class="widget-body">
-        <div id="board">
-            <div class="content">
-                <p>欢迎交流与分享经验!</p>
-            </div>
-        </div>
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link open-algolia-search"
+                            href="#search"
+                            
+                            rel="noopener"
+                            title="Search"
+                        >
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="http://stackoverflow.com/users"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Stack Overflow"
+                        >
+                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Stack Overflow</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://twitter.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Twitter"
+                        >
+                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Twitter</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://facebook.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Facebook"
+                        >
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://plus.google.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Google +"
+                        >
+                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Google +</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
     </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            LeetCode题目总结-Tree+BST
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2020-09-07T21:13:19+08:00">
+	
+		    Sep 07, 2020
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/LeetCode/">LeetCode</a>
+
+
+    
 </div>
 
     
-      
-  <div class="widget">
-    <h3 class="widget-title">Categories</h3>
-    <div class="widget-body">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/LeetCode/">LeetCode</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Notes/">Notes</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%91%E8%AE%A1%E7%AE%97/">云计算</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a><span class="category-list-count">11</span></li></ul>
-    </div>
-  </div>
-
+</div>
 
     
-      
-  <div class="widget">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget-body">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/" rel="tag">Algorithm</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bash/" rel="tag">Bash</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cent-OS/" rel="tag">Cent OS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Command-Line/" rel="tag">Command Line</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Database/" rel="tag">Database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Django/" rel="tag">Django</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FD-io/" rel="tag">FD.io</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/K8s/" rel="tag">K8s</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Notes/" rel="tag">Notes</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VM/" rel="tag">VM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/" rel="tag">Web</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a><span class="tag-list-count">6</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget-body tagcloud">
-      <a href="/tags/Algorithm/" style="font-size: 13.75px;">Algorithm</a> <a href="/tags/Bash/" style="font-size: 13.13px;">Bash</a> <a href="/tags/C/" style="font-size: 14px;">C++</a> <a href="/tags/Cent-OS/" style="font-size: 13px;">Cent OS</a> <a href="/tags/Command-Line/" style="font-size: 13px;">Command Line</a> <a href="/tags/Database/" style="font-size: 13px;">Database</a> <a href="/tags/Django/" style="font-size: 13px;">Django</a> <a href="/tags/Docker/" style="font-size: 13px;">Docker</a> <a href="/tags/FD-io/" style="font-size: 13px;">FD.io</a> <a href="/tags/K8s/" style="font-size: 13px;">K8s</a> <a href="/tags/Linux/" style="font-size: 13.25px;">Linux</a> <a href="/tags/Notes/" style="font-size: 13.5px;">Notes</a> <a href="/tags/VM/" style="font-size: 13px;">VM</a> <a href="/tags/Web/" style="font-size: 13px;">Web</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 13.25px;">操作系统</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.38px;">数据库</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 13.25px;">测试</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.88px;">算法</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 13.63px;">计算机网络</a>
-    </div>
-  </div>
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">Archive</h3>
-    <div class="widget-body">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">October 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">10</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget-body">
-      <ul class="recent-post-list list-unstyled no-thumbnail">
-        
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Notes/">Notes</a>
-              </p>
-              <p class="item-title">
-                <a href="/2022/10/21/2022-10-21-dev%20null%20and%202&%3E1/" class="title">/dev/null and 2&amp;&gt;1</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2022-10-21T13:27:29.000Z" itemprop="datePublished">2022-10-21</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Notes/">Notes</a>
-              </p>
-              <p class="item-title">
-                <a href="/2022/10/21/2022-10-21-getopts%20in%20Bash/" class="title">getopts in Bash</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2022-10-21T06:17:29.000Z" itemprop="datePublished">2022-10-21</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Notes/">Notes</a>
-              </p>
-              <p class="item-title">
-                <a href="/2021/06/05/2021-06-05-K8s-and-docker-Related-Notes/" class="title">K8s and docker Related Notes</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2021-06-05T07:08:29.000Z" itemprop="datePublished">2021-06-05</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Notes/">Notes</a>
-              </p>
-              <p class="item-title">
-                <a href="/2021/06/05/2021-06-05-VM-Related%20-Notes/" class="title">VM Related Notes</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2021-06-05T07:01:29.000Z" itemprop="datePublished">2021-06-05</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Notes/">Notes</a>
-              </p>
-              <p class="item-title">
-                <a href="/2021/06/05/2021-06-05-Command-Line-Related-Notes/" class="title">Command Line Related Notes</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2021-06-04T16:31:29.000Z" itemprop="datePublished">2021-06-05</time>
-              </p>
-            </div>
-          </li>
-          
-      </ul>
-    </div>
-  </div>
-  
-
-    
-  </div>
-</aside>
-
-  
-  
-<main class="main" role="main">
-  <div class="content">
-  <article id="post-2020-09-07-LeetCode题目总结-Tree+BST" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-    
-    <div class="article-header">
-      
-        
-  
-    <h1 class="article-title" itemprop="name">
-      LeetCode题目总结-Tree+BST
-    </h1>
-  
-
-      
-      <div class="article-meta">
-        <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/" class="article-date">
-	  <time datetime="2020-09-07T13:13:19.000Z" itemprop="datePublished">2020-09-07</time>
-	</a>
-</span>
-        
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
-  </span>
-
-        
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/C/" rel="tag">C++</a>, <a class="article-tag-link-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a>
-  </span>
-
-
-        
-
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/#comments" class="article-comment-link">Comments</a></span>
-        
-      </div>
-    </div>
-    <div class="article-entry marked-body" itemprop="articleBody">
-      
-        <h3 id="题目94-二叉树的中序遍历"><a href="#题目94-二叉树的中序遍历" class="headerlink" title="题目94:二叉树的中序遍历"></a>题目94:<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/binary-tree-inorder-traversal/">二叉树的中序遍历</a></h3><hr>
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <h3 id="题目94-二叉树的中序遍历"><a href="#题目94-二叉树的中序遍历" class="headerlink" title="题目94:二叉树的中序遍历"></a>题目94:<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/binary-tree-inorder-traversal/">二叉树的中序遍历</a></h3><hr>
 <p>描述：</p>
 <p>给定一个二叉树，返回它的中序 遍历。</p>
 <p>示例:</p>
@@ -534,229 +490,324 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(TreeNode *root, vector&lt;<span class="keyword">int</span>&gt; &amp;vec)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="literal">nullptr</span> == root) &#123; </span><br><span class="line">          <span class="keyword">return</span>; </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">dfs</span>(root-&gt;left, vec);</span><br><span class="line">        vec.<span class="built_in">push_back</span>(root-&gt;val);</span><br><span class="line">        <span class="built_in">dfs</span>(root-&gt;right, vec);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="function">TreeNode* <span class="title">construct</span><span class="params">(<span class="keyword">const</span> vector&lt;<span class="keyword">int</span>&gt; &amp;vec, <span class="keyword">int</span> leftVal, <span class="keyword">int</span> rightVal)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(leftVal &gt; rightVal) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> mid = (leftVal+rightVal)&gt;&gt;<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">auto</span> ptr = <span class="keyword">new</span> <span class="built_in">TreeNode</span>(vec[mid]);</span><br><span class="line">        ptr-&gt;right = <span class="built_in">construct</span>(vec, mid+<span class="number">1</span>, rightVal);</span><br><span class="line">        ptr-&gt;left = <span class="built_in">construct</span>(vec, leftVal, mid<span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">return</span> ptr;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">TreeNode* <span class="title">balanceBST</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="literal">nullptr</span> == root) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; data;</span><br><span class="line">        <span class="built_in">dfs</span>(root, data);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">construct</span>(data, <span class="number">0</span>, data.<span class="built_in">size</span>()<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 
-      
-    </div>
-    <div class="article-footer">
-      <blockquote class="mt-2x">
-  <ul class="post-copyright list-unstyled">
-    
-    <li class="post-copyright-link hidden-xs">
-      <strong>本文链接：</strong>
-      <a href="https://junyu-bian.github.io/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/" title="LeetCode题目总结-Tree+BST" target="_blank" rel="external">https://junyu-bian.github.io/2020/09/07/2020-09-07-LeetCode题目总结-Tree+BST/</a>
-    </li>
-    
-    <li class="post-copyright-license">
-      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
-    </li>
-  </ul>
-</blockquote>
+            
 
 
-<div class="panel panel-default panel-badger">
-  <div class="panel-body">
-    <figure class="media">
-      <div class="media-left">
-        <a href="https://github.com/cofess" target="_blank" class="img-burn thumb-sm visible-lg">
-          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
-        </a>
-      </div>
-      <div class="media-body">
-        <h3 class="media-heading"><a href="https://github.com/cofess" target="_blank"><span class="text-dark">昵称</span><small class="ml-1x">Web Developer &amp; Designer</small></a></h3>
-        <div>个人简介。</div>
-      </div>
-    </figure>
-  </div>
-</div>
-
-
-    </div>
-  </article>
-  
-    
-  <section id="comments">
-  	
-      <div id="vcomments"></div>
-    
-  </section>
-
-
-  
-</div>
-
-  <nav class="bar bar-footer clearfix" data-stick-bottom>
-  <div class="bar-inner">
-  
-  <ul class="pager pull-left">
-    
-    <li class="prev">
-      <a href="/2020/09/08/2020-09-08-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-DFS+BFS/" title="LeetCode题目总结-DFS+BFS"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
-    </li>
-    
-    
-    <li class="next">
-      <a href="/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Two-Pointer+Linked-List/" title="LeetCode题目总结-Two Pointer+Linked List"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
-    </li>
-    
-    
-  </ul>
-  
-  
-  <!-- Button trigger modal -->
-  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
-  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
-    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
-  </div> -->
-  
-  
-  <div class="bar-right">
-    
-    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
-    
-  </div>
-  </div>
-</nav>
-  
-<!-- Modal -->
-<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content donate">
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <div class="modal-body">
-        <div class="donate-box">
-          <div class="donate-head">
-            <p>Maybe you could buy me a cup of coffee.</p>
-          </div>
-          <div class="tab-content">
-            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
-              <div class="donate-payimg">
-                <img src="/images/donate/alipayimg.png" alt="Scan Qrcode" title="Scan" />
-              </div>
-              <p class="text-muted mv">Scan this qrcode</p>
-              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
-              <div class="donate-payimg">
-                <img src="/images/donate/wechatpayimg.png" alt="Scan Qrcode" title="Scan" />
-              </div>
-              <p class="text-muted mv">Scan this qrcode</p>
-              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
-            </div>
-          </div>
-          <div class="donate-footer">
-            <ul class="nav nav-tabs nav-justified" role="tablist">
-              <li role="presentation" class="active">
-                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
-              </li>
-              <li role="presentation" class="">
-                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
-              </li>
-            </ul>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-</div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/C/" rel="tag">C++</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a>
 
-
-
-</main>
-
-  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
-	
-	
-    <ul class="social-links">
-    	
-        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+            </div>
         
-        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
         
-        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/09/08/2020-09-08-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-DFS+BFS/"
+                    data-tooltip="LeetCode题目总结-DFS+BFS"
+                    aria-label="PREVIOUS: LeetCode题目总结-DFS+BFS"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Two-Pointer+Linked-List/"
+                    data-tooltip="LeetCode题目总结-Two Pointer+Linked List"
+                    aria-label="NEXT: LeetCode题目总结-Two Pointer+Linked List"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
         
-        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
         
-        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
         
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
     </ul>
+</div>
 
-    <div class="copyright">
-    	
-        <div class="publishby">
-        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
-        </div>
+
+        
+        
+            
+        
     </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2023 Junyu Bian. All Rights Reserved.
+    </span>
 </footer>
-  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
-<script>
-window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
 
-<script src="/js/plugin.min.js"></script>
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/09/08/2020-09-08-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-DFS+BFS/"
+                    data-tooltip="LeetCode题目总结-DFS+BFS"
+                    aria-label="PREVIOUS: LeetCode题目总结-DFS+BFS"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/09/06/2020-09-06-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Two-Pointer+Linked-List/"
+                    data-tooltip="LeetCode题目总结-Two Pointer+Linked List"
+                    aria-label="NEXT: LeetCode题目总结-Two Pointer+Linked List"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
 
 
-<script src="/js/application.js"></script>
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/09/07/2020-09-07-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Tree+BST/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
 
 
-    <script>
-(function (window) {
-    var INSIGHT_CONFIG = {
-        TRANSLATION: {
-            POSTS: 'Posts',
-            PAGES: 'Pages',
-            CATEGORIES: 'Categories',
-            TAGS: 'Tags',
-            UNTITLED: '(Untitled)',
-        },
-        ROOT_URL: '/',
-        CONTENT_URL: '/content.json',
-    };
-    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-})(window);
-</script>
-
-<script src="/js/insight.js"></script>
+            
+        </div>
+        
 
 
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">Junyu Bian</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-vnqkjqlintjjatuhqa130uwkuwsu27ios2j5z5qwaodowllkaooycjjcee9d.min.js"></script>
+
+<!--SCRIPTS END-->
 
 
-
-
-   
-
-
-
-
-   
     
-  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/valine"></script>
-  <script type="text/javascript">
-  var GUEST = ['nick', 'mail', 'link'];
-  var meta = 'nick,mail,link';
-  meta = meta.split(',').filter(function(item) {
-    return GUEST.indexOf(item) > -1;
-  });
-  new Valine({
-    el: '#vcomments',
-    verify: false,
-    notify: false,
-    appId: '',
-    appKey: '',
-    placeholder: 'Just go go',
-    avatar: 'mm',
-    meta: meta,
-    pageSize: '10' || 10,
-    visitor: false
-  });
-  </script>
-
-     
 
 
 
 
-
-
-
-</body>
+    </body>
 </html>

@@ -1,25 +1,19 @@
+
 <!DOCTYPE html>
-<html lang=en>
+<html lang="en">
+    
 <head>
-  <meta charset="utf-8">
-  
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="Cache-Control" content="no-transform" />
-  <meta http-equiv="Cache-Control" content="no-siteapp" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="format-detection" content="telephone=no,email=no,adress=no">
-  <!-- Color theme for statusbar -->
-  <meta name="theme-color" content="#000000" />
-  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
-  <meta http-equiv="window-target" content="_top" />
-  
-  
-  <title>知识点整理-3 | Hexo</title>
-  <meta name="description" content="1. 计算机网络分层模型  7层 (osi国际标准组织定制)：  应用层：为程序提供网络服务。 表示层：数据格式化，加密、解密。 会话层：建立、维护、管理会话链接。 传输层：建立、维护、管理端到端链接。">
-<meta property="og:type" content="article">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Blogs of Junyu">
+    <title>知识点整理-3 - Blogs of Junyu</title>
+    <meta name="author" content="Junyu Bian">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Junyu Bian","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"1. 计算机网络分层模型\n\n7层 (osi国际标准组织定制)：\n\n应用层：为程序提供网络服务。\n表示层：数据格式化，加密、解密。\n会话层：建立、维护、管理会话链接。\n传输层：建立、维护、管理端到端链接。\n\n\n网络层：IP寻址和路由选择。\n数据链路层：控制网络层与物理层之间的通信。\n物理层：比特流传输。\n\n四层 (TCP/IP)：\n\n应用层：ping、DNS、telnet\n传输层：UDP、TCP\n网络层：ICMP、IP\n数据链路层：ARP、DataLink、RARP\n\n2. HTTP请求包含哪几个部分\n\n请求行：\n\n请求方法：HTTP最常见的请求方法为GET和POST。\n请求URL：请求对应的URL地址。\nHTTP协议及版本：协议名称及版本号。\n\n请求头：\n\n包含多个属性，格式为“属性名：属性值”，服务器根据请求头来获取客户端的信息。\n\n请求体：\n\n将一个页面表单中的组件值通过param1=value &amp; param2=value2的键值对形式编码成一个格式化串，承载多个请求参数的数据。\n\n3. TCP拥塞控制\n主要为四个算法：\n慢开始：在TCP链接刚建立时，一点一点地增大拥塞窗口cwnd，慢慢变为指数增长，试探网络的承受能力，直到cwnd大于等于ssthresh（slow start threshold）则进入拥塞避免。\n拥塞避免：收到一个ACK，即每经过一个往返时间RTT，就把发送方的cwnd加1，使其按线性规律缓慢增长。\n乘法减小【TCP Tahoe】：不论在慢开始阶段还是拥塞避免阶段，只要出现超时，即可能发生了阻塞，发生丢包，就把慢开始门限ssthresh的值减半，即设置为当前cwnd的一半，并开始执行慢开始算法。\n快速重传【TCP Reno】：发生丢包时，把cwnd设置为当前的一半，ssthresh设置为缩小后的cwnd大小，进入快速恢复算法。\n快速恢复【TCP Reno】：设置cwnd=cwnd+3*MSS（因为收到3个重复的ACK，所以加三个MSS），重传DACKs指定的数据包，如果再收到DACKs，则cwnd增加1，若收到新的ACK，表明重传包成功，退出快速恢复，将cwnd设置为ssthresh，进入拥塞避免算法。\n\n4. 死锁与死锁的处理\n\n形成死锁的四个必要条件：\n\n互斥：在某段时间内某资源只由一个进程占用。\n持有并等待：某进程已经持有一个或多个资源，但是还需请求其他资源，而它请求的资源不能立即获得，需要等待。\n不可抢占：进程已经获取的资源在使用过程中不能被其他进程抢占，只能在使用完后，由该进程自己释放。\n环路等待：形成进程和请求资源之间的环路。\n\n死锁的预防：\n\n互斥：不易预防\n占有并等待：方法一：不持有并等待，如果一个进程一次请求获取不了所有资源，那么它不可占用任何资源，即释放掉它已经占有的资源；方法二：持有不等待，保证资源充足，只要请求资源，就分配给资源。\n不可抢占：如果一个进程所请求的资源被另一进程占有，使它可以抢占另一进程占有的资源。\n环路等待：对资源进行排序，每个进程按照固定的顺序访问资源。\n\n死锁的避免：\n\n资源请求图算法：利用资源分配图，引入需求边表示进程可能在将来某个时候申请资源，只有申请边变为分配边而不会导致资源分配图形成环时，才允许申请。\n银行家算法：当新进程进入系统，系统对其所需资源的最大数量进行统计，若超过当前资源综合，则该进程必须等待直到其他进程释放资源。\n\n5. 什么是关系型数据库\n关系型数据库建立在关系型数据模型的基础上，借助于集合、代数等数学概念和方法来处理数据的数据库。\n\n6. KV存储\n举例：Redis、MongoDB\n不经常更新的、重要的数据一般使用关系数据库存储。\n数据结构简单、有分布式数据存储的需求使用KV数据库。\n\n7. 非递归前中后序遍历二叉树\n123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566struct TreeNode &#123;  int val;  TreeNode * left;  TreeNode * right;&#125;;void PreOrder (TreeNode * root) &#123;  stack&lt;TreeNode *&gt;s;  TreeNode * ptr = root;    while (ptr != nullptr || !s.empty()) &#123;    if (ptr != nullptr) &#123;      cout &lt;&lt; ptr-&gt;val &lt;&lt; endl;      s.push(ptr);      ptr = ptr-&gt;left;    &#125;    else &#123;      ptr = s.top();      s.pop();      ptr = ptr-&gt;right;    &#125;  &#125;&#125;void InOrder (TreeNode * root) &#123;  stack&lt;TreeNode *&gt; s;  TreeNode * ptr = root;    while (ptr != nullptr || !s.empty()) &#123;    if (ptr != nullptr) &#123;      s.push(ptr);      ptr = ptr-&gt;left;    &#125;    else &#123;      ptr = s.top();      cout &lt;&lt; ptr-&gt;val &lt;&lt; endl;      s.pop();      ptr = ptr-&gt;right;    &#125;  &#125;&#125;void PostOrder (TreeNode * root) &#123;  stack&lt;TreeNode *&gt; s;  TreeNode * ptr = root;  TreeNode * TemNode = nullptr;    while (ptr != nullptr || !s.empty()) &#123;    if (ptr != nullptr &#123;      s.push(ptr);      ptr = ptr-&gt;left;    &#125;    else &#123;      ptr = s.top();      if (ptr-&gt;right != nullptr &amp;&amp; ptr-&gt;right !- TemNode)&#123;        ptr = ptr-&gt;right;      &#125;      else &#123;        cout &lt;&lt; ptr-&gt;val &lt;&lt; endl;        s.pop();        TemNode = ptr;        ptr = nullptr;      &#125;    &#125;     &#125;&#125;\n\n\n8. 如何实现一个栈\n1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950class QueueStack &#123;private:  queue&lt;int&gt; first;  queue&lt;int&gt; second;  public:  bool empty() &#123;\t\tif (first.empty() &amp;&amp; second.empty())&#123;      return true;    &#125;    else &#123;      return false;    &#125;  &#125;    int top() &#123;    if (first.empty())&#123;      return second.front();    &#125;    else &#123;      return first.front();    &#125;  &#125;    void pop() &#123;    if (first.empty()) &#123;      second.pop();    &#125;    else &#123;      first.pop();    &#125;  &#125;    void push (int x)&#123;    if (frist.empty())&#123;      first.push(x);      while (!second.empty()) &#123;        first.push(second.front());        second.pop();      &#125;    &#125;    else &#123;      second.push(x);      while(!first.empty()) &#123;        second.push(first.front());        first.pop();      &#125;    &#125;  &#125;&#125;\n\n\n9. HTTP状态码\n\n1xx：收到请求，需要请求者继续操作。\n\n100：继续。\n101：切换协议。\n\n2xx：操作被成功接收并处理。\n\n200：请求成功。\n201：已创建。\n202：已接受。\n203：非授权信息。请求成功。\n204：无内容。\n205：重置内容。\n206：部分内容。\n\n3xx：重定向，需要进一步操作以完成请求。\n\n300：多种选择。\n301：永久移动。\n302：临时移动。\n303：查看其他地址。\n304：未修改。\n305：使用代理。\n307：临时重定向。\n\n4xx：客户端错误，请求包含语法错误或无法完成请求。\n\n400：Bad Request。\n401：Unauthorized。\n403：服务器理解客户端的请求，但是拒绝执行。\n404：无法根据请求找到资源。\n405：客户端请求中的方法被禁止。\n406：Not Acceptable。\n407：Proxy Authentication Required。\n408：Request Timeout。\n409：服务器处理请求时发生了冲突。\n410：客户端请求的资源已经不存在。\n411：Length Required。\n412：Precondition Failed。\n413：Request Entity Too Large。\n414：Request URI Too Large。\n415：Unsupported Media Type。\n416：客户端请求的范围无效。\n417：Expectation Failed。\n\n5xx：服务器错误，服务器在处理请求的过程中发生了错误。\n\n500：服务器内部错误，无法完成请求。\n501：服务器不支持请求的功能。\n502：Bad Gateway。\n503：Service Unavailable。\n504：Gateway Timeout。\n505：HTTP version not supported。\n","dateCreated":"2020-04-17T14:22:01+08:00","dateModified":"2020-09-07T12:45:45+08:00","datePublished":"2020-04-17T14:22:01+08:00","description":"1. 计算机网络分层模型\n\n7层 (osi国际标准组织定制)：\n\n应用层：为程序提供网络服务。\n表示层：数据格式化，加密、解密。\n会话层：建立、维护、管理会话链接。\n传输层：建立、维护、管理端到端链接。","headline":"知识点整理-3","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"},"publisher":{"@type":"Organization","name":"Junyu Bian","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/","keywords":"C++, 操作系统, 计算机网络, 算法, 数据库"}</script>
+    <meta name="description" content="1. 计算机网络分层模型  7层 (osi国际标准组织定制)：  应用层：为程序提供网络服务。 表示层：数据格式化，加密、解密。 会话层：建立、维护、管理会话链接。 传输层：建立、维护、管理端到端链接。">
+<meta property="og:type" content="blog">
 <meta property="og:title" content="知识点整理-3">
 <meta property="og:url" content="https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/index.html">
 <meta property="og:site_name" content="Blogs of Junyu">
@@ -34,365 +28,327 @@
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="数据库">
 <meta name="twitter:card" content="summary">
-  <!-- Canonical links -->
-  <link rel="canonical" href="https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/index.html">
-  
-    <link rel="alternate" href="/atom.xml" title="Blogs of Junyu" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png" type="image/x-icon">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-wxmdysl42bg8zzt2ryhfqsfzciwu3kx9uqdpszvt5k3t8nhbngsdtxq96fkn.min.css">
 
-  
-  
-  
-  
-<meta name="generator" content="Hexo 5.4.0"></head>
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
 
 
-<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
-  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-  <div class="slimContent">
-    <div class="navbar-header">
-      
-      
-      <div class="profile-block text-center">
-        <a id="avatar" href="https://github.com/cofess" target="_blank">
-          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Blogs of Junyu
         </a>
-        <h2 id="name" class="hidden-xs hidden-sm">昵称</h2>
-        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Designer</h3>
-        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shenzhen, China</small>
-      </div>
-      
-      <div class="search" id="search-form-wrap">
-
-    <form class="search-form sidebar-form">
-        <div class="input-group">
-            <input type="text" class="search-form-input form-control" placeholder="Search" />
-            <span class="input-group-btn">
-                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
-            </span>
-        </div>
-    </form>
-    <div class="ins-search">
-  <div class="ins-search-mask"></div>
-  <div class="ins-search-container">
-    <div class="ins-input-wrapper">
-      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech />
-      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
     </div>
-    <div class="ins-section-wrapper">
-      <div class="ins-section-container"></div>
-    </div>
-  </div>
-</div>
-
-
-</div>
-      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
-    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
-      <ul class="nav navbar-nav main-nav ">
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
         
         
-        <li class="menu-item menu-item-home">
-          <a href="/.">
-            
-            <i class="icon icon-home-fill"></i>
-            
-            <span class="menu-title">Home</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives">
-            
-            <i class="icon icon-archives-fill"></i>
-            
-            <span class="menu-title">Archives</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories">
-            
-            <i class="icon icon-folder"></i>
-            
-            <span class="menu-title">Categories</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags">
-            
-            <i class="icon icon-tags"></i>
-            
-            <span class="menu-title">Tags</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-repository">
-          <a href="/repository">
-            
-            <i class="icon icon-project"></i>
-            
-            <span class="menu-title">Repository</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-books">
-          <a href="/books">
-            
-            <i class="icon icon-book-fill"></i>
-            
-            <span class="menu-title">Books</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-links">
-          <a href="/links">
-            
-            <i class="icon icon-friendship"></i>
-            
-            <span class="menu-title">Links</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about">
-            
-            <i class="icon icon-cup-fill"></i>
-            
-            <span class="menu-title">About</span>
-          </a>
-        </li>
-        
-      </ul>
-      
-	
-    <ul class="social-links">
-    	
-        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
-        
-        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
-        
-        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
-        
-        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
-        
-        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
-        
-    </ul>
-
-    </nav>
-  </div>
+        </a>
+    
 </header>
 
-  
-    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
-  <div class="slimContent">
-    
-      <div class="widget">
-    <h3 class="widget-title">Board</h3>
-    <div class="widget-body">
-        <div id="board">
-            <div class="content">
-                <p>欢迎交流与分享经验!</p>
-            </div>
-        </div>
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link open-algolia-search"
+                            href="#search"
+                            
+                            rel="noopener"
+                            title="Search"
+                        >
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="http://stackoverflow.com/users"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Stack Overflow"
+                        >
+                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Stack Overflow</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://twitter.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Twitter"
+                        >
+                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Twitter</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://facebook.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Facebook"
+                        >
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://plus.google.com/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Google +"
+                        >
+                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Google +</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/profile/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/mailto"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
     </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            知识点整理-3
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2020-04-17T14:22:01+08:00">
+	
+		    Apr 17, 2020
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a>
+
+
+    
 </div>
 
     
-      
-  <div class="widget">
-    <h3 class="widget-title">Categories</h3>
-    <div class="widget-body">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/LeetCode/">LeetCode</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Notes/">Notes</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%91%E8%AE%A1%E7%AE%97/">云计算</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a><span class="category-list-count">11</span></li></ul>
-    </div>
-  </div>
-
+</div>
 
     
-      
-  <div class="widget">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget-body">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/" rel="tag">Algorithm</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bash/" rel="tag">Bash</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">23</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cent-OS/" rel="tag">Cent OS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Command-Line/" rel="tag">Command Line</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Database/" rel="tag">Database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Django/" rel="tag">Django</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FD-io/" rel="tag">FD.io</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/K8s/" rel="tag">K8s</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Notes/" rel="tag">Notes</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VM/" rel="tag">VM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/" rel="tag">Web</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a><span class="tag-list-count">6</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget-body tagcloud">
-      <a href="/tags/Algorithm/" style="font-size: 13.75px;">Algorithm</a> <a href="/tags/Bash/" style="font-size: 13.13px;">Bash</a> <a href="/tags/C/" style="font-size: 14px;">C++</a> <a href="/tags/Cent-OS/" style="font-size: 13px;">Cent OS</a> <a href="/tags/Command-Line/" style="font-size: 13px;">Command Line</a> <a href="/tags/Database/" style="font-size: 13px;">Database</a> <a href="/tags/Django/" style="font-size: 13px;">Django</a> <a href="/tags/Docker/" style="font-size: 13px;">Docker</a> <a href="/tags/FD-io/" style="font-size: 13px;">FD.io</a> <a href="/tags/K8s/" style="font-size: 13px;">K8s</a> <a href="/tags/Linux/" style="font-size: 13.25px;">Linux</a> <a href="/tags/Notes/" style="font-size: 13.5px;">Notes</a> <a href="/tags/VM/" style="font-size: 13px;">VM</a> <a href="/tags/Web/" style="font-size: 13px;">Web</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 13.25px;">操作系统</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.38px;">数据库</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 13.25px;">测试</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.88px;">算法</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 13.63px;">计算机网络</a>
-    </div>
-  </div>
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">Archive</h3>
-    <div class="widget-body">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">October 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">10</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget-body">
-      <ul class="recent-post-list list-unstyled no-thumbnail">
-        
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Notes/">Notes</a>
-              </p>
-              <p class="item-title">
-                <a href="/2022/10/21/2022-10-21-dev%20null%20and%202&%3E1/" class="title">/dev/null and 2&amp;&gt;1</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2022-10-21T13:27:29.000Z" itemprop="datePublished">2022-10-21</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Notes/">Notes</a>
-              </p>
-              <p class="item-title">
-                <a href="/2022/10/21/2022-10-21-getopts%20in%20Bash/" class="title">getopts in Bash</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2022-10-21T06:17:29.000Z" itemprop="datePublished">2022-10-21</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Notes/">Notes</a>
-              </p>
-              <p class="item-title">
-                <a href="/2021/06/05/2021-06-05-K8s-and-docker-Related-Notes/" class="title">K8s and docker Related Notes</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2021-06-05T07:08:29.000Z" itemprop="datePublished">2021-06-05</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Notes/">Notes</a>
-              </p>
-              <p class="item-title">
-                <a href="/2021/06/05/2021-06-05-VM-Related%20-Notes/" class="title">VM Related Notes</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2021-06-05T07:01:29.000Z" itemprop="datePublished">2021-06-05</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Notes/">Notes</a>
-              </p>
-              <p class="item-title">
-                <a href="/2021/06/05/2021-06-05-Command-Line-Related-Notes/" class="title">Command Line Related Notes</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2021-06-04T16:31:29.000Z" itemprop="datePublished">2021-06-05</time>
-              </p>
-            </div>
-          </li>
-          
-      </ul>
-    </div>
-  </div>
-  
-
-    
-  </div>
-</aside>
-
-  
-  
-<main class="main" role="main">
-  <div class="content">
-  <article id="post-2020-04-17-知识点整理-3" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-    
-    <div class="article-header">
-      
-        
-  
-    <h1 class="article-title" itemprop="name">
-      知识点整理-3
-    </h1>
-  
-
-      
-      <div class="article-meta">
-        <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/" class="article-date">
-	  <time datetime="2020-04-17T06:22:01.000Z" itemprop="datePublished">2020-04-17</time>
-	</a>
-</span>
-        
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a>
-  </span>
-
-        
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/C/" rel="tag">C++</a>, <a class="article-tag-link-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a>, <a class="article-tag-link-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a>, <a class="article-tag-link-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a>, <a class="article-tag-link-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a>
-  </span>
-
-
-        
-
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/#comments" class="article-comment-link">Comments</a></span>
-        
-      </div>
-    </div>
-    <div class="article-entry marked-body" itemprop="articleBody">
-      
-        <h3 id="1-计算机网络分层模型"><a href="#1-计算机网络分层模型" class="headerlink" title="1. 计算机网络分层模型"></a>1. 计算机网络分层模型</h3><hr>
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <h3 id="1-计算机网络分层模型"><a href="#1-计算机网络分层模型" class="headerlink" title="1. 计算机网络分层模型"></a>1. 计算机网络分层模型</h3><hr>
 <blockquote>
 <p><strong>7层</strong> (osi国际标准组织定制)：</p>
 </blockquote>
@@ -530,229 +486,324 @@
 <p><strong>504</strong>：Gateway Timeout。</p>
 <p><strong>505</strong>：HTTP version not supported。</p>
 
-      
-    </div>
-    <div class="article-footer">
-      <blockquote class="mt-2x">
-  <ul class="post-copyright list-unstyled">
-    
-    <li class="post-copyright-link hidden-xs">
-      <strong>本文链接：</strong>
-      <a href="https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/" title="知识点整理-3" target="_blank" rel="external">https://junyu-bian.github.io/2020/04/17/2020-04-17-知识点整理-3/</a>
-    </li>
-    
-    <li class="post-copyright-license">
-      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
-    </li>
-  </ul>
-</blockquote>
+            
 
 
-<div class="panel panel-default panel-badger">
-  <div class="panel-body">
-    <figure class="media">
-      <div class="media-left">
-        <a href="https://github.com/cofess" target="_blank" class="img-burn thumb-sm visible-lg">
-          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
-        </a>
-      </div>
-      <div class="media-body">
-        <h3 class="media-heading"><a href="https://github.com/cofess" target="_blank"><span class="text-dark">昵称</span><small class="ml-1x">Web Developer &amp; Designer</small></a></h3>
-        <div>个人简介。</div>
-      </div>
-    </figure>
-  </div>
-</div>
-
-
-    </div>
-  </article>
-  
-    
-  <section id="comments">
-  	
-      <div id="vcomments"></div>
-    
-  </section>
-
-
-  
-</div>
-
-  <nav class="bar bar-footer clearfix" data-stick-bottom>
-  <div class="bar-inner">
-  
-  <ul class="pager pull-left">
-    
-    <li class="prev">
-      <a href="/2020/04/19/2020-04-19-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-4/" title="知识点整理-4"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
-    </li>
-    
-    
-    <li class="next">
-      <a href="/2020/04/17/2020-04-17-KMP-Algorithm/" title="KMP Algorithm"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
-    </li>
-    
-    
-  </ul>
-  
-  
-  <!-- Button trigger modal -->
-  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>$</span></button>
-  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
-    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
-  </div> -->
-  
-  
-  <div class="bar-right">
-    
-    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
-    
-  </div>
-  </div>
-</nav>
-  
-<!-- Modal -->
-<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content donate">
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <div class="modal-body">
-        <div class="donate-box">
-          <div class="donate-head">
-            <p>Maybe you could buy me a cup of coffee.</p>
-          </div>
-          <div class="tab-content">
-            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
-              <div class="donate-payimg">
-                <img src="/images/donate/alipayimg.png" alt="Scan Qrcode" title="Scan" />
-              </div>
-              <p class="text-muted mv">Scan this qrcode</p>
-              <p class="text-grey">Open alipay app scan this qrcode, buy me a coffee!</p>
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
-              <div class="donate-payimg">
-                <img src="/images/donate/wechatpayimg.png" alt="Scan Qrcode" title="Scan" />
-              </div>
-              <p class="text-muted mv">Scan this qrcode</p>
-              <p class="text-grey">Open wechat app scan this qrcode, buy me a coffee!</p>
-            </div>
-          </div>
-          <div class="donate-footer">
-            <ul class="nav nav-tabs nav-justified" role="tablist">
-              <li role="presentation" class="active">
-                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> alipay</a>
-              </li>
-              <li role="presentation" class="">
-                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> wechat payment</a>
-              </li>
-            </ul>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-</div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/C/" rel="tag">C++</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a>
 
-
-
-</main>
-
-  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
-	
-	
-    <ul class="social-links">
-    	
-        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+            </div>
         
-        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
         
-        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/04/19/2020-04-19-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-4/"
+                    data-tooltip="知识点整理-4"
+                    aria-label="PREVIOUS: 知识点整理-4"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/04/17/2020-04-17-KMP-Algorithm/"
+                    data-tooltip="KMP Algorithm"
+                    aria-label="NEXT: KMP Algorithm"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
         
-        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
         
-        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
         
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
     </ul>
+</div>
 
-    <div class="copyright">
-    	
-        <div class="publishby">
-        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
-        </div>
+
+        
+        
+            
+        
     </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2023 Junyu Bian. All Rights Reserved.
+    </span>
 </footer>
-  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
-<script>
-window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
 
-<script src="/js/plugin.min.js"></script>
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/04/19/2020-04-19-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-4/"
+                    data-tooltip="知识点整理-4"
+                    aria-label="PREVIOUS: 知识点整理-4"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2020/04/17/2020-04-17-KMP-Algorithm/"
+                    data-tooltip="KMP Algorithm"
+                    aria-label="NEXT: KMP Algorithm"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
 
 
-<script src="/js/application.js"></script>
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
 
 
-    <script>
-(function (window) {
-    var INSIGHT_CONFIG = {
-        TRANSLATION: {
-            POSTS: 'Posts',
-            PAGES: 'Pages',
-            CATEGORIES: 'Categories',
-            TAGS: 'Tags',
-            UNTITLED: '(Untitled)',
-        },
-        ROOT_URL: '/',
-        CONTENT_URL: '/content.json',
-    };
-    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-})(window);
-</script>
-
-<script src="/js/insight.js"></script>
+            
+        </div>
+        
 
 
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">Junyu Bian</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-vnqkjqlintjjatuhqa130uwkuwsu27ios2j5z5qwaodowllkaooycjjcee9d.min.js"></script>
+
+<!--SCRIPTS END-->
 
 
-
-
-   
-
-
-
-
-   
     
-  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/valine"></script>
-  <script type="text/javascript">
-  var GUEST = ['nick', 'mail', 'link'];
-  var meta = 'nick,mail,link';
-  meta = meta.split(',').filter(function(item) {
-    return GUEST.indexOf(item) > -1;
-  });
-  new Valine({
-    el: '#vcomments',
-    verify: false,
-    notify: false,
-    appId: '',
-    appKey: '',
-    placeholder: 'Just go go',
-    avatar: 'mm',
-    meta: meta,
-    pageSize: '10' || 10,
-    visitor: false
-  });
-  </script>
-
-     
 
 
 
 
-
-
-
-</body>
+    </body>
 </html>
