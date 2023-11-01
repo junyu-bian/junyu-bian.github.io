@@ -1,350 +1,105 @@
 
-<!DOCTYPE html>
+ <!DOCTYPE HTML>
 <html lang="en">
-    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Blogs of Junyu">
-    <title>计算机网络知识点总结 - Blogs of Junyu</title>
+  <meta charset="UTF-8">
+  
+    <title>计算机网络知识点总结 | Blogs of Junyu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
     <meta name="author" content="Junyu Bian">
     
-    
-    
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Junyu Bian","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"1. Https加密过程\n\n客户端发起握手请求；\n服务端返回已有的证书公钥（服务端通过CA认证后，拥有证书公钥和证书私钥）；\n客户端验证证书是否有效；\n若证书有效，则生成一个随机数；\n用证书公钥加密生成的随机数；\n将加密后的密钥发送给服务端；\n服务端用证书私钥解密密钥；\n服务端使用解密出的密钥加密要发送的内容并发送给客户端；\n客户端使用秘钥解密信息。\n\n\n\n\n2. 对称加密与非对称加密\n对称加密：加密和解密使用同一个密钥；\n非对称加密：使用公钥和私钥进行加解密。\n\n3. CLOSE_WAIT和TIME_WAIT\n在四次挥手中，\nCLOSE_WAIT：服务端收到FIN后，发送ACK给客户端，之后进入CLOSE_WAIT状态；\nTIME_WAIT：客户端收到FIN后，发送ACK给服务端，之后进入TIME_WAIT状态。\n\n4. TCP如何保证传输可靠性\n\n数据包校验；\n重排序：TCP将失序数据进行重新排序后才交给应用层；\n应答机制：回复ACK；\n超时重传；\n流量控制：TCP连接的每一方都有固定大小缓冲空间，通过可变大小的滑窗协议完成。\n\n\n5.如何预防TCP的DDos攻击\n\n限制同时打开SYN半链接的数目；\n方法：在注册表中对TCPMaxHalfOpen相关参数进行调整；\nTCPMaxHalfOpen相关参数：\n\nSynAttackProtect：决定了系统受到SYN攻击时采取的保护措施，包括减少系统SYN+ACK的重试次数等；\nTcpMaxHalfOpen：系统允许同时打开的半链接值；\nTcpMaxHalfOpenRetried：决定在什么情况下系统打开SYN攻击保护；\n\n\n缩短SYN半链接的Time out时间。\n\n\n\n6. TCP如何实现拥塞控制\n\n慢启动：以指数方式，由小到大逐渐增加拥塞窗口(cwnd)的大小，慢启动达到ssthresh阈值则进入拥塞避免；\n拥塞避免：每经过一个往返时间RTT就把发送方拥塞窗口增加1，按照线性增长，发生拥塞，cwnd降为1，重新慢启动；\n快重传：接收方收到失序报文后，立即发出重复确认，发送方收到三个连续重复确认则立即重传；\n快恢复：发送方收到重复确认后，执行乘法减小 ，把ssthresh减半，但不执行慢开始，因为如果发生阻塞，不会收到多个重复确认，而是将cwnd设置为ssthresh大小进行拥塞避免。\n\n\n7. 从输入网址到获得页面的过程\n\n浏览器通过DNS查询对应IP地址：\n浏览器搜索自身DNS缓存；\n搜索操作系统DNS缓存；\n向本地DNS服务器进行查询；\n若不在本地域名服务器，则递归或迭代查询：\n递归查询：服务器作为DNS客户向根服务器查询；\n迭代查询：根服务器告知服务器需要查询的IP，服务器自己进行查询；\n\n\n\n\n获取IP地址后，浏览器向服务器请求建立连接，发起三次握手；\nTCP连接建立后，浏览器向服务器发送HTTP请求；\n浏览器对请求进行处理，并将处理结果返回给浏览器；\n浏览器进行渲染，呈现页面给用户。\n\n\n8. Session 与 Cookie\nSession： \n\n用户访问服务器时，服务器首先检查请求中是否包含sessionId，若包含，说明session已创建，若不包含，则为用户建立一个session并分配sessionId（依赖Cookie）；\n\n用户提交表单时，浏览器将用户的SessionId附在HTTP头信息中，服务器处理完表单将结果返回sessionId对应的用户；\n\n若Cookie被禁用：\n\nURL重写：直接将sessionId附在URL后；\n表单隐藏字段：修改表单，添加一个隐藏字段，以便提交时能够回传sessionId\n\n\n\n\nsession共享：修改cookie的域名为父域名；\n\n使用场景：购物车；\n\n\nCookie：\n\n若服务器需要记录用户状态，则使用response向客户端颁发一个cookie，再次请求时，浏览器将请求网址连同cookie一起提交给服务器；\n会话Cookie和持久Cookie：\n会话cookie：不设置过期时间，关闭浏览器窗口，cookie就消失，一般保存在内存里而不是硬盘上；\n持久cookie：设置了过期时间，cookie有效指导超过了设定的过期时间，一般存储在硬盘上；\n\n\n使用场景：登录网站。\n\n\n9. 七层网络体系结构\n\n物理层：实现相邻计算机节点之间比特流透明传送；\n数据链路层：接手物理层的位流行驶数据，封装成帧，传送到上一层，同样，也将上一层的数据帧，拆装成位流转发到物理层；\n网络层：将网络地址翻译为对应的物理地址，并通过路由算法选择最佳路径；\n传输层：为不同主机上运行的进程提供逻辑通信；\n区别于网络层：网络层完成主机间的逻辑通信，传输层完成应用进程间的逻辑通信；\n\n\n会话层：应用程序与网络之间的接口，负责在网络中的两节点之间建立、维持和终止通信；\n表示层：对来自应用层的命令和数据进行解释；\n应用层：为用户的应用进程提供网络通信服务。\n\n\n10. TCP和UDP对应的常见应用层协议\nTCP：\nFTP：文件传输协议；\nTelnet：用于远程登录的端口：\n和ssh的区别：\ntelnet为明文传送，ssh为加密传送；\nssh使用公钥对服务器的用户进行身份验证，telnet没有使用公钥；\n\n\n\n\nSMTP：邮件传送协议，用于发送邮件；\nPOP3：用于接收邮件；\nHTTP；\n\n\nUDP：\nDNS：域名解析服务；\nSNMP：网络管理协议，用于管理网络设备；\nTFTP：简单文件传输协议。\n\n\n\n\n11. ARP\n\n将IP地址转换为MAC地址；\n网络通过帧进行传输，帧里面需要目标主机的MAC地址。\n\n\n12. 常见状态码\n1XX：请求已被接受，正在处理；\n2XX：请求成功被处理；\n3XX：重定向：\n​    301：永久性转移；\n​    302：暂时性转移；\n​    304：已缓存；\n4XX：客户端请求不合法：\n​    400：请求语法有问题；\n​    403：拒绝请求；\n​    404：客户端所访问的页面不存在；\n5XX：服务器不能处理合法请求：\n​    500：服务器内部错误；\n​    503：服务暂时不可用。\n","dateCreated":"2020-08-31T16:40:10+08:00","dateModified":"2020-09-09T09:10:49+08:00","datePublished":"2020-08-31T16:40:10+08:00","description":"1. Https加密过程\n\n客户端发起握手请求；\n服务端返回已有的证书公钥（服务端通过CA认证后，拥有证书公钥和证书私钥）；\n客户端验证证书是否有效；\n若证书有效，则生成一个随机数；\n用证书公钥加密生成的随机数；\n将加密后的密钥发送给服务端；\n服务端用证书私钥解密密钥；\n服务端使用解密出的密钥加密要发送的内容并发送给客户端；\n客户端使用秘钥解密信息。\n","headline":"计算机网络知识点总结","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://junyu-bian.github.io/2020/08/31/2020-08-31-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"},"publisher":{"@type":"Organization","name":"Junyu Bian","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"https://junyu-bian.github.io/2020/08/31/2020-08-31-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/","keywords":"计算机网络"}</script>
-    <meta name="description" content="1. Https加密过程  客户端发起握手请求； 服务端返回已有的证书公钥（服务端通过CA认证后，拥有证书公钥和证书私钥）； 客户端验证证书是否有效； 若证书有效，则生成一个随机数； 用证书公钥加密生成的随机数； 将加密后的密钥发送给服务端； 服务端用证书私钥解密密钥； 服务端使用解密出的密钥加密要发送的内容并发送给客户端； 客户端使用秘钥解密信息。">
-<meta property="og:type" content="blog">
-<meta property="og:title" content="计算机网络知识点总结">
-<meta property="og:url" content="https://junyu-bian.github.io/2020/08/31/2020-08-31-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/index.html">
-<meta property="og:site_name" content="Blogs of Junyu">
-<meta property="og:description" content="1. Https加密过程  客户端发起握手请求； 服务端返回已有的证书公钥（服务端通过CA认证后，拥有证书公钥和证书私钥）； 客户端验证证书是否有效； 若证书有效，则生成一个随机数； 用证书公钥加密生成的随机数； 将加密后的密钥发送给服务端； 服务端用证书私钥解密密钥； 服务端使用解密出的密钥加密要发送的内容并发送给客户端； 客户端使用秘钥解密信息。">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-08-31T08:40:10.000Z">
-<meta property="article:modified_time" content="2020-09-09T01:10:49.337Z">
-<meta property="article:author" content="Junyu Bian">
-<meta property="article:tag" content="计算机网络">
-<meta name="twitter:card" content="summary">
-    
-    
-        
-    
-    
-    
-    
-    
-    <!--STYLES-->
-    
-<link rel="stylesheet" href="/assets/css/style-wxmdysl42bg8zzt2ryhfqsfzciwu3kx9uqdpszvt5k3t8nhbngsdtxq96fkn.min.css">
+    <meta name="description" content="1. Https加密过程
 
-    <!--STYLES END-->
+客户端发起握手请求；
+服务端返回已有的证书公钥（服务端通过CA认证后，拥有证书公钥和证书私钥）；
+客户端验证证书是否有效；
+若证书有效，则生成一个随机数；
+用证书公钥加密生成的随机数；
+将加密后的密钥发送给服务端；
+服务端用证书私钥解密密钥；
+服务端使用解密出的密钥加密要发送的内容并发送给客户端；
+客户端使用秘钥解密信息。">
     
+    
+    
+    
+    <link rel="alternate" href="/atom.xml" title="Blogs of Junyu" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
 
-    
+<meta name="generator" content="Hexo 5.4.0"></head>
 
-    
-        
-    
-</head>
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Blogs of Junyu" title="Blogs of Junyu"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Blogs of Junyu">Blogs of Junyu</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:junyu-bian.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
 
-    <body>
-        <div id="blog">
-            <!-- Define author's picture -->
-
-
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
     
-
-<header id="header" data-behavior="4">
-    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <div class="header-title">
-        <a
-            class="header-title-link"
-            href="/"
-            aria-label=""
-        >
-            Blogs of Junyu
-        </a>
-    </div>
+      <a href="/2020/08/31/2020-08-31-计算机网络知识点总结/" title="计算机网络知识点总结" itemprop="url">计算机网络知识点总结</a>
+  </h1>
+  <p class="article-author">By
     
-        
-            <a
-                class="header-right-picture "
-                href="#about"
-                aria-label="Open the link: /#about"
-            >
-        
-        
-        </a>
+      <a href="https://junyu-bian.github.io" title="Junyu Bian">Junyu Bian</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2020-08-31T08:40:10.000Z" itemprop="datePublished">2020-08-31</time>
+    Updated:<time datetime="2020-09-09T01:10:49.337Z" itemprop="dateModified">2020-09-09</time>
     
+  </p>
 </header>
-
-            <!-- Define author's picture -->
-
-
-<nav id="sidebar" data-behavior="4">
-    <div class="sidebar-container">
-        
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/"
-                            
-                            rel="noopener"
-                            title="Home"
-                        >
-                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Home</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-categories"
-                            
-                            rel="noopener"
-                            title="Categories"
-                        >
-                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Categories</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-tags"
-                            
-                            rel="noopener"
-                            title="Tags"
-                        >
-                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Tags</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-archives"
-                            
-                            rel="noopener"
-                            title="Archives"
-                        >
-                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Archives</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link open-algolia-search"
-                            href="#search"
-                            
-                            rel="noopener"
-                            title="Search"
-                        >
-                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Search</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="#about"
-                            
-                            rel="noopener"
-                            title="About"
-                        >
-                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">About</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://github.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="GitHub"
-                        >
-                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">GitHub</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="http://stackoverflow.com/users"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Stack Overflow"
-                        >
-                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Stack Overflow</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://twitter.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Twitter"
-                        >
-                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Twitter</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://facebook.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Facebook"
-                        >
-                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Facebook</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://plus.google.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Google +"
-                        >
-                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Google +</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-    </div>
-</nav>
-
-            
-            <div id="main" data-behavior="4"
-                 class="
-                        hasCoverMetaIn
-                        ">
-                
-<article class="post">
-    
-    
-        <div class="post-header main-content-wrap text-left">
-    
-        <h1 class="post-title">
-            计算机网络知识点总结
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2020-08-31T16:40:10+08:00">
-	
-		    Aug 31, 2020
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a>
-
-
-    
-</div>
-
-    
-</div>
-
-    
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <h3 id="1-Https加密过程"><a href="#1-Https加密过程" class="headerlink" title="1. Https加密过程"></a>1. Https加密过程</h3><hr>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Https%E5%8A%A0%E5%AF%86%E8%BF%87%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">1. Https加密过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E4%B8%8E%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86"><span class="toc-number">2.</span> <span class="toc-text">2. 对称加密与非对称加密</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-CLOSE-WAIT%E5%92%8CTIME-WAIT"><span class="toc-number">3.</span> <span class="toc-text">3. CLOSE_WAIT和TIME_WAIT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-TCP%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E4%BC%A0%E8%BE%93%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="toc-number">4.</span> <span class="toc-text">4. TCP如何保证传输可靠性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%A6%82%E4%BD%95%E9%A2%84%E9%98%B2TCP%E7%9A%84DDos%E6%94%BB%E5%87%BB"><span class="toc-number">5.</span> <span class="toc-text">5.如何预防TCP的DDos攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-TCP%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="toc-number">6.</span> <span class="toc-text">6. TCP如何实现拥塞控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E4%BB%8E%E8%BE%93%E5%85%A5%E7%BD%91%E5%9D%80%E5%88%B0%E8%8E%B7%E5%BE%97%E9%A1%B5%E9%9D%A2%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-number">7.</span> <span class="toc-text">7. 从输入网址到获得页面的过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-Session-%E4%B8%8E-Cookie"><span class="toc-number">8.</span> <span class="toc-text">8. Session 与 Cookie</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-%E4%B8%83%E5%B1%82%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-number">9.</span> <span class="toc-text">9. 七层网络体系结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-TCP%E5%92%8CUDP%E5%AF%B9%E5%BA%94%E7%9A%84%E5%B8%B8%E8%A7%81%E5%BA%94%E7%94%A8%E5%B1%82%E5%8D%8F%E8%AE%AE"><span class="toc-number">10.</span> <span class="toc-text">10. TCP和UDP对应的常见应用层协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-ARP"><span class="toc-number">11.</span> <span class="toc-text">11. ARP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E5%B8%B8%E8%A7%81%E7%8A%B6%E6%80%81%E7%A0%81"><span class="toc-number">12.</span> <span class="toc-text">12. 常见状态码</span></a></li></ol>
+		</div>
+		
+		<h3 id="1-Https加密过程"><a href="#1-Https加密过程" class="headerlink" title="1. Https加密过程"></a>1. Https加密过程</h3><hr>
 <ol>
 <li>客户端发起握手请求；</li>
 <li>服务端返回已有的<code>证书公钥</code>（服务端通过CA认证后，拥有<code>证书公钥</code>和<code>证书私钥</code>）；</li>
@@ -508,325 +263,276 @@
 <p>5XX：服务器不能处理合法请求：</p>
 <p>​    500：服务器内部错误；</p>
 <p>​    503：服务暂时不可用。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
 
-            
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/计算机网络/">计算机网络</a>
+  </div>
 
 
-        </div>
-    </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a>
-
-            </div>
-        
-        
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/08/31/2020-08-31-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
-                    data-tooltip="操作系统知识点总结"
-                    aria-label="PREVIOUS: 操作系统知识点总结"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/07/23/2020-07-23-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-6/"
-                    data-tooltip="知识点整理-6"
-                    aria-label="NEXT: 知识点整理-6"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/08/31/2020-08-31-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/08/31/2020-08-31-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/08/31/2020-08-31-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a>
 </div>
 
 
-        
-        
-            
-        
+
+<div class="article-share" id="share">
+
+  <div data-url="https://junyu-bian.github.io/2020/08/31/2020-08-31-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/" data-title="计算机网络知识点总结 | Blogs of Junyu" data-tsina="" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2020/08/31/2020-08-31-操作系统知识点总结/" title="操作系统知识点总结">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  操作系统知识点总结</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2020/07/23/2020-07-23-知识点整理-6/"  title="知识点整理-6">
+ <strong>NEXT:</strong><br/> 
+ <span>知识点整理-6
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Https%E5%8A%A0%E5%AF%86%E8%BF%87%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">1. Https加密过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E4%B8%8E%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86"><span class="toc-number">2.</span> <span class="toc-text">2. 对称加密与非对称加密</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-CLOSE-WAIT%E5%92%8CTIME-WAIT"><span class="toc-number">3.</span> <span class="toc-text">3. CLOSE_WAIT和TIME_WAIT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-TCP%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E4%BC%A0%E8%BE%93%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="toc-number">4.</span> <span class="toc-text">4. TCP如何保证传输可靠性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%A6%82%E4%BD%95%E9%A2%84%E9%98%B2TCP%E7%9A%84DDos%E6%94%BB%E5%87%BB"><span class="toc-number">5.</span> <span class="toc-text">5.如何预防TCP的DDos攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-TCP%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="toc-number">6.</span> <span class="toc-text">6. TCP如何实现拥塞控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E4%BB%8E%E8%BE%93%E5%85%A5%E7%BD%91%E5%9D%80%E5%88%B0%E8%8E%B7%E5%BE%97%E9%A1%B5%E9%9D%A2%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-number">7.</span> <span class="toc-text">7. 从输入网址到获得页面的过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-Session-%E4%B8%8E-Cookie"><span class="toc-number">8.</span> <span class="toc-text">8. Session 与 Cookie</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-%E4%B8%83%E5%B1%82%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-number">9.</span> <span class="toc-text">9. 七层网络体系结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-TCP%E5%92%8CUDP%E5%AF%B9%E5%BA%94%E7%9A%84%E5%B8%B8%E8%A7%81%E5%BA%94%E7%94%A8%E5%B1%82%E5%8D%8F%E8%AE%AE"><span class="toc-number">10.</span> <span class="toc-text">10. TCP和UDP对应的常见应用层协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-ARP"><span class="toc-number">11.</span> <span class="toc-text">11. ARP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E5%B8%B8%E8%A7%81%E7%8A%B6%E6%80%81%E7%A0%81"><span class="toc-number">12.</span> <span class="toc-text">12. 常见状态码</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+		
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>9</sup></a></li>
+		
+			<li><a href="/categories/Notes/" title="Notes">Notes<sup>5</sup></a></li>
+		
+			<li><a href="/categories/Web/" title="Web">Web<sup>1</sup></a></li>
+		
+			<li><a href="/categories/云计算/" title="云计算">云计算<sup>1</sup></a></li>
+		
+			<li><a href="/categories/知识点/" title="知识点">知识点<sup>11</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+		
+			<li><a href="/tags/Bash/" title="Bash">Bash<sup>2</sup></a></li>
+		
+			<li><a href="/tags/C/" title="C++">C++<sup>23</sup></a></li>
+		
+			<li><a href="/tags/Cent-OS/" title="Cent OS">Cent OS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Command-Line/" title="Command Line">Command Line<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Database/" title="Database">Database<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Django/" title="Django">Django<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Docker/" title="Docker">Docker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/FD-io/" title="FD.io">FD.io<sup>1</sup></a></li>
+		
+			<li><a href="/tags/K8s/" title="K8s">K8s<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Notes/" title="Notes">Notes<sup>5</sup></a></li>
+		
+			<li><a href="/tags/VM/" title="VM">VM<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Web/" title="Web">Web<sup>1</sup></a></li>
+		
+			<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>3</sup></a></li>
+		
+			<li><a href="/tags/数据库/" title="数据库">数据库<sup>4</sup></a></li>
+		
+			<li><a href="/tags/测试/" title="测试">测试<sup>3</sup></a></li>
+		
+			<li><a href="/tags/算法/" title="算法">算法<sup>14</sup></a></li>
+		
+			<li><a href="/tags/计算机网络/" title="计算机网络">计算机网络<sup>6</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
     </div>
-</article>
-
-
-
-                <footer id="footer" class="main-content-wrap">
-    <span class="copyrights">
-        Copyrights &copy; 2023 Junyu Bian. All Rights Reserved.
-    </span>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2023 
+		
+		<a href="https://junyu-bian.github.io" target="_blank" title="Junyu Bian">Junyu Bian</a>
+		
+		</p>
+</div>
 </footer>
-
-            </div>
-            
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
-                    <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/08/31/2020-08-31-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
-                    data-tooltip="操作系统知识点总结"
-                    aria-label="PREVIOUS: 操作系统知识点总结"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/07/23/2020-07-23-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-6/"
-                    data-tooltip="知识点整理-6"
-                    aria-label="NEXT: 知识点整理-6"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
         
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/08/31/2020-08-31-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/08/31/2020-08-31-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/08/31/2020-08-31-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
 
 
-                </div>
-                
-    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
-        <i id="btn-close-shareoptions" class="fa fa-times"></i>
-        <ul class="share-options">
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/08/31/2020-08-31-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
-                        aria-label="Share on Facebook"
-                    >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/08/31/2020-08-31-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
-                        aria-label="Share on Twitter"
-                    >
-                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/08/31/2020-08-31-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
-                        aria-label="Share on Google+"
-                    >
-                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
-                    </a>
-                </li>
-            
-        </ul>
-    </div>
-
-
-            
-        </div>
-        
-
-
-<div id="about">
-    <div id="about-card">
-        <div id="about-btn-close">
-            <i class="fa fa-times"></i>
-        </div>
-        
-            <h4 id="about-card-name">Junyu Bian</h4>
-        
-            <div id="about-card-bio"><p>author.bio</p>
-</div>
-        
-        
-            <div id="about-card-job">
-                <i class="fa fa-briefcase"></i>
-                <br/>
-                <p>author.job</p>
-
-            </div>
-        
-        
-    </div>
-</div>
-
-        
-        
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-        <!--SCRIPTS-->
-
-<script src="/assets/js/script-vnqkjqlintjjatuhqa130uwkuwsu27ios2j5z5qwaodowllkaooycjjcee9d.min.js"></script>
-
-<!--SCRIPTS END-->
-
-
-    
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
 
 
 
 
-    </body>
+
+
+  </body>
 </html>

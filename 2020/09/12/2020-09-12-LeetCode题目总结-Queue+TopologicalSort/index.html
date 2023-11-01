@@ -1,351 +1,98 @@
 
-<!DOCTYPE html>
+ <!DOCTYPE HTML>
 <html lang="en">
-    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Blogs of Junyu">
-    <title>LeetCode题目总结-Queue+TopologicalSort - Blogs of Junyu</title>
+  <meta charset="UTF-8">
+  
+    <title>LeetCode题目总结-Queue+TopologicalSort | Blogs of Junyu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
     <meta name="author" content="Junyu Bian">
     
-    
-    
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Junyu Bian","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"题目621:任务调度器\n描述：\n给定一个用字符数组表示的 CPU 需要执行的任务列表。其中包含使用大写的 A - Z 字母表示的26 种不同种类的任务。任务可以以任意顺序执行，并且每个任务都可以在 1 个单位时间内执行完。CPU 在任何一个单位时间内都可以执行一个任务，或者在待命状态。\n然而，两个相同种类的任务之间必须有长度为 n 的冷却时间，因此至少有连续 n 个单位时间内 CPU 在执行不同的任务，或者在待命状态。\n\n\n你需要计算完成所有任务所需要的最短时间。\n示例 ：\n输入：tasks = [“A”,”A”,”A”,”B”,”B”,”B”], n = 2输出：8解释：A -&gt; B -&gt; (待命) -&gt; A -&gt; B -&gt; (待命) -&gt; A -&gt; B.在本示例中，两个相同类型任务之间必须间隔长度为 n = 2 的冷却时间，而执行一个任务只需要一个单位时间，所以中间出现了（待命）状态。 \n提示：\n任务的总个数为 [1, 10000]。n 的取值范围为 [0, 100]。\n思路：\n突破点：桶思想。\n步骤：\n\n建立大小为n+1的桶，个数为数量最多的任务；\n每个桶视为一轮任务；\n总排队时间=(桶个数-1)*(n+1)+最后一个桶的任务数；\n\n代码：\n123456789101112int leastInterval(vector&lt;char&gt;&amp; tasks, int n) &#123;        int len=tasks.size();        vector&lt;int&gt; vec(26);        for(char c:tasks) ++vec[c-&#x27;A&#x27;];          sort(vec.begin(),vec.end(),[](int&amp; x,int&amp;y)&#123;return x&gt;y;&#125;);          int cnt=1;          while(cnt&lt;vec.size()&amp;&amp;vec[cnt]==vec[0]) cnt++;        return max(len,cnt+(n+1)*(vec[0]-1) );    &#125;\n\n\n题目641:设计循环双端队列\n描述：\n设计实现双端队列。你的实现需要支持以下操作：\nMyCircularDeque(k)：构造函数,双端队列的大小为k。insertFront()：将一个元素添加到双端队列头部。 如果操作成功返回 true。insertLast()：将一个元素添加到双端队列尾部。如果操作成功返回 true。deleteFront()：从双端队列头部删除一个元素。 如果操作成功返回 true。deleteLast()：从双端队列尾部删除一个元素。如果操作成功返回 true。getFront()：从双端队列头部获得一个元素。如果双端队列为空，返回 -1。getRear()：获得双端队列的最后一个元素。 如果双端队列为空，返回 -1。isEmpty()：检查双端队列是否为空。isFull()：检查双端队列是否满了。示例：\nMyCircularDeque circularDeque = new MycircularDeque(3); // 设置容量大小为3circularDeque.insertLast(1);                    // 返回 truecircularDeque.insertLast(2);                    // 返回 truecircularDeque.insertFront(3);                    // 返回 truecircularDeque.insertFront(4);                    // 已经满了，返回 falsecircularDeque.getRear();                  // 返回 2circularDeque.isFull();                        // 返回 truecircularDeque.deleteLast();                    // 返回 truecircularDeque.insertFront(4);                    // 返回 truecircularDeque.getFront();                // 返回 4\n提示：\n所有值的范围为 [1, 1000]操作次数的范围为 [1, 1000]请不要使用内置的双端队列库。\n思路：\n突破点：双端链表。\n代码：\n12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091class MyCircularDeque &#123;public:    struct DLNode &#123;        int val;        DLNode* next;        DLNode* prev;        DLNode() : val(-1), next(NULL), prev(NULL) &#123;&#125;        DLNode(int v) : val(v), next(NULL), prev(NULL) &#123;&#125;    &#125;;    int size;    int capacity;    DLNode* head;    DLNode* tail;    /** Initialize your data structure here. Set the size of the deque to be k. */    MyCircularDeque(int k) &#123;        size = 0;        capacity = k;        head = new DLNode();        tail = new DLNode();        head-&gt;next = tail;        tail-&gt;prev = head;    &#125;        /** Adds an item at the front of Deque. Return true if the operation is successful. */    bool insertFront(int value) &#123;        if (isFull()) return false;        auto node = new DLNode(value);        node-&gt;prev = head;        node-&gt;next = head-&gt;next;        node-&gt;next-&gt;prev = node;        node-&gt;prev-&gt;next = node;        ++size;        return true;    &#125;        /** Adds an item at the rear of Deque. Return true if the operation is successful. */    bool insertLast(int value) &#123;        if (isFull()) return false;        auto node = new DLNode(value);        node-&gt;prev = tail-&gt;prev;        node-&gt;next = tail;        node-&gt;prev-&gt;next = node;        node-&gt;next-&gt;prev = node;        ++size;        return true;    &#125;        /** Deletes an item from the front of Deque. Return true if the operation is successful. */    bool deleteFront() &#123;        if (isEmpty()) return false;        auto node = head-&gt;next;        node-&gt;next-&gt;prev = node-&gt;prev;        node-&gt;prev-&gt;next = node-&gt;next;        delete node;        node = NULL;        --size;        return true;    &#125;        /** Deletes an item from the rear of Deque. Return true if the operation is successful. */    bool deleteLast() &#123;        if (isEmpty()) return false;        auto node = tail-&gt;prev;        node-&gt;next-&gt;prev = node-&gt;prev;        node-&gt;prev-&gt;next = node-&gt;next;        delete node;        node = NULL;        --size;        return true;    &#125;        /** Get the front item from the deque. */    int getFront() &#123;        return head-&gt;next-&gt;val;    &#125;        /** Get the last item from the deque. */    int getRear() &#123;        return tail-&gt;prev-&gt;val;    &#125;        /** Checks whether the circular deque is empty or not. */    bool isEmpty() &#123;        return size == 0;    &#125;        /** Checks whether the circular deque is full or not. */    bool isFull() &#123;        return size == capacity;    &#125;&#125;;\n\n\n题目622:设计循环队列\n描述：\n设计你的循环队列实现。 循环队列是一种线性数据结构，其操作表现基于 FIFO（先进先出）原则并且队尾被连接在队首之后以形成一个循环。它也被称为“环形缓冲器”。\n循环队列的一个好处是我们可以利用这个队列之前用过的空间。在一个普通队列里，一旦一个队列满了，我们就不能插入下一个元素，即使在队列前面仍有空间。但是使用循环队列，我们能使用这些空间去存储新的值。\n你的实现应该支持如下操作：\nMyCircularQueue(k): 构造器，设置队列长度为 k 。Front: 从队首获取元素。如果队列为空，返回 -1 。Rear: 获取队尾元素。如果队列为空，返回 -1 。enQueue(value): 向循环队列插入一个元素。如果成功插入则返回真。deQueue(): 从循环队列中删除一个元素。如果成功删除则返回真。isEmpty(): 检查循环队列是否为空。isFull(): 检查循环队列是否已满。\n示例：\nMyCircularQueue circularQueue = new MyCircularQueue(3); // 设置长度为 3circularQueue.enQueue(1);  // 返回 truecircularQueue.enQueue(2);  // 返回 truecircularQueue.enQueue(3);  // 返回 truecircularQueue.enQueue(4);  // 返回 false，队列已满circularQueue.Rear();  // 返回 3circularQueue.isFull();  // 返回 truecircularQueue.deQueue();  // 返回 truecircularQueue.enQueue(4);  // 返回 truecircularQueue.Rear();  // 返回 4\n提示：\n所有的值都在 0 至 1000 的范围内；操作数将在 1 至 1000 的范围内；请不要使用内置的队列库。\n思路：\n突破点：下标%数组大小。\n代码：\n12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061class MyCircularQueue &#123;private:    int start;    int end;    int count;    vector&lt;int&gt; nums;  public:    /** Initialize your data structure here. Set the size of the queue to be k. */    MyCircularQueue(int k):        start(0),        end(0),        count(0)    &#123;        nums.resize(k);    &#125;        /** Insert an element into the circular queue. Return true if the operation is successful. */    bool enQueue(int value) &#123;        if (count == nums.size())            return false;        nums[start++] = value;        start %= nums.size();        ++count;        return true;    &#125;        /** Delete an element from the circular queue. Return true if the operation is successful. */    bool deQueue() &#123;        if (count == 0)            return false;        nums[end++] = 0;        end %= nums.size();        --count;        return true;    &#125;        /** Get the front item from the queue. */    int Front() &#123;        if (count == 0)            return -1;        return nums[end];    &#125;        /** Get the last item from the queue. */    int Rear() &#123;        if (count == 0)            return -1;        return nums[(start - 1 + nums.size()) % nums.size()];    &#125;        /** Checks whether the circular queue is empty or not. */    bool isEmpty() &#123;        return count == 0;    &#125;        /** Checks whether the circular queue is full or not. */    bool isFull() &#123;        return nums.size() == count;    &#125;&#125;;\n\n\n题目329:矩阵中的最长递增路径\n描述：\n给定一个整数矩阵，找出最长递增路径的长度。\n对于每个单元格，你可以往上，下，左，右四个方向移动。 你不能在对角线方向上移动或移动到边界外（即不允许环绕）。\n示例 1:\n输入: nums =[  [9,9,4],  [6,6,8],  [2,1,1]]输出: 4解释: 最长递增路径为 [1, 2, 6, 9]。示例 2:\n输入: nums =[  [3,4,5],  [3,2,6],  [2,2,1]]输出: 4解释: 最长递增路径是 [3, 4, 5, 6]。注意不允许在对角线方向上移动。\n思路一：\n突破点：优化的深度优先搜索。\n步骤：\n\n将矩阵视为有向图，若相邻两个单元格大小不等，则在两相邻单元格中存在一条小值指向大值的有向边；\n在有向图中，寻找最长路径；\n从一个单元格开始DFS，直到搜索结束；\n使用缓存矩阵优化，已经计算过的单元格进行保存。\n\n代码：\n1234567891011121314151617181920212223242526272829303132333435class Solution &#123;public:    static constexpr int dirs[4][2] = &#123;&#123;-1, 0&#125;, &#123;1, 0&#125;, &#123;0, -1&#125;, &#123;0, 1&#125;&#125;;    int rows, columns;    int longestIncreasingPath(vector&lt; vector&lt;int&gt; &gt; &amp;matrix) &#123;        if (matrix.size() == 0 || matrix[0].size() == 0) &#123;            return 0;        &#125;        rows = matrix.size();        columns = matrix[0].size();        auto memo = vector&lt; vector&lt;int&gt; &gt; (rows, vector &lt;int&gt; (columns));        int ans = 0;        for (int i = 0; i &lt; rows; ++i) &#123;            for (int j = 0; j &lt; columns; ++j) &#123;                ans = max(ans, dfs(matrix, i, j, memo));            &#125;        &#125;        return ans;    &#125;    int dfs(vector&lt; vector&lt;int&gt; &gt; &amp;matrix, int row, int column, vector&lt; vector&lt;int&gt; &gt; &amp;memo) &#123;        if (memo[row][column] != 0) &#123;            return memo[row][column];        &#125;        ++memo[row][column];        for (int i = 0; i &lt; 4; ++i) &#123;            int newRow = row + dirs[i][0], newColumn = column + dirs[i][1];            if (newRow &gt;= 0 &amp;&amp; newRow &lt; rows &amp;&amp; newColumn &gt;= 0 &amp;&amp; newColumn &lt; columns &amp;&amp; matrix[newRow][newColumn] &gt; matrix[row][column]) &#123;                memo[row][column] = max(memo[row][column], dfs(matrix, newRow, newColumn, memo) + 1);            &#125;        &#125;        return memo[row][column];    &#125;&#125;;\n\n思路二：\n突破点：拓扑排序+动态规划。\n步骤：\n\n状态转移方程：memo[i][j] = max{memo[x][y]} + 1，(x, y)与(i, j)相邻，且matrix[x][y]&gt;matrix[i][j]；\n使用拓扑排序，从所有出度为0的单元格开始DFS；\n更新其余单元格出度，并将出度为0的加入下一层搜索；\n搜索结束后，总层数即为所求答案。\n\n代码：\n123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051class Solution &#123;public:    static constexpr int dirs[4][2] = &#123;&#123;-1, 0&#125;, &#123;1, 0&#125;, &#123;0, -1&#125;, &#123;0, 1&#125;&#125;;    int rows, columns;    int longestIncreasingPath(vector&lt; vector&lt;int&gt; &gt; &amp;matrix) &#123;        if (matrix.size() == 0 || matrix[0].size() == 0) &#123;            return 0;        &#125;        rows = matrix.size();        columns = matrix[0].size();        auto outdegrees = vector&lt; vector&lt;int&gt; &gt; (rows, vector &lt;int&gt; (columns));        for (int i = 0; i &lt; rows; ++i) &#123;            for (int j = 0; j &lt; columns; ++j) &#123;                for (int k = 0; k &lt; 4; ++k) &#123;                    int newRow = i + dirs[k][0], newColumn = j + dirs[k][1];                    if (newRow &gt;= 0 &amp;&amp; newRow &lt; rows &amp;&amp; newColumn &gt;= 0 &amp;&amp; newColumn &lt; columns &amp;&amp; matrix[newRow][newColumn] &gt; matrix[i][j]) &#123;                        ++outdegrees[i][j];                    &#125;                &#125;            &#125;        &#125;        queue &lt; pair&lt;int, int&gt; &gt; q;        for (int i = 0; i &lt; rows; ++i) &#123;            for (int j = 0; j &lt; columns; ++j) &#123;                if (outdegrees[i][j] == 0) &#123;                    q.push(&#123;i, j&#125;);                &#125;            &#125;        &#125;        int ans = 0;        while (!q.empty()) &#123;            ++ans;            int size = q.size();            for (int i = 0; i &lt; size; ++i) &#123;                auto cell = q.front(); q.pop();                int row = cell.first, column = cell.second;                for (int k = 0; k &lt; 4; ++k) &#123;                    int newRow = row + dirs[k][0], newColumn = column + dirs[k][1];                    if (newRow &gt;= 0 &amp;&amp; newRow &lt; rows &amp;&amp; newColumn &gt;= 0 &amp;&amp; newColumn &lt; columns &amp;&amp; matrix[newRow][newColumn] &lt; matrix[row][column]) &#123;                        --outdegrees[newRow][newColumn];                        if (outdegrees[newRow][newColumn] == 0) &#123;                            q.push(&#123;newRow, newColumn&#125;);                        &#125;                    &#125;                &#125;            &#125;        &#125;        return ans;    &#125;&#125;;\n\n\n题目1203:项目管理\n描述：\n公司共有 n 个项目和  m 个小组，每个项目要不没有归属，要不就由其中的一个小组负责。\n我们用 group[i] 代表第 i 个项目所属的小组，如果这个项目目前无人接手，那么 group[i] 就等于 -1。（项目和小组都是从零开始编号的）\n请你帮忙按要求安排这些项目的进度，并返回排序后的项目列表：\n同一小组的项目，排序后在列表中彼此相邻。项目之间存在一定的依赖关系，我们用一个列表 beforeItems 来表示，其中 beforeItems[i] 表示在进行第 i 个项目前（位于第 i 个项目左侧）应该完成的所有项目。结果要求：\n如果存在多个解决方案，只需要返回其中任意一个即可。\n如果没有合适的解决方案，就请返回一个 空列表\n示例 1：\n输入：n = 8, m = 2, group = [-1,-1,1,0,0,1,0,-1], beforeItems = [[],[6],[5],[6],[3,6],[],[],[]]输出：[6,3,4,1,5,2,0,7]示例 2：\n输入：n = 8, m = 2, group = [-1,-1,1,0,0,1,0,-1], beforeItems = [[],[6],[5],[6],[3],[],[4],[]]输出：[]解释：与示例 1 大致相同，但是在排序后的列表中，4 必须放在 6 的前面。\n提示：\n1 &lt;= m &lt;= n &lt;= 3*10^4group.length == beforeItems.length == n-1 &lt;= group[i] &lt;= m-10 &lt;= beforeItems[i].length &lt;= n-10 &lt;= beforeItems[i][j] &lt;= n-1i != beforeItems[i][j]\n思路：\n突破点：拓扑排序。\n步骤：\n\n将组别为-1的项目都创建一个新组；\n遍历beforeItems[i][j]数组；\n如果i和j属于同组，则确定组内优先级关系；\n若不同组，则确定小组间优先级关系；\n对每个组内拓扑排序；\n对不同组拓扑排序。\n\n代码：\n123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103class Solution &#123;public:  //拓扑排序的节点结构体声明struct tpnod &#123;  //组外的优先级比该节点小的节点索引，维护不同的小组排序后的优先级关系\tvector&lt;int&gt;next1;  //组内的优先级比该节点小的节点索引，维护同一小组的任务排序后的优先级关系\tvector&lt;int&gt;ingnext;  //不同组间的在完成该节点之前需要完成的任务数\tint deg = 0;  //组内的在完成该节点之前需要完成的任务数\tint igdeg = 0;&#125;;  tpnod nos[30001];//小组的数组，每个单元都是一个小组，可能不只m个，因为新创建了一些小组，但一定不会超过30000；tpnod itogroup[30001];//维护同一个组的项目vector&lt;int&gt;grouptoi[30001];//维护同一组的不同项目之间的顺序vector&lt;int&gt;ingroup[30001];    vector&lt;int&gt; sortItems(int n, int m, vector&lt;int&gt;&amp; group, vector&lt;vector&lt;int&gt;&gt;&amp; beforeItems) &#123;  //numOfG为包括创建的新组的组数\tint numOfG = m;\tvector&lt;int&gt;res;\tfor (int i = 0; i &lt; group.size(); i++) &#123;\t\tif (group[i] != -1)\t\t\tgrouptoi[group[i]].push_back(i);\t\t//否则创建新组    else &#123;\t\t\tgrouptoi[numOfG].push_back(i);\t\t\tgroup[i] = numOfG;\t\t\tnumOfG++;//创建后加一\t\t&#125;\t&#125;\tfor (int i = 0; i &lt; beforeItems.size(); i++) &#123;\t\tfor (int j = 0; j &lt; beforeItems[i].size(); j++) &#123;      //在同一组就看作组内项目优先级关系\t\t\tif (group[beforeItems[i][j]] == group[i])\t\t\t\tnos[i].igdeg++, nos[beforeItems[i][j]].next1.push_back(i);      //在不同组就看作组之间的优先级关系，因为同组的肯定是聚在一起的\t\t\telse itogroup[group[i]].deg++,\t\t\t\titogroup[group[beforeItems[i][j]]].next1.push_back(group[i]);\t\t&#125;\t&#125;  //确定不同小组组内项目优先级顺序     \tfor (int i = 0; i &lt; numOfG; i++) &#123;\t\tqueue&lt;int&gt;q;\t\tfor (int j = 0; j &lt; grouptoi[i].size(); j++) &#123;\t\t\tif (nos[grouptoi[i][j]].igdeg == 0)\t\t\t\tq.push(grouptoi[i][j]);\t\t&#125;\t\tint cnt2 = 0;\t\twhile (!q.empty()) &#123;\t\t\tcnt2++;\t\t\tint tp2 = q.front();\t\t\tingroup[i].push_back(tp2);\t\t\tq.pop();\t\t\tfor (int j = 0; j &lt; nos[tp2].next1.size(); j++) &#123;\t\t\t\tnos[nos[tp2].next1[j]].igdeg--;        //在该节点之前的工作处理完了就把该节点放入队列\t\t\t\tif (nos[nos[tp2].next1[j]].igdeg == 0)\t\t\t\t\tq.push(nos[tp2].next1[j]);\t\t\t&#125;\t\t&#125;    //判断是否矛盾 \t\tif (cnt2 != grouptoi[i].size()) &#123;\t\t\t//res此时为空      return res;\t\t&#125;\t&#125;\tqueue&lt;int&gt;q;\tfor (int i = 0; i &lt; numOfG; i++)\t\tif (itogroup[i].deg == 0)\t\t\tq.push(i);\tint cnt3 = 0;\tint tp7;\tvector&lt;int&gt;grorder;  //之前已经处理好了不同小组优先级关系，现在开始确定不同小组的顺序。\twhile (!q.empty()) &#123;\t\ttp7 = q.front();\t\tgrorder.push_back(tp7);\t\tq.pop();\t\tcnt3++;\t\tfor (int i = 0; i &lt; itogroup[tp7].next1.size(); i++) &#123;\t\t\t(itogroup[itogroup[tp7].next1[i]].deg)--;\t\t\tif (itogroup[itogroup[tp7].next1[i]].deg == 0)\t\t\t\tq.push(itogroup[tp7].next1[i]);\t\t&#125;\t&#125;  //判断是否矛盾\tif (cnt3 != numOfG) &#123;    //res为空\t\treturn res;\t&#125;\tfor (int i = 0; i &lt; numOfG; i++) &#123;\t\tfor (int j = 0; j &lt; ingroup[grorder[i]].size(); j++)\t\t\tres.push_back(ingroup[grorder[i]][j]);\t&#125;\treturn res;  &#125;&#125;;\n\n","dateCreated":"2020-09-12T21:32:19+08:00","dateModified":"2020-09-15T22:06:16+08:00","datePublished":"2020-09-12T21:32:19+08:00","description":"题目621:任务调度器\n描述：\n给定一个用字符数组表示的 CPU 需要执行的任务列表。其中包含使用大写的 A - Z 字母表示的26 种不同种类的任务。任务可以以任意顺序执行，并且每个任务都可以在 1 个单位时间内执行完。CPU 在任何一个单位时间内都可以执行一个任务，或者在待命状态。\n然而，两个相同种类的任务之间必须有长度为 n 的冷却时间，因此至少有连续 n 个单位时间内 CPU 在执行不同的任务，或者在待命状态。","headline":"LeetCode题目总结-Queue+TopologicalSort","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://junyu-bian.github.io/2020/09/12/2020-09-12-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Queue+TopologicalSort/"},"publisher":{"@type":"Organization","name":"Junyu Bian","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"https://junyu-bian.github.io/2020/09/12/2020-09-12-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Queue+TopologicalSort/","keywords":"C++, 算法"}</script>
-    <meta name="description" content="题目621:任务调度器 描述： 给定一个用字符数组表示的 CPU 需要执行的任务列表。其中包含使用大写的 A - Z 字母表示的26 种不同种类的任务。任务可以以任意顺序执行，并且每个任务都可以在 1 个单位时间内执行完。CPU 在任何一个单位时间内都可以执行一个任务，或者在待命状态。 然而，两个相同种类的任务之间必须有长度为 n 的冷却时间，因此至少有连续 n 个单位时间内 CPU 在执行不同的">
-<meta property="og:type" content="blog">
-<meta property="og:title" content="LeetCode题目总结-Queue+TopologicalSort">
-<meta property="og:url" content="https://junyu-bian.github.io/2020/09/12/2020-09-12-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Queue+TopologicalSort/index.html">
-<meta property="og:site_name" content="Blogs of Junyu">
-<meta property="og:description" content="题目621:任务调度器 描述： 给定一个用字符数组表示的 CPU 需要执行的任务列表。其中包含使用大写的 A - Z 字母表示的26 种不同种类的任务。任务可以以任意顺序执行，并且每个任务都可以在 1 个单位时间内执行完。CPU 在任何一个单位时间内都可以执行一个任务，或者在待命状态。 然而，两个相同种类的任务之间必须有长度为 n 的冷却时间，因此至少有连续 n 个单位时间内 CPU 在执行不同的">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-09-12T13:32:19.000Z">
-<meta property="article:modified_time" content="2020-09-15T14:06:16.529Z">
-<meta property="article:author" content="Junyu Bian">
-<meta property="article:tag" content="C++">
-<meta property="article:tag" content="算法">
-<meta name="twitter:card" content="summary">
-    
-    
-        
+    <meta name="description" content="题目621:任务调度器
+描述：
+给定一个用字符数组表示的 CPU 需要执行的任务列表。其中包含使用大写的 A - Z 字母表示的26 种不同种类的任务。任务可以以任意顺序执行，并且每个任务都可以在 1 个单位时间内执行完。CPU 在任何一个单位时间内都可以执行一个任务，或者在待命状态。
+然而，两个相同种类的任务之间必须有长度为 n 的冷却时间，因此至少有连续 n 个单位时间内 CPU 在执行不同的任务，或者在待命状态。">
     
     
     
     
+    <link rel="alternate" href="/atom.xml" title="Blogs of Junyu" type="application/atom+xml">
     
-    <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-wxmdysl42bg8zzt2ryhfqsfzciwu3kx9uqdpszvt5k3t8nhbngsdtxq96fkn.min.css">
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
 
-    <!--STYLES END-->
-    
+<meta name="generator" content="Hexo 5.4.0"></head>
 
-    
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Blogs of Junyu" title="Blogs of Junyu"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Blogs of Junyu">Blogs of Junyu</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:junyu-bian.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
 
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
     
-        
+      <a href="/2020/09/12/2020-09-12-LeetCode题目总结-Queue+TopologicalSort/" title="LeetCode题目总结-Queue+TopologicalSort" itemprop="url">LeetCode题目总结-Queue+TopologicalSort</a>
+  </h1>
+  <p class="article-author">By
     
-</head>
-
-    <body>
-        <div id="blog">
-            <!-- Define author's picture -->
-
-
+      <a href="https://junyu-bian.github.io" title="Junyu Bian">Junyu Bian</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2020-09-12T13:32:19.000Z" itemprop="datePublished">2020-09-12</time>
+    Updated:<time datetime="2020-09-15T14:06:16.529Z" itemprop="dateModified">2020-09-15</time>
     
-
-<header id="header" data-behavior="4">
-    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <div class="header-title">
-        <a
-            class="header-title-link"
-            href="/"
-            aria-label=""
-        >
-            Blogs of Junyu
-        </a>
-    </div>
-    
-        
-            <a
-                class="header-right-picture "
-                href="#about"
-                aria-label="Open the link: /#about"
-            >
-        
-        
-        </a>
-    
+  </p>
 </header>
-
-            <!-- Define author's picture -->
-
-
-<nav id="sidebar" data-behavior="4">
-    <div class="sidebar-container">
-        
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/"
-                            
-                            rel="noopener"
-                            title="Home"
-                        >
-                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Home</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-categories"
-                            
-                            rel="noopener"
-                            title="Categories"
-                        >
-                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Categories</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-tags"
-                            
-                            rel="noopener"
-                            title="Tags"
-                        >
-                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Tags</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-archives"
-                            
-                            rel="noopener"
-                            title="Archives"
-                        >
-                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Archives</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link open-algolia-search"
-                            href="#search"
-                            
-                            rel="noopener"
-                            title="Search"
-                        >
-                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Search</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="#about"
-                            
-                            rel="noopener"
-                            title="About"
-                        >
-                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">About</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://github.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="GitHub"
-                        >
-                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">GitHub</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="http://stackoverflow.com/users"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Stack Overflow"
-                        >
-                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Stack Overflow</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://twitter.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Twitter"
-                        >
-                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Twitter</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://facebook.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Facebook"
-                        >
-                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Facebook</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://plus.google.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Google +"
-                        >
-                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Google +</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-    </div>
-</nav>
-
-            
-            <div id="main" data-behavior="4"
-                 class="
-                        hasCoverMetaIn
-                        ">
-                
-<article class="post">
-    
-    
-        <div class="post-header main-content-wrap text-left">
-    
-        <h1 class="post-title">
-            LeetCode题目总结-Queue+TopologicalSort
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2020-09-12T21:32:19+08:00">
-	
-		    Sep 12, 2020
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/categories/LeetCode/">LeetCode</a>
-
-
-    
-</div>
-
-    
-</div>
-
-    
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <h3 id="题目621-任务调度器"><a href="#题目621-任务调度器" class="headerlink" title="题目621:任务调度器"></a>题目621:<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/task-scheduler/">任务调度器</a></h3><hr>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE621-%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="toc-number">1.</span> <span class="toc-text">题目621:任务调度器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE641-%E8%AE%BE%E8%AE%A1%E5%BE%AA%E7%8E%AF%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97"><span class="toc-number">2.</span> <span class="toc-text">题目641:设计循环双端队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE622-%E8%AE%BE%E8%AE%A1%E5%BE%AA%E7%8E%AF%E9%98%9F%E5%88%97"><span class="toc-number">3.</span> <span class="toc-text">题目622:设计循环队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE329-%E7%9F%A9%E9%98%B5%E4%B8%AD%E7%9A%84%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E8%B7%AF%E5%BE%84"><span class="toc-number">4.</span> <span class="toc-text">题目329:矩阵中的最长递增路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE1203-%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86"><span class="toc-number">5.</span> <span class="toc-text">题目1203:项目管理</span></a></li></ol>
+		</div>
+		
+		<h3 id="题目621-任务调度器"><a href="#题目621-任务调度器" class="headerlink" title="题目621:任务调度器"></a>题目621:<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/task-scheduler/">任务调度器</a></h3><hr>
 <p>描述：</p>
 <p>给定一个用字符数组表示的 CPU 需要执行的任务列表。其中包含使用大写的 A - Z 字母表示的26 种不同种类的任务。任务可以以任意顺序执行，并且每个任务都可以在 1 个单位时间内执行完。CPU 在任何一个单位时间内都可以执行一个任务，或者在待命状态。</p>
 <p>然而，两个相同种类的任务之间必须有长度为 n 的冷却时间，因此至少有连续 n 个单位时间内 CPU 在执行不同的任务，或者在待命状态。</p>
@@ -456,325 +203,276 @@
 <p>代码：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="comment">//拓扑排序的节点结构体声明</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">tpnod</span> &#123;</span></span><br><span class="line">  <span class="comment">//组外的优先级比该节点小的节点索引，维护不同的小组排序后的优先级关系</span></span><br><span class="line">	vector&lt;<span class="keyword">int</span>&gt;next1;</span><br><span class="line">  <span class="comment">//组内的优先级比该节点小的节点索引，维护同一小组的任务排序后的优先级关系</span></span><br><span class="line">	vector&lt;<span class="keyword">int</span>&gt;ingnext;</span><br><span class="line">  <span class="comment">//不同组间的在完成该节点之前需要完成的任务数</span></span><br><span class="line">	<span class="keyword">int</span> deg = <span class="number">0</span>;</span><br><span class="line">  <span class="comment">//组内的在完成该节点之前需要完成的任务数</span></span><br><span class="line">	<span class="keyword">int</span> igdeg = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line">  </span><br><span class="line">tpnod nos[<span class="number">30001</span>];</span><br><span class="line"><span class="comment">//小组的数组，每个单元都是一个小组，可能不只m个，因为新创建了一些小组，但一定不会超过30000；</span></span><br><span class="line">tpnod itogroup[<span class="number">30001</span>];</span><br><span class="line"><span class="comment">//维护同一个组的项目</span></span><br><span class="line">vector&lt;<span class="keyword">int</span>&gt;grouptoi[<span class="number">30001</span>];</span><br><span class="line"><span class="comment">//维护同一组的不同项目之间的顺序</span></span><br><span class="line">vector&lt;<span class="keyword">int</span>&gt;ingroup[<span class="number">30001</span>];</span><br><span class="line"></span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">sortItems</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span> m, vector&lt;<span class="keyword">int</span>&gt;&amp; group, vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; beforeItems)</span> </span>&#123;</span><br><span class="line">  <span class="comment">//numOfG为包括创建的新组的组数</span></span><br><span class="line">	<span class="keyword">int</span> numOfG = m;</span><br><span class="line">	vector&lt;<span class="keyword">int</span>&gt;res;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; group.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">		<span class="keyword">if</span> (group[i] != <span class="number">-1</span>)</span><br><span class="line">			grouptoi[group[i]].<span class="built_in">push_back</span>(i);</span><br><span class="line">		<span class="comment">//否则创建新组</span></span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">			grouptoi[numOfG].<span class="built_in">push_back</span>(i);</span><br><span class="line">			group[i] = numOfG;</span><br><span class="line">			numOfG++;<span class="comment">//创建后加一</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; beforeItems.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; beforeItems[i].<span class="built_in">size</span>(); j++) &#123;</span><br><span class="line">      <span class="comment">//在同一组就看作组内项目优先级关系</span></span><br><span class="line">			<span class="keyword">if</span> (group[beforeItems[i][j]] == group[i])</span><br><span class="line">				nos[i].igdeg++, nos[beforeItems[i][j]].next1.<span class="built_in">push_back</span>(i);</span><br><span class="line">      <span class="comment">//在不同组就看作组之间的优先级关系，因为同组的肯定是聚在一起的</span></span><br><span class="line">			<span class="keyword">else</span> itogroup[group[i]].deg++,</span><br><span class="line">				itogroup[group[beforeItems[i][j]]].next1.<span class="built_in">push_back</span>(group[i]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">  <span class="comment">//确定不同小组组内项目优先级顺序     </span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numOfG; i++) &#123;</span><br><span class="line">		queue&lt;<span class="keyword">int</span>&gt;q;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; grouptoi[i].<span class="built_in">size</span>(); j++) &#123;</span><br><span class="line">			<span class="keyword">if</span> (nos[grouptoi[i][j]].igdeg == <span class="number">0</span>)</span><br><span class="line">				q.<span class="built_in">push</span>(grouptoi[i][j]);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">int</span> cnt2 = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">while</span> (!q.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">			cnt2++;</span><br><span class="line">			<span class="keyword">int</span> tp2 = q.<span class="built_in">front</span>();</span><br><span class="line">			ingroup[i].<span class="built_in">push_back</span>(tp2);</span><br><span class="line">			q.<span class="built_in">pop</span>();</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; nos[tp2].next1.<span class="built_in">size</span>(); j++) &#123;</span><br><span class="line">				nos[nos[tp2].next1[j]].igdeg--;</span><br><span class="line">        <span class="comment">//在该节点之前的工作处理完了就把该节点放入队列</span></span><br><span class="line">				<span class="keyword">if</span> (nos[nos[tp2].next1[j]].igdeg == <span class="number">0</span>)</span><br><span class="line">					q.<span class="built_in">push</span>(nos[tp2].next1[j]);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">    <span class="comment">//判断是否矛盾 </span></span><br><span class="line">		<span class="keyword">if</span> (cnt2 != grouptoi[i].<span class="built_in">size</span>()) &#123;</span><br><span class="line">			<span class="comment">//res此时为空</span></span><br><span class="line">      <span class="keyword">return</span> res;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	queue&lt;<span class="keyword">int</span>&gt;q;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numOfG; i++)</span><br><span class="line">		<span class="keyword">if</span> (itogroup[i].deg == <span class="number">0</span>)</span><br><span class="line">			q.<span class="built_in">push</span>(i);</span><br><span class="line">	<span class="keyword">int</span> cnt3 = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> tp7;</span><br><span class="line">	vector&lt;<span class="keyword">int</span>&gt;grorder;</span><br><span class="line">  <span class="comment">//之前已经处理好了不同小组优先级关系，现在开始确定不同小组的顺序。</span></span><br><span class="line">	<span class="keyword">while</span> (!q.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">		tp7 = q.<span class="built_in">front</span>();</span><br><span class="line">		grorder.<span class="built_in">push_back</span>(tp7);</span><br><span class="line">		q.<span class="built_in">pop</span>();</span><br><span class="line">		cnt3++;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; itogroup[tp7].next1.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">			(itogroup[itogroup[tp7].next1[i]].deg)--;</span><br><span class="line">			<span class="keyword">if</span> (itogroup[itogroup[tp7].next1[i]].deg == <span class="number">0</span>)</span><br><span class="line">				q.<span class="built_in">push</span>(itogroup[tp7].next1[i]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">  <span class="comment">//判断是否矛盾</span></span><br><span class="line">	<span class="keyword">if</span> (cnt3 != numOfG) &#123;</span><br><span class="line">    <span class="comment">//res为空</span></span><br><span class="line">		<span class="keyword">return</span> res;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numOfG; i++) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; ingroup[grorder[i]].<span class="built_in">size</span>(); j++)</span><br><span class="line">			res.<span class="built_in">push_back</span>(ingroup[grorder[i]][j]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
+  
+	</div>
+		<footer class="article-footer clearfix">
 
-            
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/C/">C++</a><a href="/tags/算法/">算法</a>
+  </div>
 
 
-        </div>
-    </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/C/" rel="tag">C++</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a>
-
-            </div>
-        
-        
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/09/12/2020-09-12-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Graph/"
-                    data-tooltip="LeetCode题目总结-Graph"
-                    aria-label="PREVIOUS: LeetCode题目总结-Graph"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/09/11/2020-09-11-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-DP+Greedy/"
-                    data-tooltip="LeetCode题目总结-DP+Greedy"
-                    aria-label="NEXT: LeetCode题目总结-DP+Greedy"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/09/12/2020-09-12-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Queue+TopologicalSort/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/09/12/2020-09-12-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Queue+TopologicalSort/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/09/12/2020-09-12-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Queue+TopologicalSort/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
 </div>
 
 
-        
-        
-            
-        
+
+<div class="article-share" id="share">
+
+  <div data-url="https://junyu-bian.github.io/2020/09/12/2020-09-12-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Queue+TopologicalSort/" data-title="LeetCode题目总结-Queue+TopologicalSort | Blogs of Junyu" data-tsina="" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2020/09/12/2020-09-12-LeetCode题目总结-Graph/" title="LeetCode题目总结-Graph">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  LeetCode题目总结-Graph</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2020/09/11/2020-09-11-LeetCode题目总结-DP+Greedy/"  title="LeetCode题目总结-DP+Greedy">
+ <strong>NEXT:</strong><br/> 
+ <span>LeetCode题目总结-DP+Greedy
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE621-%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="toc-number">1.</span> <span class="toc-text">题目621:任务调度器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE641-%E8%AE%BE%E8%AE%A1%E5%BE%AA%E7%8E%AF%E5%8F%8C%E7%AB%AF%E9%98%9F%E5%88%97"><span class="toc-number">2.</span> <span class="toc-text">题目641:设计循环双端队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE622-%E8%AE%BE%E8%AE%A1%E5%BE%AA%E7%8E%AF%E9%98%9F%E5%88%97"><span class="toc-number">3.</span> <span class="toc-text">题目622:设计循环队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE329-%E7%9F%A9%E9%98%B5%E4%B8%AD%E7%9A%84%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E8%B7%AF%E5%BE%84"><span class="toc-number">4.</span> <span class="toc-text">题目329:矩阵中的最长递增路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE1203-%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86"><span class="toc-number">5.</span> <span class="toc-text">题目1203:项目管理</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+		
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>9</sup></a></li>
+		
+			<li><a href="/categories/Notes/" title="Notes">Notes<sup>5</sup></a></li>
+		
+			<li><a href="/categories/Web/" title="Web">Web<sup>1</sup></a></li>
+		
+			<li><a href="/categories/云计算/" title="云计算">云计算<sup>1</sup></a></li>
+		
+			<li><a href="/categories/知识点/" title="知识点">知识点<sup>11</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+		
+			<li><a href="/tags/Bash/" title="Bash">Bash<sup>2</sup></a></li>
+		
+			<li><a href="/tags/C/" title="C++">C++<sup>23</sup></a></li>
+		
+			<li><a href="/tags/Cent-OS/" title="Cent OS">Cent OS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Command-Line/" title="Command Line">Command Line<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Database/" title="Database">Database<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Django/" title="Django">Django<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Docker/" title="Docker">Docker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/FD-io/" title="FD.io">FD.io<sup>1</sup></a></li>
+		
+			<li><a href="/tags/K8s/" title="K8s">K8s<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Notes/" title="Notes">Notes<sup>5</sup></a></li>
+		
+			<li><a href="/tags/VM/" title="VM">VM<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Web/" title="Web">Web<sup>1</sup></a></li>
+		
+			<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>3</sup></a></li>
+		
+			<li><a href="/tags/数据库/" title="数据库">数据库<sup>4</sup></a></li>
+		
+			<li><a href="/tags/测试/" title="测试">测试<sup>3</sup></a></li>
+		
+			<li><a href="/tags/算法/" title="算法">算法<sup>14</sup></a></li>
+		
+			<li><a href="/tags/计算机网络/" title="计算机网络">计算机网络<sup>6</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
     </div>
-</article>
-
-
-
-                <footer id="footer" class="main-content-wrap">
-    <span class="copyrights">
-        Copyrights &copy; 2023 Junyu Bian. All Rights Reserved.
-    </span>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2023 
+		
+		<a href="https://junyu-bian.github.io" target="_blank" title="Junyu Bian">Junyu Bian</a>
+		
+		</p>
+</div>
 </footer>
-
-            </div>
-            
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
-                    <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/09/12/2020-09-12-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Graph/"
-                    data-tooltip="LeetCode题目总结-Graph"
-                    aria-label="PREVIOUS: LeetCode题目总结-Graph"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/09/11/2020-09-11-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-DP+Greedy/"
-                    data-tooltip="LeetCode题目总结-DP+Greedy"
-                    aria-label="NEXT: LeetCode题目总结-DP+Greedy"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
         
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/09/12/2020-09-12-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Queue+TopologicalSort/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/09/12/2020-09-12-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Queue+TopologicalSort/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/09/12/2020-09-12-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Queue+TopologicalSort/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
 
 
-                </div>
-                
-    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
-        <i id="btn-close-shareoptions" class="fa fa-times"></i>
-        <ul class="share-options">
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/09/12/2020-09-12-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Queue+TopologicalSort/"
-                        aria-label="Share on Facebook"
-                    >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/09/12/2020-09-12-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Queue+TopologicalSort/"
-                        aria-label="Share on Twitter"
-                    >
-                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/09/12/2020-09-12-LeetCode%E9%A2%98%E7%9B%AE%E6%80%BB%E7%BB%93-Queue+TopologicalSort/"
-                        aria-label="Share on Google+"
-                    >
-                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
-                    </a>
-                </li>
-            
-        </ul>
-    </div>
-
-
-            
-        </div>
-        
-
-
-<div id="about">
-    <div id="about-card">
-        <div id="about-btn-close">
-            <i class="fa fa-times"></i>
-        </div>
-        
-            <h4 id="about-card-name">Junyu Bian</h4>
-        
-            <div id="about-card-bio"><p>author.bio</p>
-</div>
-        
-        
-            <div id="about-card-job">
-                <i class="fa fa-briefcase"></i>
-                <br/>
-                <p>author.job</p>
-
-            </div>
-        
-        
-    </div>
-</div>
-
-        
-        
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-        <!--SCRIPTS-->
-
-<script src="/assets/js/script-vnqkjqlintjjatuhqa130uwkuwsu27ios2j5z5qwaodowllkaooycjjcee9d.min.js"></script>
-
-<!--SCRIPTS END-->
-
-
-    
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
 
 
 
 
-    </body>
+
+
+  </body>
 </html>

@@ -1,354 +1,102 @@
 
-<!DOCTYPE html>
+ <!DOCTYPE HTML>
 <html lang="en">
-    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Blogs of Junyu">
-    <title>知识点整理-3 - Blogs of Junyu</title>
+  <meta charset="UTF-8">
+  
+    <title>知识点整理-3 | Blogs of Junyu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
     <meta name="author" content="Junyu Bian">
     
-    
-    
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Junyu Bian","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"1. 计算机网络分层模型\n\n7层 (osi国际标准组织定制)：\n\n应用层：为程序提供网络服务。\n表示层：数据格式化，加密、解密。\n会话层：建立、维护、管理会话链接。\n传输层：建立、维护、管理端到端链接。\n\n\n网络层：IP寻址和路由选择。\n数据链路层：控制网络层与物理层之间的通信。\n物理层：比特流传输。\n\n四层 (TCP/IP)：\n\n应用层：ping、DNS、telnet\n传输层：UDP、TCP\n网络层：ICMP、IP\n数据链路层：ARP、DataLink、RARP\n\n2. HTTP请求包含哪几个部分\n\n请求行：\n\n请求方法：HTTP最常见的请求方法为GET和POST。\n请求URL：请求对应的URL地址。\nHTTP协议及版本：协议名称及版本号。\n\n请求头：\n\n包含多个属性，格式为“属性名：属性值”，服务器根据请求头来获取客户端的信息。\n\n请求体：\n\n将一个页面表单中的组件值通过param1=value &amp; param2=value2的键值对形式编码成一个格式化串，承载多个请求参数的数据。\n\n3. TCP拥塞控制\n主要为四个算法：\n慢开始：在TCP链接刚建立时，一点一点地增大拥塞窗口cwnd，慢慢变为指数增长，试探网络的承受能力，直到cwnd大于等于ssthresh（slow start threshold）则进入拥塞避免。\n拥塞避免：收到一个ACK，即每经过一个往返时间RTT，就把发送方的cwnd加1，使其按线性规律缓慢增长。\n乘法减小【TCP Tahoe】：不论在慢开始阶段还是拥塞避免阶段，只要出现超时，即可能发生了阻塞，发生丢包，就把慢开始门限ssthresh的值减半，即设置为当前cwnd的一半，并开始执行慢开始算法。\n快速重传【TCP Reno】：发生丢包时，把cwnd设置为当前的一半，ssthresh设置为缩小后的cwnd大小，进入快速恢复算法。\n快速恢复【TCP Reno】：设置cwnd=cwnd+3*MSS（因为收到3个重复的ACK，所以加三个MSS），重传DACKs指定的数据包，如果再收到DACKs，则cwnd增加1，若收到新的ACK，表明重传包成功，退出快速恢复，将cwnd设置为ssthresh，进入拥塞避免算法。\n\n4. 死锁与死锁的处理\n\n形成死锁的四个必要条件：\n\n互斥：在某段时间内某资源只由一个进程占用。\n持有并等待：某进程已经持有一个或多个资源，但是还需请求其他资源，而它请求的资源不能立即获得，需要等待。\n不可抢占：进程已经获取的资源在使用过程中不能被其他进程抢占，只能在使用完后，由该进程自己释放。\n环路等待：形成进程和请求资源之间的环路。\n\n死锁的预防：\n\n互斥：不易预防\n占有并等待：方法一：不持有并等待，如果一个进程一次请求获取不了所有资源，那么它不可占用任何资源，即释放掉它已经占有的资源；方法二：持有不等待，保证资源充足，只要请求资源，就分配给资源。\n不可抢占：如果一个进程所请求的资源被另一进程占有，使它可以抢占另一进程占有的资源。\n环路等待：对资源进行排序，每个进程按照固定的顺序访问资源。\n\n死锁的避免：\n\n资源请求图算法：利用资源分配图，引入需求边表示进程可能在将来某个时候申请资源，只有申请边变为分配边而不会导致资源分配图形成环时，才允许申请。\n银行家算法：当新进程进入系统，系统对其所需资源的最大数量进行统计，若超过当前资源综合，则该进程必须等待直到其他进程释放资源。\n\n5. 什么是关系型数据库\n关系型数据库建立在关系型数据模型的基础上，借助于集合、代数等数学概念和方法来处理数据的数据库。\n\n6. KV存储\n举例：Redis、MongoDB\n不经常更新的、重要的数据一般使用关系数据库存储。\n数据结构简单、有分布式数据存储的需求使用KV数据库。\n\n7. 非递归前中后序遍历二叉树\n123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566struct TreeNode &#123;  int val;  TreeNode * left;  TreeNode * right;&#125;;void PreOrder (TreeNode * root) &#123;  stack&lt;TreeNode *&gt;s;  TreeNode * ptr = root;    while (ptr != nullptr || !s.empty()) &#123;    if (ptr != nullptr) &#123;      cout &lt;&lt; ptr-&gt;val &lt;&lt; endl;      s.push(ptr);      ptr = ptr-&gt;left;    &#125;    else &#123;      ptr = s.top();      s.pop();      ptr = ptr-&gt;right;    &#125;  &#125;&#125;void InOrder (TreeNode * root) &#123;  stack&lt;TreeNode *&gt; s;  TreeNode * ptr = root;    while (ptr != nullptr || !s.empty()) &#123;    if (ptr != nullptr) &#123;      s.push(ptr);      ptr = ptr-&gt;left;    &#125;    else &#123;      ptr = s.top();      cout &lt;&lt; ptr-&gt;val &lt;&lt; endl;      s.pop();      ptr = ptr-&gt;right;    &#125;  &#125;&#125;void PostOrder (TreeNode * root) &#123;  stack&lt;TreeNode *&gt; s;  TreeNode * ptr = root;  TreeNode * TemNode = nullptr;    while (ptr != nullptr || !s.empty()) &#123;    if (ptr != nullptr &#123;      s.push(ptr);      ptr = ptr-&gt;left;    &#125;    else &#123;      ptr = s.top();      if (ptr-&gt;right != nullptr &amp;&amp; ptr-&gt;right !- TemNode)&#123;        ptr = ptr-&gt;right;      &#125;      else &#123;        cout &lt;&lt; ptr-&gt;val &lt;&lt; endl;        s.pop();        TemNode = ptr;        ptr = nullptr;      &#125;    &#125;     &#125;&#125;\n\n\n8. 如何实现一个栈\n1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950class QueueStack &#123;private:  queue&lt;int&gt; first;  queue&lt;int&gt; second;  public:  bool empty() &#123;\t\tif (first.empty() &amp;&amp; second.empty())&#123;      return true;    &#125;    else &#123;      return false;    &#125;  &#125;    int top() &#123;    if (first.empty())&#123;      return second.front();    &#125;    else &#123;      return first.front();    &#125;  &#125;    void pop() &#123;    if (first.empty()) &#123;      second.pop();    &#125;    else &#123;      first.pop();    &#125;  &#125;    void push (int x)&#123;    if (frist.empty())&#123;      first.push(x);      while (!second.empty()) &#123;        first.push(second.front());        second.pop();      &#125;    &#125;    else &#123;      second.push(x);      while(!first.empty()) &#123;        second.push(first.front());        first.pop();      &#125;    &#125;  &#125;&#125;\n\n\n9. HTTP状态码\n\n1xx：收到请求，需要请求者继续操作。\n\n100：继续。\n101：切换协议。\n\n2xx：操作被成功接收并处理。\n\n200：请求成功。\n201：已创建。\n202：已接受。\n203：非授权信息。请求成功。\n204：无内容。\n205：重置内容。\n206：部分内容。\n\n3xx：重定向，需要进一步操作以完成请求。\n\n300：多种选择。\n301：永久移动。\n302：临时移动。\n303：查看其他地址。\n304：未修改。\n305：使用代理。\n307：临时重定向。\n\n4xx：客户端错误，请求包含语法错误或无法完成请求。\n\n400：Bad Request。\n401：Unauthorized。\n403：服务器理解客户端的请求，但是拒绝执行。\n404：无法根据请求找到资源。\n405：客户端请求中的方法被禁止。\n406：Not Acceptable。\n407：Proxy Authentication Required。\n408：Request Timeout。\n409：服务器处理请求时发生了冲突。\n410：客户端请求的资源已经不存在。\n411：Length Required。\n412：Precondition Failed。\n413：Request Entity Too Large。\n414：Request URI Too Large。\n415：Unsupported Media Type。\n416：客户端请求的范围无效。\n417：Expectation Failed。\n\n5xx：服务器错误，服务器在处理请求的过程中发生了错误。\n\n500：服务器内部错误，无法完成请求。\n501：服务器不支持请求的功能。\n502：Bad Gateway。\n503：Service Unavailable。\n504：Gateway Timeout。\n505：HTTP version not supported。\n","dateCreated":"2020-04-17T14:22:01+08:00","dateModified":"2020-09-07T12:45:45+08:00","datePublished":"2020-04-17T14:22:01+08:00","description":"1. 计算机网络分层模型\n\n7层 (osi国际标准组织定制)：\n\n应用层：为程序提供网络服务。\n表示层：数据格式化，加密、解密。\n会话层：建立、维护、管理会话链接。\n传输层：建立、维护、管理端到端链接。","headline":"知识点整理-3","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"},"publisher":{"@type":"Organization","name":"Junyu Bian","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/","keywords":"C++, 操作系统, 计算机网络, 算法, 数据库"}</script>
-    <meta name="description" content="1. 计算机网络分层模型  7层 (osi国际标准组织定制)：  应用层：为程序提供网络服务。 表示层：数据格式化，加密、解密。 会话层：建立、维护、管理会话链接。 传输层：建立、维护、管理端到端链接。">
-<meta property="og:type" content="blog">
-<meta property="og:title" content="知识点整理-3">
-<meta property="og:url" content="https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/index.html">
-<meta property="og:site_name" content="Blogs of Junyu">
-<meta property="og:description" content="1. 计算机网络分层模型  7层 (osi国际标准组织定制)：  应用层：为程序提供网络服务。 表示层：数据格式化，加密、解密。 会话层：建立、维护、管理会话链接。 传输层：建立、维护、管理端到端链接。">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-04-17T06:22:01.000Z">
-<meta property="article:modified_time" content="2020-09-07T04:45:45.994Z">
-<meta property="article:author" content="Junyu Bian">
-<meta property="article:tag" content="C++">
-<meta property="article:tag" content="操作系统">
-<meta property="article:tag" content="计算机网络">
-<meta property="article:tag" content="算法">
-<meta property="article:tag" content="数据库">
-<meta name="twitter:card" content="summary">
-    
-    
-        
-    
-    
-    
-    
-    
-    <!--STYLES-->
-    
-<link rel="stylesheet" href="/assets/css/style-wxmdysl42bg8zzt2ryhfqsfzciwu3kx9uqdpszvt5k3t8nhbngsdtxq96fkn.min.css">
+    <meta name="description" content="1. 计算机网络分层模型
 
-    <!--STYLES END-->
-    
+7层 (osi国际标准组织定制)：
 
+应用层：为程序提供网络服务。
+表示层：数据格式化，加密、解密。
+会话层：建立、维护、管理会话链接。
+传输层：建立、维护、管理端到端链接。">
     
+    
+    
+    
+    <link rel="alternate" href="/atom.xml" title="Blogs of Junyu" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
 
-    
-        
-    
-</head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
-    <body>
-        <div id="blog">
-            <!-- Define author's picture -->
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Blogs of Junyu" title="Blogs of Junyu"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Blogs of Junyu">Blogs of Junyu</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:junyu-bian.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
 
-
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
     
-
-<header id="header" data-behavior="4">
-    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <div class="header-title">
-        <a
-            class="header-title-link"
-            href="/"
-            aria-label=""
-        >
-            Blogs of Junyu
-        </a>
-    </div>
+      <a href="/2020/04/17/2020-04-17-知识点整理-3/" title="知识点整理-3" itemprop="url">知识点整理-3</a>
+  </h1>
+  <p class="article-author">By
     
-        
-            <a
-                class="header-right-picture "
-                href="#about"
-                aria-label="Open the link: /#about"
-            >
-        
-        
-        </a>
+      <a href="https://junyu-bian.github.io" title="Junyu Bian">Junyu Bian</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2020-04-17T06:22:01.000Z" itemprop="datePublished">2020-04-17</time>
+    Updated:<time datetime="2020-09-07T04:45:45.994Z" itemprop="dateModified">2020-09-07</time>
     
+  </p>
 </header>
-
-            <!-- Define author's picture -->
-
-
-<nav id="sidebar" data-behavior="4">
-    <div class="sidebar-container">
-        
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/"
-                            
-                            rel="noopener"
-                            title="Home"
-                        >
-                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Home</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-categories"
-                            
-                            rel="noopener"
-                            title="Categories"
-                        >
-                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Categories</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-tags"
-                            
-                            rel="noopener"
-                            title="Tags"
-                        >
-                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Tags</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-archives"
-                            
-                            rel="noopener"
-                            title="Archives"
-                        >
-                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Archives</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link open-algolia-search"
-                            href="#search"
-                            
-                            rel="noopener"
-                            title="Search"
-                        >
-                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Search</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="#about"
-                            
-                            rel="noopener"
-                            title="About"
-                        >
-                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">About</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://github.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="GitHub"
-                        >
-                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">GitHub</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="http://stackoverflow.com/users"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Stack Overflow"
-                        >
-                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Stack Overflow</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://twitter.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Twitter"
-                        >
-                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Twitter</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://facebook.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Facebook"
-                        >
-                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Facebook</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://plus.google.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Google +"
-                        >
-                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Google +</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-    </div>
-</nav>
-
-            
-            <div id="main" data-behavior="4"
-                 class="
-                        hasCoverMetaIn
-                        ">
-                
-<article class="post">
-    
-    
-        <div class="post-header main-content-wrap text-left">
-    
-        <h1 class="post-title">
-            知识点整理-3
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2020-04-17T14:22:01+08:00">
-	
-		    Apr 17, 2020
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a>
-
-
-    
-</div>
-
-    
-</div>
-
-    
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <h3 id="1-计算机网络分层模型"><a href="#1-计算机网络分层模型" class="headerlink" title="1. 计算机网络分层模型"></a>1. 计算机网络分层模型</h3><hr>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%88%86%E5%B1%82%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">1. 计算机网络分层模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-HTTP%E8%AF%B7%E6%B1%82%E5%8C%85%E5%90%AB%E5%93%AA%E5%87%A0%E4%B8%AA%E9%83%A8%E5%88%86"><span class="toc-number">2.</span> <span class="toc-text">2. HTTP请求包含哪几个部分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-TCP%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="toc-number">3.</span> <span class="toc-text">3. TCP拥塞控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%AD%BB%E9%94%81%E4%B8%8E%E6%AD%BB%E9%94%81%E7%9A%84%E5%A4%84%E7%90%86"><span class="toc-number">4.</span> <span class="toc-text">4. 死锁与死锁的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E4%BB%80%E4%B9%88%E6%98%AF%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">5.</span> <span class="toc-text">5. 什么是关系型数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-KV%E5%AD%98%E5%82%A8"><span class="toc-number">6.</span> <span class="toc-text">6. KV存储</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E9%9D%9E%E9%80%92%E5%BD%92%E5%89%8D%E4%B8%AD%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="toc-number">7.</span> <span class="toc-text">7. 非递归前中后序遍历二叉树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E6%A0%88"><span class="toc-number">8.</span> <span class="toc-text">8. 如何实现一个栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-HTTP%E7%8A%B6%E6%80%81%E7%A0%81"><span class="toc-number">9.</span> <span class="toc-text">9. HTTP状态码</span></a></li></ol>
+		</div>
+		
+		<h3 id="1-计算机网络分层模型"><a href="#1-计算机网络分层模型" class="headerlink" title="1. 计算机网络分层模型"></a>1. 计算机网络分层模型</h3><hr>
 <blockquote>
 <p><strong>7层</strong> (osi国际标准组织定制)：</p>
 </blockquote>
@@ -485,325 +233,276 @@
 <p><strong>503</strong>：Service Unavailable。</p>
 <p><strong>504</strong>：Gateway Timeout。</p>
 <p><strong>505</strong>：HTTP version not supported。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
 
-            
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/C/">C++</a><a href="/tags/操作系统/">操作系统</a><a href="/tags/计算机网络/">计算机网络</a><a href="/tags/算法/">算法</a><a href="/tags/数据库/">数据库</a>
+  </div>
 
 
-        </div>
-    </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/C/" rel="tag">C++</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a>
-
-            </div>
-        
-        
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/04/19/2020-04-19-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-4/"
-                    data-tooltip="知识点整理-4"
-                    aria-label="PREVIOUS: 知识点整理-4"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/04/17/2020-04-17-KMP-Algorithm/"
-                    data-tooltip="KMP Algorithm"
-                    aria-label="NEXT: KMP Algorithm"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">知识点</a>
 </div>
 
 
-        
-        
-            
-        
+
+<div class="article-share" id="share">
+
+  <div data-url="https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/" data-title="知识点整理-3 | Blogs of Junyu" data-tsina="" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2020/04/19/2020-04-19-知识点整理-4/" title="知识点整理-4">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  知识点整理-4</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2020/04/17/2020-04-17-KMP-Algorithm/"  title="KMP Algorithm">
+ <strong>NEXT:</strong><br/> 
+ <span>KMP Algorithm
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%88%86%E5%B1%82%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">1. 计算机网络分层模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-HTTP%E8%AF%B7%E6%B1%82%E5%8C%85%E5%90%AB%E5%93%AA%E5%87%A0%E4%B8%AA%E9%83%A8%E5%88%86"><span class="toc-number">2.</span> <span class="toc-text">2. HTTP请求包含哪几个部分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-TCP%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="toc-number">3.</span> <span class="toc-text">3. TCP拥塞控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%AD%BB%E9%94%81%E4%B8%8E%E6%AD%BB%E9%94%81%E7%9A%84%E5%A4%84%E7%90%86"><span class="toc-number">4.</span> <span class="toc-text">4. 死锁与死锁的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E4%BB%80%E4%B9%88%E6%98%AF%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">5.</span> <span class="toc-text">5. 什么是关系型数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-KV%E5%AD%98%E5%82%A8"><span class="toc-number">6.</span> <span class="toc-text">6. KV存储</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E9%9D%9E%E9%80%92%E5%BD%92%E5%89%8D%E4%B8%AD%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="toc-number">7.</span> <span class="toc-text">7. 非递归前中后序遍历二叉树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E6%A0%88"><span class="toc-number">8.</span> <span class="toc-text">8. 如何实现一个栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-HTTP%E7%8A%B6%E6%80%81%E7%A0%81"><span class="toc-number">9.</span> <span class="toc-text">9. HTTP状态码</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+		
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>9</sup></a></li>
+		
+			<li><a href="/categories/Notes/" title="Notes">Notes<sup>5</sup></a></li>
+		
+			<li><a href="/categories/Web/" title="Web">Web<sup>1</sup></a></li>
+		
+			<li><a href="/categories/云计算/" title="云计算">云计算<sup>1</sup></a></li>
+		
+			<li><a href="/categories/知识点/" title="知识点">知识点<sup>11</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+		
+			<li><a href="/tags/Bash/" title="Bash">Bash<sup>2</sup></a></li>
+		
+			<li><a href="/tags/C/" title="C++">C++<sup>23</sup></a></li>
+		
+			<li><a href="/tags/Cent-OS/" title="Cent OS">Cent OS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Command-Line/" title="Command Line">Command Line<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Database/" title="Database">Database<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Django/" title="Django">Django<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Docker/" title="Docker">Docker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/FD-io/" title="FD.io">FD.io<sup>1</sup></a></li>
+		
+			<li><a href="/tags/K8s/" title="K8s">K8s<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Notes/" title="Notes">Notes<sup>5</sup></a></li>
+		
+			<li><a href="/tags/VM/" title="VM">VM<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Web/" title="Web">Web<sup>1</sup></a></li>
+		
+			<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>3</sup></a></li>
+		
+			<li><a href="/tags/数据库/" title="数据库">数据库<sup>4</sup></a></li>
+		
+			<li><a href="/tags/测试/" title="测试">测试<sup>3</sup></a></li>
+		
+			<li><a href="/tags/算法/" title="算法">算法<sup>14</sup></a></li>
+		
+			<li><a href="/tags/计算机网络/" title="计算机网络">计算机网络<sup>6</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
     </div>
-</article>
-
-
-
-                <footer id="footer" class="main-content-wrap">
-    <span class="copyrights">
-        Copyrights &copy; 2023 Junyu Bian. All Rights Reserved.
-    </span>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2023 
+		
+		<a href="https://junyu-bian.github.io" target="_blank" title="Junyu Bian">Junyu Bian</a>
+		
+		</p>
+</div>
 </footer>
-
-            </div>
-            
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
-                    <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/04/19/2020-04-19-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-4/"
-                    data-tooltip="知识点整理-4"
-                    aria-label="PREVIOUS: 知识点整理-4"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/04/17/2020-04-17-KMP-Algorithm/"
-                    data-tooltip="KMP Algorithm"
-                    aria-label="NEXT: KMP Algorithm"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
         
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
 
 
-                </div>
-                
-    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
-        <i id="btn-close-shareoptions" class="fa fa-times"></i>
-        <ul class="share-options">
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"
-                        aria-label="Share on Facebook"
-                    >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"
-                        aria-label="Share on Twitter"
-                    >
-                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/04/17/2020-04-17-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86-3/"
-                        aria-label="Share on Google+"
-                    >
-                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
-                    </a>
-                </li>
-            
-        </ul>
-    </div>
-
-
-            
-        </div>
-        
-
-
-<div id="about">
-    <div id="about-card">
-        <div id="about-btn-close">
-            <i class="fa fa-times"></i>
-        </div>
-        
-            <h4 id="about-card-name">Junyu Bian</h4>
-        
-            <div id="about-card-bio"><p>author.bio</p>
-</div>
-        
-        
-            <div id="about-card-job">
-                <i class="fa fa-briefcase"></i>
-                <br/>
-                <p>author.job</p>
-
-            </div>
-        
-        
-    </div>
-</div>
-
-        
-        
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-        <!--SCRIPTS-->
-
-<script src="/assets/js/script-vnqkjqlintjjatuhqa130uwkuwsu27ios2j5z5qwaodowllkaooycjjcee9d.min.js"></script>
-
-<!--SCRIPTS END-->
-
-
-    
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
 
 
 
 
-    </body>
+
+
+  </body>
 </html>

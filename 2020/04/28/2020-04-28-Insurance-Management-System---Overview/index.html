@@ -1,362 +1,96 @@
 
-<!DOCTYPE html>
+ <!DOCTYPE HTML>
 <html lang="en">
-    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Blogs of Junyu">
-    <title>Insurance Management System - Overview - Blogs of Junyu</title>
+  <meta charset="UTF-8">
+  
+    <title>Insurance Management System - Overview | Blogs of Junyu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
     <meta name="author" content="Junyu Bian">
     
-    
-    
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Junyu Bian","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"In this series of blogs, we will talk about how to build a Insurance Management web application together with database system.\nBackgroundTom’s dad works in an insurance company. His work is to drop down who bought what kind of insurance, on which day does the customer receives an invoice, and on which day does the customer makes a payment. \n\n\nOneday, Tom’s dad talks to Tom: “Oh Tom, you see see you, one day day, only eat, do nothing, build a management system for me.” Tom becomes not happy.\nRlational ModelTom’s dad talks to Tom about what information is needed. After discussion, Tom draws the following relational model:\nSummary of development environmentTom thinks it over and over, finally decides to apply the following development environment: \n\nProgramming language: Python3.5\n\nFramework: Django2.1.1\n\nDatabase: SQLite\n\nCode editor: Pycharm\n\n\nApplication FeaturesTo build the application, Tom mainly used the ORM model characteristic provided by Django. With ORM, so that he can treat each table as a CLASS in python and each time he insert data into that table, he simply instantiate an object, together with Object-Oriented Programming, he can make queries, add items, change information and delete object in a convenient way.\nThe features of the application are but not restricted to:\nNormal UsersFor users who are new to the application, he/she can register themselves in the REGISTER page. As shown below, the REGISTER page can be access by clicking the REGISTER button on the right of system bar.\n\nIf information is filled not properly, application will generate warnings to helper users. When information filled in the correct way, user will be directed to the login page with notice of successful account creation.\n\nAfter logging in, application will go to welcome page, where the username of user is confirmed again to make sure the user is about to purchase insurance. As long as the user has been logged in, the username and email will always be displayed on each page.\n\nAfter confirmation, the user will be guided to the insurance purchase page, the first insurance is Home insurance, after which user is required to enter the information about home under insurance. When Home insurance purchase is finished, user is going to the Auto insurance purchase page, after which the information about vehicle under insurance needs to be provided, and finally the driver information is also needed. Notice the side bar, there are more detailed instruction about how to buy different kinds of insurance.\n\nIf the user want to check detailed information about the insurances purchased, he/she can click on the PROFILE button. In the PROFILE window, user can update email address if needed. And for each insurance listed, to check the detail information, just click on the insurance number will work.\n\nWhen finish browsing, user can click on LOGOUT to logout the account.\n\nSuper UserFor users with administration power, they can go to 127.0.0.1:8000/admin/ to access the administrative page.\n\nAfter logging in, Tom can manage all stored data, including add invoice and payment information for different users. (Notice that users pay their bill in other sites, this site is just designed for users to choose insurance and look for records.)\n\nProject OutcomeIn this project, Tom designed and built a web-based database application. There are three fields Tom have outcomes:\n\nweb development\ndatabase development\nconnection between web development and database development\n\nFor the web development, Tom chose to use python as programming language and django as web framework. This combination guaranteed us a good view of Object Oriented Programming experience. All the users and each recorded were created as an object from CLASS Tom defined.\nDjango is a MVT like frame, therefore, during web development, it is important to get clear of which page Tom are working on, which html Tom want to return and which template is required by django.\nFor database, Tom used the simple but powerful SQLite to perform its duty. Together with Pycharm, Tom can clearly see the structure of our project and database, in addition to manage through admin page, Tom can also open the SQLite database with Navicat or other database management software to easily manage our SQL.\nThe connection between database and web application is established by the ORM character of django, Tom can use OOP procedure to create and manage different records. But Tom also need to be clear about the foreign key relationship between different tables, each time Tom create or delete a record, Tom need to guarantee its foreign key (if any) is assigned. This gives us a good taste of how database is used in reality.\nTom is happy now.\n","dateCreated":"2020-04-28T22:59:02+08:00","dateModified":"2020-09-07T12:44:56+08:00","datePublished":"2020-04-28T22:59:02+08:00","description":"In this series of blogs, we will talk about how to build a Insurance Management web application together with database system.\nBackgroundTom’s dad works in an insurance company. His work is to drop down who bought what kind of insurance, on which day does the customer receives an invoice, and on which day does the customer makes a payment. ","headline":"Insurance Management System - Overview","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://junyu-bian.github.io/2020/04/28/2020-04-28-Insurance-Management-System---Overview/"},"publisher":{"@type":"Organization","name":"Junyu Bian","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"https://junyu-bian.github.io/2020/04/28/2020-04-28-Insurance-Management-System---Overview/","keywords":"Web, Django, Database"}</script>
-    <meta name="description" content="In this series of blogs, we will talk about how to build a Insurance Management web application together with database system. BackgroundTom’s dad works in an insurance company. His work is to drop do">
-<meta property="og:type" content="blog">
-<meta property="og:title" content="Insurance Management System - Overview">
-<meta property="og:url" content="https://junyu-bian.github.io/2020/04/28/2020-04-28-Insurance-Management-System---Overview/index.html">
-<meta property="og:site_name" content="Blogs of Junyu">
-<meta property="og:description" content="In this series of blogs, we will talk about how to build a Insurance Management web application together with database system. BackgroundTom’s dad works in an insurance company. His work is to drop do">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://raw.githubusercontent.com/JYBian/BlogPic/master/%E6%88%AA%E5%B1%8F2020-04-09%E4%B8%8B%E5%8D%888.28.00.png">
-<meta property="og:image" content="https://github.com/JYBian/BlogPic/raw/master/%E6%88%AA%E5%B1%8F2020-04-28%E4%B8%8B%E5%8D%888.08.13.png">
-<meta property="og:image" content="https://github.com/JYBian/BlogPic/raw/master/%E6%88%AA%E5%B1%8F2020-04-28%E4%B8%8B%E5%8D%888.08.13.png">
-<meta property="og:image" content="https://github.com/JYBian/BlogPic/raw/master/%E6%88%AA%E5%B1%8F2020-04-28%E4%B8%8B%E5%8D%888.19.43.png">
-<meta property="og:image" content="https://github.com/JYBian/BlogPic/raw/master/%E6%88%AA%E5%B1%8F2020-04-28%E4%B8%8B%E5%8D%889.23.05.png">
-<meta property="og:image" content="https://github.com/JYBian/BlogPic/raw/master/%E6%88%AA%E5%B1%8F2020-04-28%E4%B8%8B%E5%8D%889.29.35.png">
-<meta property="og:image" content="https://github.com/JYBian/BlogPic/raw/master/%E6%88%AA%E5%B1%8F2020-04-28%E4%B8%8B%E5%8D%889.32.17.png">
-<meta property="og:image" content="https://github.com/JYBian/BlogPic/raw/master/%E6%88%AA%E5%B1%8F2020-04-28%E4%B8%8B%E5%8D%889.44.37.png">
-<meta property="og:image" content="https://github.com/JYBian/BlogPic/raw/master/%E6%88%AA%E5%B1%8F2020-04-28%E4%B8%8B%E5%8D%889.47.26.png">
-<meta property="article:published_time" content="2020-04-28T14:59:02.000Z">
-<meta property="article:modified_time" content="2020-09-07T04:44:56.102Z">
-<meta property="article:author" content="Junyu Bian">
-<meta property="article:tag" content="Web">
-<meta property="article:tag" content="Django">
-<meta property="article:tag" content="Database">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/JYBian/BlogPic/master/%E6%88%AA%E5%B1%8F2020-04-09%E4%B8%8B%E5%8D%888.28.00.png">
-    
-    
-        
+    <meta name="description" content="In this series of blogs, we will talk about how to build a Insurance Management web application together with database system.
+BackgroundTom’s dad works in an insurance company. His work is to drop down who bought what kind of insurance, on which day does the customer receives an invoice, and on which day does the customer makes a payment.">
     
     
     
     
+    <link rel="alternate" href="/atom.xml" title="Blogs of Junyu" type="application/atom+xml">
     
-    <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-wxmdysl42bg8zzt2ryhfqsfzciwu3kx9uqdpszvt5k3t8nhbngsdtxq96fkn.min.css">
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
 
-    <!--STYLES END-->
-    
+<meta name="generator" content="Hexo 5.4.0"></head>
 
-    
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Blogs of Junyu" title="Blogs of Junyu"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Blogs of Junyu">Blogs of Junyu</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:junyu-bian.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
 
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
     
-        
+      <a href="/2020/04/28/2020-04-28-Insurance-Management-System---Overview/" title="Insurance Management System - Overview" itemprop="url">Insurance Management System - Overview</a>
+  </h1>
+  <p class="article-author">By
     
-</head>
-
-    <body>
-        <div id="blog">
-            <!-- Define author's picture -->
-
-
+      <a href="https://junyu-bian.github.io" title="Junyu Bian">Junyu Bian</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2020-04-28T14:59:02.000Z" itemprop="datePublished">2020-04-28</time>
+    Updated:<time datetime="2020-09-07T04:44:56.102Z" itemprop="dateModified">2020-09-07</time>
     
-
-<header id="header" data-behavior="4">
-    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <div class="header-title">
-        <a
-            class="header-title-link"
-            href="/"
-            aria-label=""
-        >
-            Blogs of Junyu
-        </a>
-    </div>
-    
-        
-            <a
-                class="header-right-picture "
-                href="#about"
-                aria-label="Open the link: /#about"
-            >
-        
-        
-        </a>
-    
+  </p>
 </header>
-
-            <!-- Define author's picture -->
-
-
-<nav id="sidebar" data-behavior="4">
-    <div class="sidebar-container">
-        
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/"
-                            
-                            rel="noopener"
-                            title="Home"
-                        >
-                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Home</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-categories"
-                            
-                            rel="noopener"
-                            title="Categories"
-                        >
-                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Categories</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-tags"
-                            
-                            rel="noopener"
-                            title="Tags"
-                        >
-                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Tags</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-archives"
-                            
-                            rel="noopener"
-                            title="Archives"
-                        >
-                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Archives</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link open-algolia-search"
-                            href="#search"
-                            
-                            rel="noopener"
-                            title="Search"
-                        >
-                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Search</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="#about"
-                            
-                            rel="noopener"
-                            title="About"
-                        >
-                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">About</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://github.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="GitHub"
-                        >
-                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">GitHub</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="http://stackoverflow.com/users"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Stack Overflow"
-                        >
-                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Stack Overflow</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://twitter.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Twitter"
-                        >
-                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Twitter</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://facebook.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Facebook"
-                        >
-                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Facebook</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://plus.google.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Google +"
-                        >
-                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Google +</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-    </div>
-</nav>
-
-            
-            <div id="main" data-behavior="4"
-                 class="
-                        hasCoverMetaIn
-                        ">
-                
-<article class="post">
-    
-    
-        <div class="post-header main-content-wrap text-left">
-    
-        <h1 class="post-title">
-            Insurance Management System - Overview
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2020-04-28T22:59:02+08:00">
-	
-		    Apr 28, 2020
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/categories/Web/">Web</a>
-
-
-    
-</div>
-
-    
-</div>
-
-    
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <p>In this series of blogs, we will talk about how to build a Insurance Management web application together with database system.</p>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Background"><span class="toc-number">1.</span> <span class="toc-text">Background</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Rlational-Model"><span class="toc-number">2.</span> <span class="toc-text">Rlational Model</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Summary-of-development-environment"><span class="toc-number">3.</span> <span class="toc-text">Summary of development environment</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Application-Features"><span class="toc-number">4.</span> <span class="toc-text">Application Features</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Normal-Users"><span class="toc-number">4.1.</span> <span class="toc-text">Normal Users</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Super-User"><span class="toc-number">4.2.</span> <span class="toc-text">Super User</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Project-Outcome"><span class="toc-number">5.</span> <span class="toc-text">Project Outcome</span></a></li></ol>
+		</div>
+		
+		<p>In this series of blogs, we will talk about how to build a Insurance Management web application together with database system.</p>
 <h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><p>Tom’s dad works in an insurance company. His work is to drop down who bought what kind of insurance, on which day does the customer receives an invoice, and on which day does the customer makes a payment. </p>
 <span id="more"></span>
 
@@ -402,325 +136,276 @@
 <p>For database, Tom used the simple but powerful SQLite to perform its duty. Together with Pycharm, Tom can clearly see the structure of our project and database, in addition to manage through admin page, Tom can also open the SQLite database with Navicat or other database management software to easily manage our SQL.</p>
 <p>The connection between database and web application is established by the ORM character of django, Tom can use OOP procedure to create and manage different records. But Tom also need to be clear about the foreign key relationship between different tables, each time Tom create or delete a record, Tom need to guarantee its foreign key (if any) is assigned. This gives us a good taste of how database is used in reality.</p>
 <p>Tom is happy now.</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
 
-            
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Web/">Web</a><a href="/tags/Django/">Django</a><a href="/tags/Database/">Database</a>
+  </div>
 
 
-        </div>
-    </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/Database/" rel="tag">Database</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/Django/" rel="tag">Django</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/Web/" rel="tag">Web</a>
-
-            </div>
-        
-        
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/05/16/2020-05-16-emplace_back-in-C++/"
-                    data-tooltip="EMPLACE_BACK in C++"
-                    aria-label="PREVIOUS: EMPLACE_BACK in C++"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/04/23/2020-04-23-Sorting-Algorithms---Quick-Sort/"
-                    data-tooltip="Sorting Algorithms - Quick Sort"
-                    aria-label="NEXT: Sorting Algorithms - Quick Sort"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/04/28/2020-04-28-Insurance-Management-System---Overview/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/04/28/2020-04-28-Insurance-Management-System---Overview/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/04/28/2020-04-28-Insurance-Management-System---Overview/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Web/">Web</a>
 </div>
 
 
-        
-        
-            
-        
+
+<div class="article-share" id="share">
+
+  <div data-url="https://junyu-bian.github.io/2020/04/28/2020-04-28-Insurance-Management-System---Overview/" data-title="Insurance Management System - Overview | Blogs of Junyu" data-tsina="" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2020/05/16/2020-05-16-emplace_back-in-C++/" title="EMPLACE_BACK in C++">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  EMPLACE_BACK in C++</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2020/04/23/2020-04-23-Sorting-Algorithms---Quick-Sort/"  title="Sorting Algorithms - Quick Sort">
+ <strong>NEXT:</strong><br/> 
+ <span>Sorting Algorithms - Quick Sort
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Background"><span class="toc-number">1.</span> <span class="toc-text">Background</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Rlational-Model"><span class="toc-number">2.</span> <span class="toc-text">Rlational Model</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Summary-of-development-environment"><span class="toc-number">3.</span> <span class="toc-text">Summary of development environment</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Application-Features"><span class="toc-number">4.</span> <span class="toc-text">Application Features</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Normal-Users"><span class="toc-number">4.1.</span> <span class="toc-text">Normal Users</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Super-User"><span class="toc-number">4.2.</span> <span class="toc-text">Super User</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Project-Outcome"><span class="toc-number">5.</span> <span class="toc-text">Project Outcome</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+		
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>9</sup></a></li>
+		
+			<li><a href="/categories/Notes/" title="Notes">Notes<sup>5</sup></a></li>
+		
+			<li><a href="/categories/Web/" title="Web">Web<sup>1</sup></a></li>
+		
+			<li><a href="/categories/云计算/" title="云计算">云计算<sup>1</sup></a></li>
+		
+			<li><a href="/categories/知识点/" title="知识点">知识点<sup>11</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+		
+			<li><a href="/tags/Bash/" title="Bash">Bash<sup>2</sup></a></li>
+		
+			<li><a href="/tags/C/" title="C++">C++<sup>23</sup></a></li>
+		
+			<li><a href="/tags/Cent-OS/" title="Cent OS">Cent OS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Command-Line/" title="Command Line">Command Line<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Database/" title="Database">Database<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Django/" title="Django">Django<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Docker/" title="Docker">Docker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/FD-io/" title="FD.io">FD.io<sup>1</sup></a></li>
+		
+			<li><a href="/tags/K8s/" title="K8s">K8s<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Notes/" title="Notes">Notes<sup>5</sup></a></li>
+		
+			<li><a href="/tags/VM/" title="VM">VM<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Web/" title="Web">Web<sup>1</sup></a></li>
+		
+			<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>3</sup></a></li>
+		
+			<li><a href="/tags/数据库/" title="数据库">数据库<sup>4</sup></a></li>
+		
+			<li><a href="/tags/测试/" title="测试">测试<sup>3</sup></a></li>
+		
+			<li><a href="/tags/算法/" title="算法">算法<sup>14</sup></a></li>
+		
+			<li><a href="/tags/计算机网络/" title="计算机网络">计算机网络<sup>6</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
     </div>
-</article>
-
-
-
-                <footer id="footer" class="main-content-wrap">
-    <span class="copyrights">
-        Copyrights &copy; 2023 Junyu Bian. All Rights Reserved.
-    </span>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2023 
+		
+		<a href="https://junyu-bian.github.io" target="_blank" title="Junyu Bian">Junyu Bian</a>
+		
+		</p>
+</div>
 </footer>
-
-            </div>
-            
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
-                    <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/05/16/2020-05-16-emplace_back-in-C++/"
-                    data-tooltip="EMPLACE_BACK in C++"
-                    aria-label="PREVIOUS: EMPLACE_BACK in C++"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/04/23/2020-04-23-Sorting-Algorithms---Quick-Sort/"
-                    data-tooltip="Sorting Algorithms - Quick Sort"
-                    aria-label="NEXT: Sorting Algorithms - Quick Sort"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
         
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/04/28/2020-04-28-Insurance-Management-System---Overview/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/04/28/2020-04-28-Insurance-Management-System---Overview/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/04/28/2020-04-28-Insurance-Management-System---Overview/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
 
 
-                </div>
-                
-    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
-        <i id="btn-close-shareoptions" class="fa fa-times"></i>
-        <ul class="share-options">
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/04/28/2020-04-28-Insurance-Management-System---Overview/"
-                        aria-label="Share on Facebook"
-                    >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/04/28/2020-04-28-Insurance-Management-System---Overview/"
-                        aria-label="Share on Twitter"
-                    >
-                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/04/28/2020-04-28-Insurance-Management-System---Overview/"
-                        aria-label="Share on Google+"
-                    >
-                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
-                    </a>
-                </li>
-            
-        </ul>
-    </div>
-
-
-            
-        </div>
-        
-
-
-<div id="about">
-    <div id="about-card">
-        <div id="about-btn-close">
-            <i class="fa fa-times"></i>
-        </div>
-        
-            <h4 id="about-card-name">Junyu Bian</h4>
-        
-            <div id="about-card-bio"><p>author.bio</p>
-</div>
-        
-        
-            <div id="about-card-job">
-                <i class="fa fa-briefcase"></i>
-                <br/>
-                <p>author.job</p>
-
-            </div>
-        
-        
-    </div>
-</div>
-
-        
-        
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-        <!--SCRIPTS-->
-
-<script src="/assets/js/script-vnqkjqlintjjatuhqa130uwkuwsu27ios2j5z5qwaodowllkaooycjjcee9d.min.js"></script>
-
-<!--SCRIPTS END-->
-
-
-    
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
 
 
 
 
-    </body>
+
+
+  </body>
 </html>

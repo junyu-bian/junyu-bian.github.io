@@ -1,351 +1,96 @@
 
-<!DOCTYPE html>
+ <!DOCTYPE HTML>
 <html lang="en">
-    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Blogs of Junyu">
-    <title>EMPLACE_BACK in C++ - Blogs of Junyu</title>
+  <meta charset="UTF-8">
+  
+    <title>EMPLACE_BACK in C++ | Blogs of Junyu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
     <meta name="author" content="Junyu Bian">
     
-    
-    
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Junyu Bian","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"articleBody":"There are different type of containers in C++ STL. To add a new element into the back of a container, we normally use push_back(). In this blog, we will look into a new way of performing push back - emplace_back().\nBackground KnowledgeRvalue References: with aim of increasing the efficiency of C++, rvalues are included. It doesn’t  need to copy the value, the rvalue reference is bound to the value itself.\n\n\nTo claim an Rvalue:\n1T &amp;&amp; T_reference = t;\n\nFor emplace_back( )…How is emplace_back() defined:\n12template &lt;typename T&gt;\tvoid emplace_back (T &amp;&amp; t);\n\nAn example for emplace_back() from this blog: \n12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849#include &lt;vector&gt;  #include &lt;string&gt;  #include &lt;iostream&gt;   struct President  &#123;      std::string name;      std::string country;      int year;       President(std::string p_name, std::string p_country, int p_year)          : name(std::move(p_name)), country(std::move(p_country)), year(p_year)      &#123;          std::cout &lt;&lt; &quot;I am being constructed.\\n&quot;;      &#125;    President(const President&amp; other)        : name(std::move(other.name)), country(std::move(other.country)), year(other.year)    &#123;        std::cout &lt;&lt; &quot;I am being copy constructed.\\n&quot;;    &#125;    President(President&amp;&amp; other)          : name(std::move(other.name)), country(std::move(other.country)), year(other.year)      &#123;          std::cout &lt;&lt; &quot;I am being moved.\\n&quot;;      &#125;      President&amp; operator=(const President&amp; other);  &#125;;   int main()  &#123;      std::vector&lt;President&gt; elections;      std::cout &lt;&lt; &quot;emplace_back:\\n&quot;;      elections.emplace_back(&quot;Nelson Mandela&quot;, &quot;South Africa&quot;, 1994); //没有类的创建       std::vector&lt;President&gt; reElections;      std::cout &lt;&lt; &quot;\\npush_back:\\n&quot;;      reElections.push_back(President(&quot;Franklin Delano Roosevelt&quot;, &quot;the USA&quot;, 1936));       std::cout &lt;&lt; &quot;\\nContents:\\n&quot;;      for (President const&amp; president: elections) &#123;         std::cout &lt;&lt; president.name &lt;&lt; &quot; was elected president of &quot;              &lt;&lt; president.country &lt;&lt; &quot; in &quot; &lt;&lt; president.year &lt;&lt; &quot;.\\n&quot;;      &#125;      for (President const&amp; president: reElections) &#123;          std::cout &lt;&lt; president.name &lt;&lt; &quot; was re-elected president of &quot;              &lt;&lt; president.country &lt;&lt; &quot; in &quot; &lt;&lt; president.year &lt;&lt; &quot;.\\n&quot;;      &#125; &#125;\n\nThe output from the above code would be:\n123456789emplace_back:I am being constructed. push_back:I am being constructed.I am being moved. Contents:Nelson Mandela was elected president of South Africa in 1994.\n\n移动构造函数\n对于拷贝构造函数、赋值构造函数必须实现指针变量的深拷贝，可能会造成高耗时。移动构造函数不会进行变量成员的深拷贝，而是交换所有权，避免拷贝时的性能损耗。\n声明为：\n1className(className &amp;&amp;)\n\nemplace_back()\nC++11新特性，声明为\n12template&lt;class ... Args&gt;void emplace_back(Arg&amp;&amp; ... args);\n\n接收一个右值引用，调用其移动构造函数，将对象移动到容器中。\n对比push_back：调用对象拷贝构造函数，容器中存储拷贝后的副本。\nstd::move\n用于将左值转化为右值引用类型。\n","dateCreated":"2020-05-16T09:39:00+08:00","dateModified":"2020-09-10T18:52:34+08:00","datePublished":"2020-05-16T09:39:00+08:00","description":"There are different type of containers in C++ STL. To add a new element into the back of a container, we normally use push_back(). In this blog, we will look into a new way of performing push back - emplace_back().\nBackground KnowledgeRvalue References: with aim of increasing the efficiency of C++, rvalues are included. It doesn’t  need to copy the value, the rvalue reference is bound to the value itself.","headline":"EMPLACE_BACK in C++","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://junyu-bian.github.io/2020/05/16/2020-05-16-emplace_back-in-C++/"},"publisher":{"@type":"Organization","name":"Junyu Bian","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"url":"https://junyu-bian.github.io/2020/05/16/2020-05-16-emplace_back-in-C++/","keywords":"C++, Algorithm"}</script>
-    <meta name="description" content="There are different type of containers in C++ STL. To add a new element into the back of a container, we normally use push_back(). In this blog, we will look into a new way of performing push back - e">
-<meta property="og:type" content="blog">
-<meta property="og:title" content="EMPLACE_BACK in C++">
-<meta property="og:url" content="https://junyu-bian.github.io/2020/05/16/2020-05-16-emplace_back-in-C++/index.html">
-<meta property="og:site_name" content="Blogs of Junyu">
-<meta property="og:description" content="There are different type of containers in C++ STL. To add a new element into the back of a container, we normally use push_back(). In this blog, we will look into a new way of performing push back - e">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-05-16T01:39:00.000Z">
-<meta property="article:modified_time" content="2020-09-10T10:52:34.305Z">
-<meta property="article:author" content="Junyu Bian">
-<meta property="article:tag" content="C++">
-<meta property="article:tag" content="Algorithm">
-<meta name="twitter:card" content="summary">
-    
-    
-        
+    <meta name="description" content="There are different type of containers in C++ STL. To add a new element into the back of a container, we normally use push_back(). In this blog, we will look into a new way of performing push back - emplace_back().
+Background KnowledgeRvalue References: with aim of increasing the efficiency of C++, rvalues are included. It doesn’t  need to copy the value, the rvalue reference is bound to the value itself.">
     
     
     
     
+    <link rel="alternate" href="/atom.xml" title="Blogs of Junyu" type="application/atom+xml">
     
-    <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-wxmdysl42bg8zzt2ryhfqsfzciwu3kx9uqdpszvt5k3t8nhbngsdtxq96fkn.min.css">
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
 
-    <!--STYLES END-->
-    
+<meta name="generator" content="Hexo 5.4.0"></head>
 
-    
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Blogs of Junyu" title="Blogs of Junyu"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Blogs of Junyu">Blogs of Junyu</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:junyu-bian.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
 
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
     
-        
+      <a href="/2020/05/16/2020-05-16-emplace_back-in-C++/" title="EMPLACE_BACK in C++" itemprop="url">EMPLACE_BACK in C++</a>
+  </h1>
+  <p class="article-author">By
     
-</head>
-
-    <body>
-        <div id="blog">
-            <!-- Define author's picture -->
-
-
+      <a href="https://junyu-bian.github.io" title="Junyu Bian">Junyu Bian</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2020-05-16T01:39:00.000Z" itemprop="datePublished">2020-05-16</time>
+    Updated:<time datetime="2020-09-10T10:52:34.305Z" itemprop="dateModified">2020-09-10</time>
     
-
-<header id="header" data-behavior="4">
-    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <div class="header-title">
-        <a
-            class="header-title-link"
-            href="/"
-            aria-label=""
-        >
-            Blogs of Junyu
-        </a>
-    </div>
-    
-        
-            <a
-                class="header-right-picture "
-                href="#about"
-                aria-label="Open the link: /#about"
-            >
-        
-        
-        </a>
-    
+  </p>
 </header>
-
-            <!-- Define author's picture -->
-
-
-<nav id="sidebar" data-behavior="4">
-    <div class="sidebar-container">
-        
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/"
-                            
-                            rel="noopener"
-                            title="Home"
-                        >
-                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Home</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-categories"
-                            
-                            rel="noopener"
-                            title="Categories"
-                        >
-                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Categories</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-tags"
-                            
-                            rel="noopener"
-                            title="Tags"
-                        >
-                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Tags</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/all-archives"
-                            
-                            rel="noopener"
-                            title="Archives"
-                        >
-                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Archives</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link open-algolia-search"
-                            href="#search"
-                            
-                            rel="noopener"
-                            title="Search"
-                        >
-                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Search</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="#about"
-                            
-                            rel="noopener"
-                            title="About"
-                        >
-                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">About</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://github.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="GitHub"
-                        >
-                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">GitHub</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="http://stackoverflow.com/users"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Stack Overflow"
-                        >
-                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Stack Overflow</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://twitter.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Twitter"
-                        >
-                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Twitter</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://facebook.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Facebook"
-                        >
-                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Facebook</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://plus.google.com/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="Google +"
-                        >
-                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Google +</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="https://www.linkedin.com/profile/"
-                            
-                                target="_blank"
-                            
-                            rel="noopener"
-                            title="LinkedIn"
-                        >
-                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">LinkedIn</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/mailto"
-                            
-                            rel="noopener"
-                            title="Mail"
-                        >
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a
-                            class="sidebar-button-link "
-                            href="/atom.xml"
-                            
-                            rel="noopener"
-                            title="RSS"
-                        >
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-    </div>
-</nav>
-
-            
-            <div id="main" data-behavior="4"
-                 class="
-                        hasCoverMetaIn
-                        ">
-                
-<article class="post">
-    
-    
-        <div class="post-header main-content-wrap text-left">
-    
-        <h1 class="post-title">
-            EMPLACE_BACK in C++
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2020-05-16T09:39:00+08:00">
-	
-		    May 16, 2020
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/categories/Algorithm/">Algorithm</a>
-
-
-    
-</div>
-
-    
-</div>
-
-    
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <p>There are different type of containers in C++ STL. To add a new element into the back of a container, we normally use <code>push_back()</code>. In this blog, we will look into a new way of performing push back - <code>emplace_back()</code>.</p>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Background-Knowledge"><span class="toc-number">1.</span> <span class="toc-text">Background Knowledge</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#For-emplace-back-%E2%80%A6"><span class="toc-number">2.</span> <span class="toc-text">For emplace_back( )…</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A7%BB%E5%8A%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-number">2.0.1.</span> <span class="toc-text">移动构造函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emplace-back"><span class="toc-number">2.0.2.</span> <span class="toc-text">emplace_back()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#std-move"><span class="toc-number">2.0.3.</span> <span class="toc-text">std::move</span></a></li></ol></li></ol></li></ol>
+		</div>
+		
+		<p>There are different type of containers in C++ STL. To add a new element into the back of a container, we normally use <code>push_back()</code>. In this blog, we will look into a new way of performing push back - <code>emplace_back()</code>.</p>
 <h1 id="Background-Knowledge"><a href="#Background-Knowledge" class="headerlink" title="Background Knowledge"></a>Background Knowledge</h1><p>Rvalue References: with aim of increasing the efficiency of C++, rvalues are included. It doesn’t  need to copy the value, the rvalue reference is bound to the value itself.</p>
 <span id="more"></span>
 
@@ -374,325 +119,276 @@
 <p>对比push_back：调用对象拷贝构造函数，容器中存储拷贝后的副本。</p>
 <h3 id="std-move"><a href="#std-move" class="headerlink" title="std::move"></a>std::move</h3><hr>
 <p>用于将左值转化为右值引用类型。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
 
-            
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/C/">C++</a><a href="/tags/Algorithm/">Algorithm</a>
+  </div>
 
 
-        </div>
-    </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/Algorithm/" rel="tag">Algorithm</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/C/" rel="tag">C++</a>
-
-            </div>
-        
-        
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/05/17/2020-05-17-SWAP-Function/"
-                    data-tooltip="SWAP Function"
-                    aria-label="PREVIOUS: SWAP Function"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/04/28/2020-04-28-Insurance-Management-System---Overview/"
-                    data-tooltip="Insurance Management System - Overview"
-                    aria-label="NEXT: Insurance Management System - Overview"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/05/16/2020-05-16-emplace_back-in-C++/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/05/16/2020-05-16-emplace_back-in-C++/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/05/16/2020-05-16-emplace_back-in-C++/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
 </div>
 
 
-        
-        
-            
-        
+
+<div class="article-share" id="share">
+
+  <div data-url="https://junyu-bian.github.io/2020/05/16/2020-05-16-emplace_back-in-C++/" data-title="EMPLACE_BACK in C++ | Blogs of Junyu" data-tsina="" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2020/05/17/2020-05-17-SWAP-Function/" title="SWAP Function">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  SWAP Function</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2020/04/28/2020-04-28-Insurance-Management-System---Overview/"  title="Insurance Management System - Overview">
+ <strong>NEXT:</strong><br/> 
+ <span>Insurance Management System - Overview
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Background-Knowledge"><span class="toc-number">1.</span> <span class="toc-text">Background Knowledge</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#For-emplace-back-%E2%80%A6"><span class="toc-number">2.</span> <span class="toc-text">For emplace_back( )…</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A7%BB%E5%8A%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-number">2.0.1.</span> <span class="toc-text">移动构造函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emplace-back"><span class="toc-number">2.0.2.</span> <span class="toc-text">emplace_back()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#std-move"><span class="toc-number">2.0.3.</span> <span class="toc-text">std::move</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+		
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>9</sup></a></li>
+		
+			<li><a href="/categories/Notes/" title="Notes">Notes<sup>5</sup></a></li>
+		
+			<li><a href="/categories/Web/" title="Web">Web<sup>1</sup></a></li>
+		
+			<li><a href="/categories/云计算/" title="云计算">云计算<sup>1</sup></a></li>
+		
+			<li><a href="/categories/知识点/" title="知识点">知识点<sup>11</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+		
+			<li><a href="/tags/Bash/" title="Bash">Bash<sup>2</sup></a></li>
+		
+			<li><a href="/tags/C/" title="C++">C++<sup>23</sup></a></li>
+		
+			<li><a href="/tags/Cent-OS/" title="Cent OS">Cent OS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Command-Line/" title="Command Line">Command Line<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Database/" title="Database">Database<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Django/" title="Django">Django<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Docker/" title="Docker">Docker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/FD-io/" title="FD.io">FD.io<sup>1</sup></a></li>
+		
+			<li><a href="/tags/K8s/" title="K8s">K8s<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Notes/" title="Notes">Notes<sup>5</sup></a></li>
+		
+			<li><a href="/tags/VM/" title="VM">VM<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Web/" title="Web">Web<sup>1</sup></a></li>
+		
+			<li><a href="/tags/操作系统/" title="操作系统">操作系统<sup>3</sup></a></li>
+		
+			<li><a href="/tags/数据库/" title="数据库">数据库<sup>4</sup></a></li>
+		
+			<li><a href="/tags/测试/" title="测试">测试<sup>3</sup></a></li>
+		
+			<li><a href="/tags/算法/" title="算法">算法<sup>14</sup></a></li>
+		
+			<li><a href="/tags/计算机网络/" title="计算机网络">计算机网络<sup>6</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
     </div>
-</article>
-
-
-
-                <footer id="footer" class="main-content-wrap">
-    <span class="copyrights">
-        Copyrights &copy; 2023 Junyu Bian. All Rights Reserved.
-    </span>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2023 
+		
+		<a href="https://junyu-bian.github.io" target="_blank" title="Junyu Bian">Junyu Bian</a>
+		
+		</p>
+</div>
 </footer>
-
-            </div>
-            
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
-                    <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/05/17/2020-05-17-SWAP-Function/"
-                    data-tooltip="SWAP Function"
-                    aria-label="PREVIOUS: SWAP Function"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2020/04/28/2020-04-28-Insurance-Management-System---Overview/"
-                    data-tooltip="Insurance Management System - Overview"
-                    aria-label="NEXT: Insurance Management System - Overview"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
         
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/05/16/2020-05-16-emplace_back-in-C++/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/05/16/2020-05-16-emplace_back-in-C++/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/05/16/2020-05-16-emplace_back-in-C++/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
 
 
-                </div>
-                
-    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
-        <i id="btn-close-shareoptions" class="fa fa-times"></i>
-        <ul class="share-options">
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://junyu-bian.github.io/2020/05/16/2020-05-16-emplace_back-in-C++/"
-                        aria-label="Share on Facebook"
-                    >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://twitter.com/intent/tweet?text=https://junyu-bian.github.io/2020/05/16/2020-05-16-emplace_back-in-C++/"
-                        aria-label="Share on Twitter"
-                    >
-                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://plus.google.com/share?url=https://junyu-bian.github.io/2020/05/16/2020-05-16-emplace_back-in-C++/"
-                        aria-label="Share on Google+"
-                    >
-                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
-                    </a>
-                </li>
-            
-        </ul>
-    </div>
-
-
-            
-        </div>
-        
-
-
-<div id="about">
-    <div id="about-card">
-        <div id="about-btn-close">
-            <i class="fa fa-times"></i>
-        </div>
-        
-            <h4 id="about-card-name">Junyu Bian</h4>
-        
-            <div id="about-card-bio"><p>author.bio</p>
-</div>
-        
-        
-            <div id="about-card-job">
-                <i class="fa fa-briefcase"></i>
-                <br/>
-                <p>author.job</p>
-
-            </div>
-        
-        
-    </div>
-</div>
-
-        
-        
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
-        <!--SCRIPTS-->
-
-<script src="/assets/js/script-vnqkjqlintjjatuhqa130uwkuwsu27ios2j5z5qwaodowllkaooycjjcee9d.min.js"></script>
-
-<!--SCRIPTS END-->
-
-
-    
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
 
 
 
 
-    </body>
+
+
+  </body>
 </html>
